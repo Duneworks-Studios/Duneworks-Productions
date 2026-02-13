@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flag Icons CDN (Replaces Emojis) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icon.min.css">
     <style>
         /* --- Core Variables --- */
         :root {
@@ -21,26 +23,36 @@
 
         /* --- Reset & Base --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Default HTML Cursor Settings (Desktop) */
         html { scroll-behavior: smooth; background-color: var(--bg-primary); cursor: none; }
+        
         body {
             font-family: 'Montserrat', sans-serif; font-weight: 300;
             color: var(--text-primary); overflow-x: hidden; line-height: 1.8;
             background: var(--bg-primary);
         }
 
-        /* --- Camera Cursor (Desktop Only) --- */
+        /* --- Camera Cursor (Desktop ONLY) --- */
         .cursor {
             width: 40px; height: 40px;
             position: fixed; pointer-events: none;
             z-index: 10000;
             transform: translate(-50%, -50%);
             transition: transform 0.1s ease, opacity 0.3s ease;
+            /* SVG Camera Icon */
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23c5a059' stroke-width='3'%3E%3Crect x='10' y='25' width='80' height='50' rx='10' /%3E%3Ccircle cx='50' cy='50' r='15' /%3E%3Crect x='60' y='30' width='15' height='10' rx='2' fill='%23c5a059' stroke='none'/%3E%3C/svg%3E");
             background-size: contain;
             background-repeat: no-repeat;
-            display: block;
+            display: block; /* Visible by default for PC */
         }
         .cursor.hover-active { transform: translate(-50%, -50%) scale(1.5); opacity: 0.8; }
+
+        /* --- Mobile Override: Hide Custom Cursor & Restore Default --- */
+        @media (hover: none) and (pointer: coarse) {
+            html { cursor: auto !important; }
+            .cursor { display: none !important; }
+        }
 
         /* --- Small Grain (Noise Effect) --- */
         .grain-overlay {
@@ -68,7 +80,7 @@
         .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: white; }
         
         .nav-links { display: flex; gap: 50px; list-style: none; }
-        .nav-links a { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: white; transition: opacity 0.3s; }
+        .nav-links a { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: white; transition: opacity 0.3s; cursor: none; }
         .nav-links a:hover { opacity: 0.7; }
         
         .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: white; z-index: 1002; }
@@ -79,11 +91,9 @@
         .hero-content { position: relative; z-index: 2; width: 100%; padding: 0 20px; }
         .hero-title-wrap { overflow: hidden; display: block; margin-bottom: -10px; }
         
-        /* Fixed font sizing for "PRODUCTION" to ensure it fits */
         .hero-title {
-            font-size: clamp(3rem, 12vw, 11rem); /* Responsive font size */
-            line-height: 0.9;
-            white-space: nowrap; /* Prevents breaking into two lines */
+            font-size: clamp(3rem, 12vw, 11rem); line-height: 0.9;
+            white-space: nowrap; /* Forces one line */
         }
         
         .hero-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; letter-spacing: 4px; color: #ccc; margin-top: 40px; text-transform: uppercase; }
@@ -100,7 +110,7 @@
         .social-info h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px; }
         .social-info p { color: var(--text-secondary); margin-bottom: 40px; }
         .social-cards { display: grid; gap: 20px; }
-        .social-card { display: flex; align-items: center; gap: 20px; padding: 30px; border: 1px solid #222; transition: all 0.4s ease; background: rgba(255,255,255,0.02); }
+        .social-card { display: flex; align-items: center; gap: 20px; padding: 30px; border: 1px solid #222; transition: all 0.4s ease; background: rgba(255,255,255,0.02); cursor: none; }
         .social-card:hover { border-color: var(--accent); background: rgba(197, 160, 89, 0.05); transform: translateX(10px); }
         .social-card i { font-size: 2rem; color: var(--accent); }
         .social-card h3 { font-size: 1.5rem; color: var(--text-primary); mix-blend-mode: normal; margin-bottom: 5px; }
@@ -109,7 +119,7 @@
         /* --- Executive Team Section --- */
         #executive-team { padding: 150px 0; background: var(--bg-secondary); text-align: center; border-top: 1px solid #222; }
         .exec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
-        .exec-card { border: 1px solid #333; padding: 50px 30px; transition: all 0.4s ease; position: relative; overflow: hidden; }
+        .exec-card { border: 1px solid #333; padding: 50px 30px; transition: all 0.4s ease; position: relative; overflow: hidden; cursor: none; }
         .exec-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent); transform: scaleX(0); transition: transform 0.4s ease; }
         .exec-card:hover::before { transform: scaleX(1); }
         .exec-card:hover { border-color: var(--accent); background: rgba(0,0,0,0.3); }
@@ -120,16 +130,27 @@
         /* --- Global Team Section --- */
         #team { padding: 150px 0; background: var(--bg-primary); text-align: center; }
         .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 60px; }
-        .team-card { border: 1px solid #222; padding: 40px 20px; transition: background 0.3s, border-color 0.3s; }
+        .team-card { border: 1px solid #222; padding: 40px 20px; transition: background 0.3s, border-color 0.3s; cursor: none; }
         .team-card:hover { background: rgba(197, 160, 89, 0.05); border-color: var(--accent); }
-        .team-flag { font-size: 2rem; margin-bottom: 15px; display: block; }
+        
+        /* Flag Icon Styling */
+        .team-flag {
+            width: 48px; height: 32px;
+            display: inline-block;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 2px;
+        }
+        /* Override default flag-icon size */
+        .team-flag.flag-icon { background-size: cover; width: 48px; height: 32px; }
+
         .team-card h4 { font-size: 1.5rem; margin-bottom: 10px; mix-blend-mode: normal; color: var(--text-primary); }
         .team-card p { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 
         /* --- Close Partners Section --- */
         #close-partners { padding: 150px 50px; background: var(--bg-light); display: flex; flex-direction: column; align-items: center; text-align: center; }
         .partner-highlight-container { display: flex; justify-content: center; gap: 100px; margin-top: 60px; flex-wrap: wrap; }
-        .partner-highlight { display: flex; flex-direction: column; align-items: center; }
+        .partner-highlight { display: flex; flex-direction: column; align-items: center; cursor: none; }
         .partner-highlight img { height: 60px; filter: grayscale(100%); opacity: 0.8; transition: all 0.3s; margin-bottom: 20px; }
         .partner-highlight:hover img { filter: grayscale(0%); opacity: 1; }
         .partner-highlight p { color: #333; font-weight: 500; }
@@ -150,28 +171,24 @@
         .booking-info h2 { font-size: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: 20px; }
         .contact-block { margin-bottom: 40px; mix-blend-mode: normal; }
         .contact-block span { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-bottom: 10px; }
-        .contact-block a { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--text-primary); display: block; }
+        .contact-block a { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--text-primary); display: block; cursor: none; }
         .contact-block a:hover { color: var(--accent); }
 
         /* Form */
         .form-row { position: relative; margin-bottom: 30px; }
-        .form-row input, .form-row textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; padding: 15px 0; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-primary); transition: border-color 0.3s; }
+        .form-row input, .form-row textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; padding: 15px 0; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-primary); transition: border-color 0.3s; cursor: none; }
         .form-row input:focus, .form-row textarea:focus { outline: none; border-bottom-color: var(--accent); }
         .form-row label { position: absolute; top: 15px; left: 0; font-size: 0.8rem; color: var(--text-secondary); pointer-events: none; transition: all 0.3s; }
         .form-row input:focus + label, .form-row input:valid + label { top: -10px; font-size: 0.7rem; color: var(--accent); }
-        .btn-gold { padding: 18px 40px; background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'Montserrat', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.4s; }
+        .btn-gold { padding: 18px 40px; background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'Montserrat', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; cursor: none; transition: all 0.4s; }
         .btn-gold:hover { color: #000; background: var(--accent); }
 
         /* --- Footer --- */
         footer { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #222; font-size: 0.75rem; color: var(--text-secondary); }
 
-        /* --- MOBILE RESPONSIVE FIXES --- */
+        /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
-            /* Disable custom cursor on mobile */
-            html { cursor: auto; }
-            .cursor { display: none !important; }
-
-            /* Mobile Navigation */
+            /* Navigation */
             .nav-links {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
                 background: rgba(0,0,0,0.98);
@@ -184,7 +201,7 @@
             .nav-links a { font-size: 1.5rem; }
             .menu-toggle { display: block; }
 
-            /* Layout Adjustments */
+            /* Layout */
             .container { padding: 0 20px; }
             
             #intro, #booking, #team, .social-grid-layout { 
@@ -193,27 +210,25 @@
                 gap: 50px; 
             }
             
-            /* Hero Adjustments */
-            .hero-title { 
-                font-size: clamp(2.5rem, 15vw, 4rem); /* Smaller on mobile */
-                white-space: normal; /* Allow wrapping */
-                text-align: center;
-            }
-            .hero-content { text-align: center; align-items: center; display: flex; flex-direction: column; }
+            /* Hero */
+            .hero-title { font-size: clamp(2.5rem, 15vw, 4rem); white-space: normal; }
+            .hero-content { text-align: center; }
             .hero-subtitle { text-align: center; }
             .scroll-indicator { right: 20px; bottom: 20px; }
 
-            /* Grid Stacking */
+            /* Grids */
             .team-grid, .exec-grid { grid-template-columns: 1fr; }
+            
+            /* Partners */
             #close-partners { padding: 80px 20px; }
             .partner-highlight-container { gap: 50px; flex-direction: column; }
             
-            /* Booking Section Mobile */
+            /* Booking */
             .booking-info { padding-right: 0; margin-bottom: 40px; text-align: center; }
             .contact-block a { font-size: 1.3rem; }
             .btn-gold { width: 100%; }
 
-            /* Footer Mobile */
+            /* Footer */
             footer { flex-direction: column; gap: 10px; text-align: center; padding: 30px 20px; }
         }
     </style>
@@ -331,22 +346,23 @@
             
             <div class="team-grid">
                 <div class="team-card hover-target">
-                    <span class="team-flag">🇦🇺</span>
+                    <!-- Replaced Emoji with SVG Flag -->
+                    <span class="team-flag flag-icon flag-icon-au"></span>
                     <h4>Australia</h4>
                     <p>Production & Cinematography</p>
                 </div>
                 <div class="team-card hover-target">
-                    <span class="team-flag">🇬🇧</span>
+                    <span class="team-flag flag-icon flag-icon-gb"></span>
                     <h4>United Kingdom</h4>
                     <p>Management</p>
                 </div>
                 <div class="team-card hover-target">
-                    <span class="team-flag">🇿🇦</span>
+                    <span class="team-flag flag-icon flag-icon-za"></span>
                     <h4>South Africa</h4>
                     <p>Management</p>
                 </div>
                 <div class="team-card hover-target">
-                    <span class="team-flag">🇵🇰</span>
+                    <span class="team-flag flag-icon flag-icon-pk"></span>
                     <h4>Pakistan</h4>
                     <p>Editing & Post Production</p>
                 </div>
@@ -453,14 +469,12 @@
     </footer>
 
     <script>
-        // --- 1. Custom Cursor Logic (Desktop Only) ---
+        // --- 1. Custom Cursor Logic (PC Only handled by CSS, JS just moves it) ---
         const cursor = document.getElementById('cursor');
         const hoverTargets = document.querySelectorAll('.hover-target');
 
-        // Check if it's a touch device
-        const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-
-        if (!isTouchDevice) {
+        // Only add mouse listeners if the device supports fine pointer (PC)
+        if (window.matchMedia("(pointer: fine)").matches) {
             document.addEventListener('mousemove', (e) => {
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
@@ -470,9 +484,6 @@
                 target.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
                 target.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
             });
-        } else {
-            // Hide cursor on mobile
-            cursor.style.display = 'none';
         }
 
         // --- 2. Mobile Navigation Logic ---
@@ -482,7 +493,6 @@
 
         menuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
-            // Toggle Icon
             const icon = menuBtn.querySelector('i');
             if (navLinks.classList.contains('active')) {
                 icon.classList.remove('fa-bars');
