@@ -32,15 +32,11 @@
 
         /* --- Camera Cursor (PC ONLY) --- */
         .cursor {
-            width: 40px; height: 40px;
-            position: fixed; pointer-events: none;
-            z-index: 10000;
-            transform: translate(-50%, -50%);
+            width: 40px; height: 40px; position: fixed; pointer-events: none;
+            z-index: 10000; transform: translate(-50%, -50%);
             transition: transform 0.1s ease, opacity 0.3s ease;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23c5a059' stroke-width='3'%3E%3Crect x='10' y='25' width='80' height='50' rx='10' /%3E%3Ccircle cx='50' cy='50' r='15' /%3E%3Crect x='60' y='30' width='15' height='10' rx='2' fill='%23c5a059' stroke='none'/%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-            display: block;
+            background-size: contain; background-repeat: no-repeat; display: block;
         }
         .cursor.hover-active { transform: translate(-50%, -50%) scale(1.5); opacity: 0.8; }
 
@@ -110,22 +106,10 @@
 
         /* --- Global Team Section --- */
         #team { padding: 150px 0; background: var(--bg-primary); text-align: center; }
-        /* Updated Grid for 5 items */
         .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 60px; justify-items: center; }
         .team-card { border: 1px solid #222; padding: 40px 20px; transition: background 0.3s, border-color 0.3s; cursor: none; width: 100%; max-width: 300px; }
         .team-card:hover { background: rgba(197, 160, 89, 0.05); border-color: var(--accent); }
-        
-        /* Flag Icon Styling */
-        .team-flag {
-            width: 48px; height: 32px;
-            display: inline-block;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            border-radius: 2px;
-            background-size: cover;
-            background-position: center;
-        }
-
+        .team-flag { width: 48px; height: 32px; display: inline-block; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border-radius: 2px; background-size: cover; background-position: center; }
         .team-card h4 { font-size: 1.5rem; margin-bottom: 10px; mix-blend-mode: normal; color: var(--text-primary); }
         .team-card p { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 
@@ -141,7 +125,6 @@
         #partners { padding: 100px 0 80px; background: var(--bg-primary); overflow: hidden; border-top: 1px solid #222; border-bottom: 1px solid #222; text-align: center; }
         .partners-header { margin-bottom: 40px; }
         .partners-header h2 { font-size: 2rem; color: var(--text-primary); mix-blend-mode: normal; }
-        
         .marquee-container { display: flex; width: max-content; animation: marquee 25s linear infinite; }
         .partner-logo-img { height: 60px; width: 150px; object-fit: contain; filter: grayscale(100%) brightness(0.7); opacity: 0.6; margin: 0 50px; transition: all 0.3s ease; }
         .partner-logo-img:hover { filter: grayscale(0%) brightness(1); opacity: 1; }
@@ -170,85 +153,69 @@
 
         /* --- MOBILE RESPONSIVE STYLES --- */
         @media (hover: none) and (pointer: coarse) {
-            /* Disable Custom Cursor on Mobile */
             html { cursor: auto !important; }
             .cursor { display: none !important; }
             * { cursor: auto !important; }
         }
 
         @media (max-width: 768px) {
-            /* --- Navigation Mobile Overhaul --- */
+            /* --- CLEAN MOBILE NAVIGATION --- */
             header { 
                 padding: 20px 0; 
                 mix-blend-mode: normal;
-                background: rgba(9, 9, 11, 0.95);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
+                background: rgba(9, 9, 11, 0.98);
                 border-bottom: 1px solid #222;
             }
             .logo { font-size: 1.5rem; color: var(--text-primary); }
             
             .nav-links {
+                display: flex;
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
                 background: #09090b;
                 flex-direction: column; justify-content: center; align-items: center;
                 gap: 40px;
-                transform: translateY(-100%); 
-                transition: transform 0.6s cubic-bezier(0.77,0.2,0.05,1.0);
                 z-index: 1001;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.4s ease, visibility 0.4s ease;
+                pointer-events: none;
             }
-            .nav-links.active { transform: translateY(0); }
-            .nav-links a { font-size: 1.8rem; font-weight: 400; color: var(--text-primary); }
+
+            .nav-links.active {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+
+            .nav-links a { font-size: 2rem; font-weight: 400; color: var(--text-primary); }
             .nav-links a:hover { color: var(--accent); }
 
             .menu-toggle { display: block; }
             .menu-toggle i { font-size: 1.5rem; }
 
-            /* --- Hero Mobile Centering --- */
-            #home { height: 100vh; padding-top: 80px; align-items: center; text-align: center; }
-            .hero-content { 
-                width: 100%; 
-                padding: 0 30px; 
-                display: flex; 
-                flex-direction: column; 
-                align-items: center; 
-                justify-content: center; 
-            }
-            .hero-title { 
-                white-space: normal;
-                font-size: clamp(2.5rem, 12vw, 4rem); 
-                line-height: 1;
-                text-align: center;
-            }
+            /* --- Hero Mobile --- */
+            #home { padding-top: 80px; align-items: center; text-align: center; }
+            .hero-content { width: 100%; padding: 0 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+            .hero-title { white-space: normal; font-size: clamp(2.5rem, 12vw, 4rem); line-height: 1; text-align: center; }
             .hero-subtitle { text-align: center; margin-top: 30px; line-height: 1.5; }
             .scroll-indicator { right: 50%; transform: translateX(50%); bottom: 30px; }
 
-            /* --- Layout Adjustments --- */
+            /* --- Layouts --- */
             .container { padding: 0 20px; }
+            #intro, #booking, #team, .social-grid-layout { grid-template-columns: 1fr; padding: 80px 0; gap: 50px; }
             
-            #intro, #booking, #team, .social-grid-layout { 
-                grid-template-columns: 1fr; 
-                padding: 80px 0; 
-                gap: 50px; 
-            }
-            
-            /* Executive Grid */
             .exec-grid { grid-template-columns: 1fr; padding: 0 20px; }
             .exec-card { padding: 40px 20px; }
 
-            /* Team Grid - Center last item on mobile */
             .team-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 20px; }
             
-            /* Partners */
             #close-partners { padding: 80px 0; }
             .partner-highlight-container { gap: 50px; flex-direction: column; }
             
-            /* Booking Section */
             .booking-info { padding-right: 0; margin-bottom: 40px; text-align: center; }
             .contact-block a { font-size: 1.3rem; }
             .btn-gold { width: 100%; padding: 20px; }
 
-            /* Footer */
             footer { flex-direction: column; gap: 10px; text-align: center; padding: 30px 20px; }
         }
     </style>
@@ -360,11 +327,19 @@
     <!-- Global Team -->
     <section id="team">
         <div class="container">
-            <span class="section-label">Global Talent</span>
-            <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px;">Our People</h2>
+            <span class="section-label">Global Reach</span>
+            <!-- RENAMED TITLE -->
+            <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px;">Our Locations and People</h2>
             <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">A diverse team of specialists bringing perspective from the world's most creative hubs.</p>
             
             <div class="team-grid">
+                <!-- NEW: Uzbekistan Added as First Item -->
+                <div class="team-card">
+                    <span class="team-flag fi fi-uz"></span>
+                    <h4>Uzbekistan</h4>
+                    <p>Headquarters & All Production</p>
+                </div>
+
                 <div class="team-card">
                     <span class="team-flag fi fi-au"></span>
                     <h4>Australia</h4>
@@ -385,7 +360,6 @@
                     <h4>Pakistan</h4>
                     <p>Editing & Post Production</p>
                 </div>
-                <!-- NEW COUNTRY ADDED -->
                 <div class="team-card">
                     <span class="team-flag fi fi-ca"></span>
                     <h4>Canada</h4>
@@ -427,7 +401,6 @@
             <img src="https://i.postimg.cc/p9bJMPm7/Adobe-Express-file-(10).png" alt="Ferrari" class="partner-logo-img">
             <img src="https://i.postimg.cc/4KkQRXYj/6a1ed52440b8152d.png" alt="SIPPY" class="partner-logo-img">
             
-            <!-- Duplicate for seamless loop -->
             <img src="https://i.postimg.cc/qtVxHpNZ/Adobe-Express-file-11.png" alt="Formula 1" class="partner-logo-img">
             <img src="https://i.postimg.cc/LqK3FmJQ/image-(24)-(1).png" alt="FIA" class="partner-logo-img">
             <img src="https://i.postimg.cc/SXFfbmnc/image-(20).png" alt="F3" class="partner-logo-img">
@@ -494,7 +467,7 @@
     </footer>
 
     <script>
-        // --- 1. Custom Cursor Logic (PC Only) ---
+        // --- 1. Custom Cursor (PC Only) ---
         const cursor = document.getElementById('cursor');
         
         if (window.matchMedia("(pointer: fine)").matches) {
@@ -502,7 +475,6 @@
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
             });
-
             const hoverTargets = document.querySelectorAll('.social-card, .exec-card, .team-card, .partner-highlight, .nav-links a, .btn-gold');
             hoverTargets.forEach(target => {
                 target.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
@@ -529,6 +501,7 @@
             }
         });
 
+        // Close menu when link clicked
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 navLinks.classList.remove('active');
