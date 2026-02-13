@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duneworks Productions | Global Cinematography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- Core Variables --- */
+        :root {
+            --bg-primary: #09090b;
+            --bg-secondary: #111113;
+            --bg-light: #f0f0f0;
+            --text-primary: #f5f5f5;
+            --text-secondary: #888;
+            --accent: #c5a059;
+        }
+
+        /* --- Reset & Base --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; background-color: var(--bg-primary); cursor: none; }
+        body {
+            font-family: 'Montserrat', sans-serif; font-weight: 300;
+            color: var(--text-primary); overflow-x: hidden; line-height: 1.8;
+            background: var(--bg-primary);
+        }
+
+        /* --- Camera Cursor --- */
+        .cursor {
+            width: 40px; height: 40px;
+            position: fixed; pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, opacity 0.3s ease;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23c5a059' stroke-width='3'%3E%3Crect x='10' y='25' width='80' height='50' rx='10' /%3E%3Ccircle cx='50' cy='50' r='15' /%3E%3Crect x='60' y='30' width='15' height='10' rx='2' fill='%23c5a059' stroke='none'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .cursor.hover-active {
+            transform: translate(-50%, -50%) scale(1.5);
+            opacity: 0.8;
+        }
+
+        /* --- Small Grain (Noise Effect) --- */
+        .grain-overlay {
+            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+            pointer-events: none; z-index: 9999;
+            opacity: 0.03; 
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            animation: grain 12s steps(10) infinite;
+        }
+        @keyframes grain { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-5%, -10%); } 20% { transform: translate(-15%, 5%); } 30% { transform: translate(7%, -25%); } 40% { transform: translate(-5%, 25%); } 50% { transform: translate(-15%, 10%); } 60% { transform: translate(15%, 0%); } 70% { transform: translate(0%, 15%); } 80% { transform: translate(3%, 35%); } 90% { transform: translate(-10%, 10%); } }
+
+        /* --- Typography --- */
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif; font-weight: 300;
+            letter-spacing: 2px; mix-blend-mode: difference; color: white;
+        }
+        a { text-decoration: none; color: inherit; }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 50px; }
+        .section-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: block; }
+
+        /* --- Navigation --- */
+        header { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 30px 0; mix-blend-mode: difference; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: white; }
+        .nav-links { display: flex; gap: 50px; list-style: none; }
+        .nav-links a { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: white; transition: opacity 0.3s; }
+        .nav-links a:hover { opacity: 0.7; }
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: none; color: white; z-index: 1001; }
+
+        /* --- Hero --- */
+        #home { height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; background: url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop') center/cover no-repeat; }
+        #home::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1; }
+        .hero-content { position: relative; z-index: 2; width: 70%; }
+        .hero-title-wrap { overflow: hidden; display: block; margin-bottom: -10px; }
+        .hero-title { font-size: clamp(4rem, 11vw, 11rem); line-height: 0.85; }
+        .hero-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; letter-spacing: 4px; color: #ccc; margin-top: 40px; text-transform: uppercase; }
+        .scroll-indicator { position: absolute; bottom: 50px; right: 50px; writing-mode: vertical-rl; font-size: 0.7rem; letter-spacing: 3px; color: #ccc; animation: bounce 2s infinite; z-index: 2; }
+
+        /* --- Intro --- */
+        #intro { padding: 150px 0; background: var(--bg-primary); display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; border-bottom: 1px solid #222; }
+        .intro-text h2 { font-size: 4rem; line-height: 1.1; margin-bottom: 30px; }
+        .intro-text p { color: var(--text-secondary); margin-bottom: 20px; }
+
+        /* --- Social Media Hub --- */
+        #social-hub { min-height: 100vh; display: flex; align-items: center; background: var(--bg-primary); padding: 100px 0; border-top: 1px solid #222; }
+        .social-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .social-info h2 { font-size: 4rem; margin-bottom: 20px; }
+        .social-info p { color: var(--text-secondary); margin-bottom: 40px; }
+        .social-cards { display: grid; gap: 20px; }
+        .social-card { display: flex; align-items: center; gap: 20px; padding: 30px; border: 1px solid #222; transition: all 0.4s ease; background: rgba(255,255,255,0.02); }
+        .social-card:hover { border-color: var(--accent); background: rgba(197, 160, 89, 0.05); transform: translateX(10px); }
+        .social-card i { font-size: 2rem; color: var(--accent); }
+        .social-card h3 { font-size: 1.5rem; color: var(--text-primary); mix-blend-mode: normal; margin-bottom: 5px; }
+        .social-card span { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* --- Executive Team Section --- */
+        #executive-team {
+            padding: 150px 0; background: var(--bg-secondary);
+            text-align: center; border-top: 1px solid #222;
+        }
+        .exec-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+            margin-top: 60px;
+        }
+        .exec-card {
+            border: 1px solid #333; padding: 50px 30px;
+            transition: all 0.4s ease; position: relative; overflow: hidden;
+        }
+        .exec-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--accent); transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .exec-card:hover::before { transform: scaleX(1); }
+        .exec-card:hover { border-color: var(--accent); background: rgba(0,0,0,0.3); }
+        
+        .exec-name { font-size: 2.5rem; margin-bottom: 10px; display: block; color: var(--text-primary); mix-blend-mode: normal; }
+        .exec-role { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); display: block; margin-bottom: 20px; }
+        .exec-desc { font-size: 0.9rem; color: var(--text-secondary); }
+
+        /* --- Global Team Section --- */
+        #team { padding: 150px 0; background: var(--bg-primary); text-align: center; }
+        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 60px; }
+        .team-card { border: 1px solid #222; padding: 40px 20px; transition: background 0.3s, border-color 0.3s; }
+        .team-card:hover { background: rgba(197, 160, 89, 0.05); border-color: var(--accent); }
+        .team-flag { font-size: 2rem; margin-bottom: 15px; display: block; }
+        .team-card h4 { font-size: 1.5rem; margin-bottom: 10px; mix-blend-mode: normal; color: var(--text-primary); }
+        .team-card p { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- Close Partners Section --- */
+        #close-partners {
+            padding: 150px 50px; background: var(--bg-light);
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .partner-highlight-container {
+            display: flex; justify-content: center; gap: 100px; margin-top: 60px; flex-wrap: wrap;
+        }
+        .partner-highlight {
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .partner-highlight img {
+            height: 60px; filter: grayscale(100%); opacity: 0.8; transition: all 0.3s; margin-bottom: 20px;
+        }
+        .partner-highlight:hover img { filter: grayscale(0%); opacity: 1; }
+        .partner-highlight p { color: #333; font-weight: 500; }
+
+        /* --- Partners Marquee --- */
+        #partners { padding: 100px 0 80px; background: var(--bg-primary); overflow: hidden; border-top: 1px solid #222; border-bottom: 1px solid #222; text-align: center; }
+        .partners-header { margin-bottom: 40px; }
+        .partners-header h2 { font-size: 2rem; color: var(--text-primary); mix-blend-mode: normal; }
+        
+        .marquee-container { display: flex; width: max-content; animation: marquee 25s linear infinite; }
+        .partner-logo-img { height: 60px; width: 150px; object-fit: contain; filter: grayscale(100%) brightness(0.7); opacity: 0.6; margin: 0 50px; transition: all 0.3s ease; }
+        .partner-logo-img:hover { filter: grayscale(0%) brightness(1); opacity: 1; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- Booking --- */
+        #booking { padding: 150px 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; background: #050505; }
+        .booking-info { padding-right: 50px; }
+        .booking-info h2 { font-size: 3.5rem; margin-bottom: 20px; }
+        .contact-block { margin-bottom: 40px; mix-blend-mode: normal; }
+        .contact-block span { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-bottom: 10px; }
+        .contact-block a { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--text-primary); display: block; }
+        .contact-block a:hover { color: var(--accent); }
+
+        /* Form */
+        .form-row { position: relative; margin-bottom: 30px; }
+        .form-row input, .form-row textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; padding: 15px 0; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-primary); transition: border-color 0.3s; }
+        .form-row input:focus, .form-row textarea:focus { outline: none; border-bottom-color: var(--accent); }
+        .form-row label { position: absolute; top: 15px; left: 0; font-size: 0.8rem; color: var(--text-secondary); pointer-events: none; transition: all 0.3s; }
+        .form-row input:focus + label, .form-row input:valid + label { top: -10px; font-size: 0.7rem; color: var(--accent); }
+        .btn-gold { padding: 18px 40px; background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'Montserrat', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; cursor: none; transition: all 0.4s; }
+        .btn-gold:hover { color: #000; background: var(--accent); }
+
+        /* --- Footer --- */
+        footer { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #222; font-size: 0.75rem; color: var(--text-secondary); }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            html { cursor: auto; } .cursor { display: none; }
+            .nav-links { display: none; } .menu-toggle { display: block; cursor: auto; }
+            #intro, #booking, #team, .social-grid-layout { grid-template-columns: 1fr; padding: 80px 20px; gap: 50px; }
+            .team-grid, .exec-grid { grid-template-columns: 1fr; }
+            #close-partners { padding: 80px 20px; }
+            .partner-highlight-container { gap: 50px; }
+            .btn-gold { cursor: pointer; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grain-overlay"></div>
+    <!-- Camera Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Navigation -->
+    <header>
+        <nav class="container">
+            <a href="#home" class="logo hover-target">Duneworks</a>
+            <ul class="nav-links">
+                <li><a href="#home" class="hover-target">Home</a></li>
+                <li><a href="#executive-team" class="hover-target">Leadership</a></li>
+                <li><a href="#team" class="hover-target">Team</a></li>
+                <li><a href="#partners" class="hover-target">Partners</a></li>
+                <li><a href="#booking" class="hover-target">Contact</a></li>
+            </ul>
+            <div class="menu-toggle hover-target"><i class="fas fa-bars"></i></div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section id="home">
+        <div class="container">
+            <div class="hero-content">
+                <span class="section-label" style="mix-blend-mode: difference; color: white;">Visual Storytelling</span>
+                <div class="hero-title-wrap"><h1 class="hero-title">DUNEWORKS</h1></div>
+                <div class="hero-title-wrap"><h1 class="hero-title" style="font-style: italic;">PRODUCTION</h1></div>
+                <p class="hero-subtitle">Premium cinematography & photography for global brands and visionaries.</p>
+            </div>
+        </div>
+        <div class="scroll-indicator">Scroll</div>
+    </section>
+
+    <!-- Intro -->
+    <section id="intro">
+        <div class="intro-text">
+            <span class="section-label">The Agency</span>
+            <h2>Visions Crafted<br>Global Reach.</h2>
+            <p>From the raw energy of the dunes to the high-stakes world of Formula 1, Duneworks Productions captures moments that define eras. We are a collective of directors, cinematographers, and photographers dedicated to visual excellence.</p>
+        </div>
+        <div class="intro-text">
+            <ul style="list-style: none; border-left: 1px solid var(--accent); padding-left: 30px;">
+                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">Formula 1®</li>
+                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">FIA World Endurance</li>
+                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">Formula 2, 3 & 4</li>
+                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">24 Hour Endurance Series</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Social Media Hub -->
+    <section id="social-hub">
+        <div class="container">
+            <div class="social-grid-layout">
+                <div class="social-info">
+                    <span class="section-label">Connect</span>
+                    <h2>Behind The Lens</h2>
+                    <p>Follow our journey on social media for daily updates, behind-the-scenes content, and the latest from our global team.</p>
+                </div>
+                <div class="social-cards">
+                    <a href="https://www.youtube.com/@Volraiden" target="_blank" class="social-card hover-target">
+                        <i class="fab fa-youtube"></i>
+                        <div><h3>YouTube</h3><span>@Volraiden</span></div>
+                    </a>
+                    <a href="https://www.instagram.com/buckley.lens/" target="_blank" class="social-card hover-target">
+                        <i class="fab fa-instagram"></i>
+                        <div><h3>Instagram</h3><span>@Buckley.lens</span></div>
+                    </a>
+                    <a href="https://www.instagram.com/duneworkspr/" target="_blank" class="social-card hover-target">
+                        <i class="fab fa-instagram"></i>
+                        <div><h3>Instagram</h3><span>@Duneworkspr</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Executive Team -->
+    <section id="executive-team">
+        <div class="container">
+            <span class="section-label">Leadership</span>
+            <h2 style="font-size: 4rem; margin-bottom: 20px;">Executive Team</h2>
+            <div class="exec-grid">
+                <!-- Member 1 -->
+                <div class="exec-card hover-target">
+                    <span class="exec-name">Daniel Lee Buckley</span>
+                    <span class="exec-role">Founder & Media Relations Director</span>
+                    <p class="exec-desc">Leading the creative vision and managing high-level media relations across global sports and entertainment sectors.</p>
+                </div>
+                <!-- Member 2 -->
+                <div class="exec-card hover-target">
+                    <span class="exec-name">Amirsaid Samigjanov</span>
+                    <span class="exec-role">Co-Founder & Management Director</span>
+                    <p class="exec-desc">Overseeing operations and strategic growth, ensuring seamless execution of complex international projects.</p>
+                </div>
+                <!-- Member 3 -->
+                <div class="exec-card hover-target">
+                    <span class="exec-name">Akbarshoh Ravshanov</span>
+                    <span class="exec-role">Co-Founder & Marketing Director</span>
+                    <p class="exec-desc">Driving brand presence and innovative marketing strategies to connect our stories with a global audience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Team -->
+    <section id="team">
+        <div class="container">
+            <span class="section-label">Global Talent</span>
+            <h2 style="font-size: 4rem; margin-bottom: 20px;">Our People</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">A diverse team of specialists bringing perspective from the world's most creative hubs.</p>
+            
+            <div class="team-grid">
+                <div class="team-card hover-target">
+                    <span class="team-flag">🇦🇺</span>
+                    <h4>Australia</h4>
+                    <p>Production & Cinematography</p>
+                </div>
+                <div class="team-card hover-target">
+                    <span class="team-flag">🇬🇧</span>
+                    <h4>United Kingdom</h4>
+                    <p>Management</p>
+                </div>
+                <div class="team-card hover-target">
+                    <span class="team-flag">🇿🇦</span>
+                    <h4>South Africa</h4>
+                    <p>Management</p>
+                </div>
+                <div class="team-card hover-target">
+                    <span class="team-flag">🇵🇰</span>
+                    <h4>Pakistan</h4>
+                    <p>Editing & Post Production</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Close Partners -->
+    <section id="close-partners">
+        <div class="container" style="text-align: center;">
+            <span class="section-label" style="color: #000;">Trusted Collaborators</span>
+            <h2 style="font-size: 3rem; color: #000; mix-blend-mode: normal;">Strategic Partners</h2>
+            
+            <div class="partner-highlight-container">
+                <div class="partner-highlight hover-target">
+                    <img src="https://i.postimg.cc/f3cjw1dg/image-(23).png" alt="NGK Spark Plugs">
+                    <p>Official Partner for Racing</p>
+                </div>
+                <div class="partner-highlight hover-target">
+                    <img src="https://i.postimg.cc/Ffyg9wSP/duneworkslogo-11zon-removebg-preview-(1).png" alt="Duneworks Studios">
+                    <p>Studio & Logistics Partner</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Marquee -->
+    <section id="partners">
+        <div class="partners-header">
+            <h2>Partners & Companies We Have Worked For</h2>
+        </div>
+        <div class="marquee-container">
+            <!-- F1 Image Updated Here -->
+            <img src="https://i.postimg.cc/qtVxHpNZ/Adobe-Express-file-11.png" alt="Formula 1" class="partner-logo-img">
+            
+            <img src="https://i.postimg.cc/LqK3FmJQ/image-(24)-(1).png" alt="FIA" class="partner-logo-img">
+            <img src="https://i.postimg.cc/SXFfbmnc/image-(20).png" alt="F3" class="partner-logo-img">
+            <img src="https://i.postimg.cc/CZGHF98r/image-(21)-(1).png" alt="Asian Le Mans" class="partner-logo-img">
+            <img src="https://i.postimg.cc/p9bJMPm7/Adobe-Express-file-(10).png" alt="Ferrari" class="partner-logo-img">
+            <img src="https://i.postimg.cc/4KkQRXYj/6a1ed52440b8152d.png" alt="SIPPY" class="partner-logo-img">
+            
+            <!-- Duplicate for seamless loop -->
+            <img src="https://i.postimg.cc/qtVxHpNZ/Adobe-Express-file-11.png" alt="Formula 1" class="partner-logo-img">
+            <img src="https://i.postimg.cc/LqK3FmJQ/image-(24)-(1).png" alt="FIA" class="partner-logo-img">
+            <img src="https://i.postimg.cc/SXFfbmnc/image-(20).png" alt="F3" class="partner-logo-img">
+            <img src="https://i.postimg.cc/CZGHF98r/image-(21)-(1).png" alt="Asian Le Mans" class="partner-logo-img">
+            <img src="https://i.postimg.cc/p9bJMPm7/Adobe-Express-file-(10).png" alt="Ferrari" class="partner-logo-img">
+            <img src="https://i.postimg.cc/4KkQRXYj/6a1ed52440b8152d.png" alt="SIPPY" class="partner-logo-img">
+        </div>
+    </section>
+
+    <!-- Booking -->
+    <section id="booking">
+        <div class="booking-info">
+            <span class="section-label">Contact Us</span>
+            <h2>Let's Create</h2>
+            
+            <div class="contact-block">
+                <span>Booking Inquiries</span>
+                <a href="tel:+998914142580" class="hover-target">+998 91 414 25 80</a>
+            </div>
+            
+            <div class="contact-block">
+                <span>Media & Press</span>
+                <a href="tel:+998880754010" class="hover-target">+998 88 075 4010</a>
+            </div>
+
+            <div class="contact-block">
+                <span>Email</span>
+                <a href="mailto:Duneworksstudios@gmail.com" class="hover-target">Duneworksstudios@gmail.com</a>
+            </div>
+        </div>
+
+        <div class="booking-form-wrapper">
+            <form class="booking-form" action="https://formsubmit.co/Duneworksstudios@gmail.com" method="POST">
+                <div class="form-row">
+                    <input type="text" name="name" required id="name">
+                    <label for="name">Full Name</label>
+                </div>
+                <div class="form-row">
+                    <input type="email" name="email" required id="email">
+                    <label for="email">Email Address</label>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="service" id="service">
+                    <label for="service">Project Type</label>
+                </div>
+                <div class="form-row">
+                    <textarea name="message" rows="1" required id="message"></textarea>
+                    <label for="message">Your Vision</label>
+                </div>
+
+                <input type="hidden" name="_subject" value="New Luxury Inquiry">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                
+                <button type="submit" class="btn-gold hover-target">Send Inquiry</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2023 Duneworks Productions. All Rights Reserved.</p>
+        <p>Made with Passion.</p>
+    </footer>
+
+    <script>
+        // --- 1. Custom Cursor Logic ---
+        const cursor = document.getElementById('cursor');
+        const hoverTargets = document.querySelectorAll('.hover-target');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
+            target.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
+        });
+
+        // --- 2. Reveal Animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.team-card, .contact-block, .form-row, .social-card, .exec-card').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.8s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
