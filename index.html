@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Flag Icons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
     <style>
         /* --- Core Variables --- */
@@ -43,10 +42,17 @@
         /* --- Grain --- */
         .grain-overlay {
             position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-            pointer-events: none; z-index: 9999; opacity: 0.03; 
+            pointer-events: none; z-index: 9999; 
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 12s steps(10) infinite;
+            opacity: 0.03; /* Desktop opacity */
         }
+        
+        /* Mobile Grain - More Visible */
+        @media (max-width: 768px) {
+            .grain-overlay { opacity: 0.08; }
+        }
+
         @keyframes grain { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-5%, -10%); } 20% { transform: translate(-15%, 5%); } 30% { transform: translate(7%, -25%); } 40% { transform: translate(-5%, 25%); } 50% { transform: translate(-15%, 10%); } 60% { transform: translate(15%, 0%); } 70% { transform: translate(0%, 15%); } 80% { transform: translate(3%, 35%); } 90% { transform: translate(-10%, 10%); } }
 
         /* --- Typography --- */
@@ -61,11 +67,30 @@
         nav { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: white; position: relative; z-index: 1002; }
         
-        .nav-links { display: flex; gap: 50px; list-style: none; }
+        .nav-links { display: flex; gap: 50px; list-style: none; align-items: center; }
         .nav-links a { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: white; transition: opacity 0.3s; }
         .nav-links a:hover { opacity: 0.7; }
         
         .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: white; z-index: 1002; }
+
+        /* --- Language Switcher --- */
+        .lang-switcher { position: relative; z-index: 1003; margin-left: 20px; }
+        .lang-btn {
+            background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
+            padding: 5px 15px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s;
+        }
+        .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .lang-dropdown {
+            position: absolute; top: 100%; right: 0; background: #111; border: 1px solid #333;
+            display: none; flex-direction: column; min-width: 100px; margin-top: 5px;
+        }
+        .lang-dropdown.active { display: flex; }
+        .lang-dropdown button {
+            background: transparent; border: none; color: #ccc; padding: 10px;
+            text-align: left; font-size: 0.7rem; cursor: pointer; transition: 0.3s;
+        }
+        .lang-dropdown button:hover { background: #222; color: var(--accent); }
 
         /* --- Hero --- */
         #home { height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; background: url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop') center/cover no-repeat; }
@@ -95,7 +120,7 @@
 
         /* --- Executive Team Section --- */
         #executive-team { padding: 150px 0; background: var(--bg-secondary); text-align: center; border-top: 1px solid #222; }
-        .exec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+        .exec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; max-width: 1400px; margin-left: auto; margin-right: auto; }
         .exec-card { border: 1px solid #333; padding: 50px 30px; transition: all 0.4s ease; position: relative; overflow: hidden; cursor: none; }
         .exec-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent); transform: scaleX(0); transition: transform 0.4s ease; }
         .exec-card:hover::before { transform: scaleX(1); }
@@ -139,12 +164,26 @@
         .contact-block a { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--text-primary); display: block; cursor: none; }
         .contact-block a:hover { color: var(--accent); }
 
-        /* Form */
+        /* Form - Fixed Duplication */
         .form-row { position: relative; margin-bottom: 30px; }
-        .form-row input, .form-row textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; padding: 15px 0; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-primary); transition: border-color 0.3s; cursor: none; }
+        .form-row input, .form-row textarea {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #333;
+            padding: 15px 0; font-family: 'Montserrat', sans-serif; font-size: 1rem;
+            color: var(--text-primary); transition: border-color 0.3s; cursor: none;
+            /* Ensure no placeholder is shown by default style, label is used instead */
+        }
         .form-row input:focus, .form-row textarea:focus { outline: none; border-bottom-color: var(--accent); }
-        .form-row label { position: absolute; top: 15px; left: 0; font-size: 0.8rem; color: var(--text-secondary); pointer-events: none; transition: all 0.3s; }
-        .form-row input:focus + label, .form-row input:valid + label { top: -10px; font-size: 0.7rem; color: var(--accent); }
+        
+        /* Floating Label Logic */
+        .form-row label {
+            position: absolute; top: 15px; left: 0; font-size: 0.8rem;
+            color: var(--text-secondary); pointer-events: none; transition: all 0.3s;
+        }
+        .form-row input:focus + label, .form-row input:valid + label,
+        .form-row textarea:focus + label, .form-row textarea:valid + label {
+            top: -10px; font-size: 0.7rem; color: var(--accent);
+        }
+
         .btn-gold { padding: 18px 40px; background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'Montserrat', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; cursor: none; transition: all 0.4s; }
         .btn-gold:hover { color: #000; background: var(--accent); }
 
@@ -159,48 +198,34 @@
         }
 
         @media (max-width: 768px) {
-            /* --- CLEAN MOBILE NAVIGATION --- */
-            header { 
-                padding: 20px 0; 
-                mix-blend-mode: normal;
-                background: rgba(9, 9, 11, 0.98);
-                border-bottom: 1px solid #222;
-            }
+            /* Navigation */
+            header { padding: 20px 0; mix-blend-mode: normal; background: rgba(9, 9, 11, 0.98); border-bottom: 1px solid #222; }
             .logo { font-size: 1.5rem; color: var(--text-primary); }
             
             .nav-links {
-                display: flex;
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: #09090b;
-                flex-direction: column; justify-content: center; align-items: center;
-                gap: 40px;
-                z-index: 1001;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.4s ease, visibility 0.4s ease;
-                pointer-events: none;
+                display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: #09090b; flex-direction: column; justify-content: center; align-items: center;
+                gap: 40px; z-index: 1001; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; pointer-events: none;
             }
-
-            .nav-links.active {
-                opacity: 1;
-                visibility: visible;
-                pointer-events: auto;
-            }
-
+            .nav-links.active { opacity: 1; visibility: visible; pointer-events: auto; }
             .nav-links a { font-size: 2rem; font-weight: 400; color: var(--text-primary); }
             .nav-links a:hover { color: var(--accent); }
+            
+            /* Mobile Lang Switcher */
+            .lang-switcher { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); margin-left: 0; }
+            .lang-btn { border-color: #555; }
+            .lang-dropdown { right: 0; background: #000; }
 
             .menu-toggle { display: block; }
-            .menu-toggle i { font-size: 1.5rem; }
 
-            /* --- Hero Mobile --- */
+            /* Hero */
             #home { padding-top: 80px; align-items: center; text-align: center; }
             .hero-content { width: 100%; padding: 0 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
             .hero-title { white-space: normal; font-size: clamp(2.5rem, 12vw, 4rem); line-height: 1; text-align: center; }
             .hero-subtitle { text-align: center; margin-top: 30px; line-height: 1.5; }
             .scroll-indicator { right: 50%; transform: translateX(50%); bottom: 30px; }
 
-            /* --- Layouts --- */
+            /* Layouts */
             .container { padding: 0 20px; }
             #intro, #booking, #team, .social-grid-layout { grid-template-columns: 1fr; padding: 80px 0; gap: 50px; }
             
@@ -230,12 +255,23 @@
         <nav class="container">
             <a href="#home" class="logo">Duneworks</a>
             <ul class="nav-links" id="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#executive-team">Leadership</a></li>
-                <li><a href="#team">Team</a></li>
-                <li><a href="#partners">Partners</a></li>
-                <li><a href="#booking">Contact</a></li>
+                <li><a href="#home" data-i18n="nav-home">Home</a></li>
+                <li><a href="#executive-team" data-i18n="nav-leadership">Leadership</a></li>
+                <li><a href="#team" data-i18n="nav-team">Team</a></li>
+                <li><a href="#partners" data-i18n="nav-partners">Partners</a></li>
+                <li><a href="#booking" data-i18n="nav-contact">Contact</a></li>
             </ul>
+            
+            <!-- Language Switcher -->
+            <div class="lang-switcher">
+                <button class="lang-btn" id="lang-btn">EN</button>
+                <div class="lang-dropdown" id="lang-dropdown">
+                    <button onclick="setLanguage('en')">English</button>
+                    <button onclick="setLanguage('ru')">Русский</button>
+                    <button onclick="setLanguage('uz')">O'zbek</button>
+                </div>
+            </div>
+
             <div class="menu-toggle" id="menu-btn">
                 <i class="fas fa-bars"></i>
             </div>
@@ -246,28 +282,28 @@
     <section id="home">
         <div class="container">
             <div class="hero-content">
-                <span class="section-label" style="mix-blend-mode: difference; color: white;">Visual Storytelling</span>
+                <span class="section-label" style="mix-blend-mode: difference; color: white;" data-i18n="hero-label">Visual Storytelling</span>
                 <div class="hero-title-wrap"><h1 class="hero-title">DUNEWORKS</h1></div>
                 <div class="hero-title-wrap"><h1 class="hero-title" style="font-style: italic;">PRODUCTION</h1></div>
-                <p class="hero-subtitle">Premium cinematography & photography for global brands and visionaries.</p>
+                <p class="hero-subtitle" data-i18n="hero-subtitle">Premium cinematography & photography for global brands and visionaries.</p>
             </div>
         </div>
-        <div class="scroll-indicator">Scroll</div>
+        <div class="scroll-indicator" data-i18n="scroll">Scroll</div>
     </section>
 
     <!-- Intro -->
     <section id="intro">
         <div class="intro-text">
-            <span class="section-label">The Agency</span>
-            <h2>Visions Crafted<br>Global Reach.</h2>
-            <p>From the raw energy of the dunes to the high-stakes world of Formula 1, Duneworks Productions captures moments that define eras. We are a collective of directors, cinematographers, and photographers dedicated to visual excellence.</p>
+            <span class="section-label" data-i18n="intro-label">The Agency</span>
+            <h2 data-i18n="intro-title">Visions Crafted<br>Global Reach.</h2>
+            <p data-i18n="intro-desc">From the raw energy of the dunes to the high-stakes world of Formula 1, Duneworks Productions captures moments that define eras. We are a collective of directors, cinematographers, and photographers dedicated to visual excellence.</p>
         </div>
         <div class="intro-text">
             <ul style="list-style: none; border-left: 1px solid var(--accent); padding-left: 30px;">
                 <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">Formula 1®</li>
                 <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">FIA World Endurance</li>
                 <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">Formula 2, 3 & 4</li>
-                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">24 Hour Endurance Series</li>
+                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);" data-i18n="intro-li4">24 Hour Endurance Series</li>
             </ul>
         </div>
     </section>
@@ -277,9 +313,9 @@
         <div class="container">
             <div class="social-grid-layout">
                 <div class="social-info">
-                    <span class="section-label">Connect</span>
-                    <h2>Behind The Lens</h2>
-                    <p>Follow our journey on social media for daily updates, behind-the-scenes content, and the latest from our global team.</p>
+                    <span class="section-label" data-i18n="social-label">Connect</span>
+                    <h2 data-i18n="social-title">Behind The Lens</h2>
+                    <p data-i18n="social-desc">Follow our journey on social media for daily updates, behind-the-scenes content, and the latest from our global team.</p>
                 </div>
                 <div class="social-cards">
                     <a href="https://www.youtube.com/@Volraiden" target="_blank" class="social-card">
@@ -302,23 +338,28 @@
     <!-- Executive Team -->
     <section id="executive-team">
         <div class="container">
-            <span class="section-label">Leadership</span>
-            <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px;">Executive Team</h2>
+            <span class="section-label" data-i18n="exec-label">Leadership</span>
+            <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px;" data-i18n="exec-title">Executive Team</h2>
             <div class="exec-grid">
                 <div class="exec-card">
                     <span class="exec-name">Daniel Lee Buckley</span>
-                    <span class="exec-role">Founder & Media Relations Director</span>
-                    <p class="exec-desc">Leading the creative vision and managing high-level media relations across global sports and entertainment sectors.</p>
+                    <span class="exec-role" data-i18n="exec-role1">Founder & Media Relations Director</span>
+                    <p class="exec-desc" data-i18n="exec-desc1">Leading the creative vision and managing high-level media relations across global sports and entertainment sectors.</p>
                 </div>
                 <div class="exec-card">
                     <span class="exec-name">Amirsaid Samigjanov</span>
-                    <span class="exec-role">Co-Founder & Management Director</span>
-                    <p class="exec-desc">Overseeing operations and strategic growth, ensuring seamless execution of complex international projects.</p>
+                    <span class="exec-role" data-i18n="exec-role2">Co-Founder & Management Director</span>
+                    <p class="exec-desc" data-i18n="exec-desc2">Overseeing operations and strategic growth, ensuring seamless execution of complex international projects.</p>
                 </div>
                 <div class="exec-card">
                     <span class="exec-name">Akbarshoh Ravshanov</span>
-                    <span class="exec-role">Co-Founder & Marketing Director</span>
-                    <p class="exec-desc">Driving brand presence and innovative marketing strategies to connect our stories with a global audience.</p>
+                    <span class="exec-role" data-i18n="exec-role3">Co-Founder & Marketing Director</span>
+                    <p class="exec-desc" data-i18n="exec-desc3">Driving brand presence and innovative marketing strategies to connect our stories with a global audience.</p>
+                </div>
+                <div class="exec-card">
+                    <span class="exec-name">Zain Ali Zaman</span>
+                    <span class="exec-role" data-i18n="exec-role4">Director Of Post Production and Editing</span>
+                    <p class="exec-desc" data-i18n="exec-desc4">Masterfully crafting the final narrative through expert editing, color grading, and post-production workflows.</p>
                 </div>
             </div>
         </div>
@@ -327,43 +368,40 @@
     <!-- Global Team -->
     <section id="team">
         <div class="container">
-            <span class="section-label">Global Reach</span>
-            <!-- RENAMED TITLE -->
-            <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px;">Our Locations and People</h2>
-            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">A diverse team of specialists bringing perspective from the world's most creative hubs.</p>
+            <span class="section-label" data-i18n="global-label">Global Reach</span>
+            <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px;" data-i18n="global-title">Our Locations and People</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;" data-i18n="global-desc">A diverse team of specialists bringing perspective from the world's most creative hubs.</p>
             
             <div class="team-grid">
-                <!-- NEW: Uzbekistan Added as First Item -->
                 <div class="team-card">
                     <span class="team-flag fi fi-uz"></span>
-                    <h4>Uzbekistan</h4>
-                    <p>Headquarters & All Production</p>
+                    <h4 data-i18n="country-uz">Uzbekistan</h4>
+                    <p data-i18n="role-uz">Headquarters & All Production</p>
                 </div>
-
                 <div class="team-card">
                     <span class="team-flag fi fi-au"></span>
-                    <h4>Australia</h4>
-                    <p>Production & Cinematography</p>
+                    <h4 data-i18n="country-au">Australia</h4>
+                    <p data-i18n="role-au">Production & Cinematography</p>
                 </div>
                 <div class="team-card">
                     <span class="team-flag fi fi-gb"></span>
-                    <h4>United Kingdom</h4>
-                    <p>Management</p>
+                    <h4 data-i18n="country-gb">United Kingdom</h4>
+                    <p data-i18n="role-gb">Management</p>
                 </div>
                 <div class="team-card">
                     <span class="team-flag fi fi-za"></span>
-                    <h4>South Africa</h4>
-                    <p>Management</p>
+                    <h4 data-i18n="country-za">South Africa</h4>
+                    <p data-i18n="role-za">Management</p>
                 </div>
                 <div class="team-card">
                     <span class="team-flag fi fi-pk"></span>
-                    <h4>Pakistan</h4>
-                    <p>Editing & Post Production</p>
+                    <h4 data-i18n="country-pk">Pakistan</h4>
+                    <p data-i18n="role-pk">Editing & Post Production</p>
                 </div>
                 <div class="team-card">
                     <span class="team-flag fi fi-ca"></span>
-                    <h4>Canada</h4>
-                    <p>Production & Photography</p>
+                    <h4 data-i18n="country-ca">Canada</h4>
+                    <p data-i18n="role-ca">Production & Photography</p>
                 </div>
             </div>
         </div>
@@ -372,17 +410,17 @@
     <!-- Close Partners -->
     <section id="close-partners">
         <div class="container" style="text-align: center;">
-            <span class="section-label" style="color: #000;">Trusted Collaborators</span>
-            <h2 style="font-size: clamp(2rem, 4vw, 3rem); color: #000; mix-blend-mode: normal;">Strategic Partners</h2>
+            <span class="section-label" style="color: #000;" data-i18n="partner-label">Trusted Collaborators</span>
+            <h2 style="font-size: clamp(2rem, 4vw, 3rem); color: #000; mix-blend-mode: normal;" data-i18n="partner-title">Strategic Partners</h2>
             
             <div class="partner-highlight-container">
                 <div class="partner-highlight">
                     <img src="https://i.postimg.cc/f3cjw1dg/image-(23).png" alt="NGK Spark Plugs">
-                    <p>Official Partner for Racing</p>
+                    <p data-i18n="partner-ngk">Official Partner for Racing</p>
                 </div>
                 <div class="partner-highlight">
                     <img src="https://i.postimg.cc/Ffyg9wSP/duneworkslogo-11zon-removebg-preview-(1).png" alt="Duneworks Studios">
-                    <p>Studio & Logistics Partner</p>
+                    <p data-i18n="partner-studio">Studio & Logistics Partner</p>
                 </div>
             </div>
         </div>
@@ -391,7 +429,7 @@
     <!-- Partners Marquee -->
     <section id="partners">
         <div class="partners-header">
-            <h2>Partners & Companies We Have Worked For</h2>
+            <h2 data-i18n="partners-header">Partners & Companies We Have Worked For</h2>
         </div>
         <div class="marquee-container">
             <img src="https://i.postimg.cc/qtVxHpNZ/Adobe-Express-file-11.png" alt="Formula 1" class="partner-logo-img">
@@ -413,49 +451,50 @@
     <!-- Booking -->
     <section id="booking">
         <div class="booking-info">
-            <span class="section-label">Contact Us</span>
-            <h2>Let's Create</h2>
+            <span class="section-label" data-i18n="contact-label">Contact Us</span>
+            <h2 data-i18n="contact-title">Let's Create</h2>
             
             <div class="contact-block">
-                <span>Booking Inquiries</span>
+                <span data-i18n="contact-booking">Booking Inquiries</span>
                 <a href="tel:+998914142580">+998 91 414 25 80</a>
             </div>
             
             <div class="contact-block">
-                <span>Media & Press</span>
+                <span data-i18n="contact-media">Media & Press</span>
                 <a href="tel:+998880754010">+998 88 075 4010</a>
             </div>
 
             <div class="contact-block">
-                <span>Email</span>
+                <span data-i18n="contact-email">Email</span>
                 <a href="mailto:Duneworksstudios@gmail.com">Duneworksstudios@gmail.com</a>
             </div>
         </div>
 
         <div class="booking-form-wrapper">
             <form class="booking-form" action="https://formsubmit.co/Duneworksstudios@gmail.com" method="POST">
+                <!-- No placeholders, just labels -->
                 <div class="form-row">
                     <input type="text" name="name" required id="name">
-                    <label for="name">Full Name</label>
+                    <label for="name" data-i18n="form-name">Full Name</label>
                 </div>
                 <div class="form-row">
                     <input type="email" name="email" required id="email">
-                    <label for="email">Email Address</label>
+                    <label for="email" data-i18n="form-email">Email Address</label>
                 </div>
                 <div class="form-row">
                     <input type="text" name="service" id="service">
-                    <label for="service">Project Type</label>
+                    <label for="service" data-i18n="form-project">Project Type</label>
                 </div>
                 <div class="form-row">
                     <textarea name="message" rows="1" required id="message"></textarea>
-                    <label for="message">Your Vision</label>
+                    <label for="message" data-i18n="form-vision">Your Vision</label>
                 </div>
 
                 <input type="hidden" name="_subject" value="New Luxury Inquiry">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
                 
-                <button type="submit" class="btn-gold">Send Inquiry</button>
+                <button type="submit" class="btn-gold" data-i18n="form-submit">Send Inquiry</button>
             </form>
         </div>
     </section>
@@ -463,7 +502,7 @@
     <!-- Footer -->
     <footer>
         <p>© 2023 Duneworks Productions. All Rights Reserved.</p>
-        <p>Made with Passion.</p>
+        <p data-i18n="footer">Made with Passion.</p>
     </footer>
 
     <script>
@@ -501,7 +540,6 @@
             }
         });
 
-        // Close menu when link clicked
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 navLinks.classList.remove('active');
@@ -510,7 +548,129 @@
             });
         });
 
-        // --- 3. Reveal Animations ---
+        // --- 3. Language Switcher Logic ---
+        const langBtn = document.getElementById('lang-btn');
+        const langDropdown = document.getElementById('lang-dropdown');
+
+        // Toggle dropdown
+        langBtn.addEventListener('click', () => {
+            langDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown if clicked outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.lang-switcher')) {
+                langDropdown.classList.remove('active');
+            }
+        });
+
+        const translations = {
+            en: {
+                'nav-home': 'Home', 'nav-leadership': 'Leadership', 'nav-team': 'Team', 'nav-partners': 'Partners', 'nav-contact': 'Contact',
+                'hero-label': 'Visual Storytelling', 'hero-subtitle': 'Premium cinematography & photography for global brands and visionaries.',
+                'scroll': 'Scroll',
+                'intro-label': 'The Agency', 'intro-title': 'Visions Crafted<br>Global Reach.',
+                'intro-desc': 'From the raw energy of the dunes to the high-stakes world of Formula 1, Duneworks Productions captures moments that define eras. We are a collective of directors, cinematographers, and photographers dedicated to visual excellence.',
+                'intro-li4': '24 Hour Endurance Series',
+                'social-label': 'Connect', 'social-title': 'Behind The Lens', 'social-desc': 'Follow our journey on social media for daily updates, behind-the-scenes content, and the latest from our global team.',
+                'exec-label': 'Leadership', 'exec-title': 'Executive Team',
+                'exec-role1': 'Founder & Media Relations Director', 'exec-desc1': 'Leading the creative vision and managing high-level media relations across global sports and entertainment sectors.',
+                'exec-role2': 'Co-Founder & Management Director', 'exec-desc2': 'Overseeing operations and strategic growth, ensuring seamless execution of complex international projects.',
+                'exec-role3': 'Co-Founder & Marketing Director', 'exec-desc3': 'Driving brand presence and innovative marketing strategies to connect our stories with a global audience.',
+                'exec-role4': 'Director Of Post Production and Editing', 'exec-desc4': 'Masterfully crafting the final narrative through expert editing, color grading, and post-production workflows.',
+                'global-label': 'Global Reach', 'global-title': 'Our Locations and People', 'global-desc': 'A diverse team of specialists bringing perspective from the world\'s most creative hubs.',
+                'country-uz': 'Uzbekistan', 'role-uz': 'Headquarters & All Production',
+                'country-au': 'Australia', 'role-au': 'Production & Cinematography',
+                'country-gb': 'United Kingdom', 'role-gb': 'Management',
+                'country-za': 'South Africa', 'role-za': 'Management',
+                'country-pk': 'Pakistan', 'role-pk': 'Editing & Post Production',
+                'country-ca': 'Canada', 'role-ca': 'Production & Photography',
+                'partner-label': 'Trusted Collaborators', 'partner-title': 'Strategic Partners',
+                'partner-ngk': 'Official Partner for Racing', 'partner-studio': 'Studio & Logistics Partner',
+                'partners-header': 'Partners & Companies We Have Worked For',
+                'contact-label': 'Contact Us', 'contact-title': "Let's Create",
+                'contact-booking': 'Booking Inquiries', 'contact-media': 'Media & Press', 'contact-email': 'Email',
+                'form-name': 'Full Name', 'form-email': 'Email Address', 'form-project': 'Project Type', 'form-vision': 'Your Vision', 'form-submit': 'Send Inquiry',
+                'footer': 'Made with Passion.'
+            },
+            ru: {
+                'nav-home': 'Главная', 'nav-leadership': 'Руководство', 'nav-team': 'Команда', 'nav-partners': 'Партнеры', 'nav-contact': 'Контакты',
+                'hero-label': 'Визуальное Повествование', 'hero-subtitle': 'Премиальная кинематография и фотография для мировых брендов и визионеров.',
+                'scroll': 'Листать',
+                'intro-label': 'Агентство', 'intro-title': 'Воплощенные Видения<br>Глобальный Охват.',
+                'intro-desc': 'От необузданной энергии дюн до мира Формулы 1, Duneworks Productions запечатляет моменты, определяющие эпохи. Мы — коллектив режиссеров, кинооператоров и фотографов, преданных визуальному совершенству.',
+                'intro-li4': '24-часовая серия на выносливость',
+                'social-label': 'Связаться', 'social-title': 'За Кадром', 'social-desc': 'Следите за нашим путешествием в социальных сетях, чтобы получать ежедневные обновления, контент закулисья и новости от нашей глобальной команды.',
+                'exec-label': 'Лидерство', 'exec-title': 'Команда Руководителей',
+                'exec-role1': 'Основатель & Директор по медиа отношениям', 'exec-desc1': 'Возглавляет творческое видение и управляет медийными отношениями высокого уровня в сферах мирового спорта и развлечений.',
+                'exec-role2': 'Соучредитель & Директор по управлению', 'exec-desc2': 'Контролирует операции и стратегический рост, обеспечивая бесшовное выполнение сложных международных проектов.',
+                'exec-role3': 'Соучредитель & Директор по маркетингу', 'exec-desc3': 'Управляет присутствием бренда и инновационными маркетинговыми стратегиями, связывая наши истории с мировой аудиторией.',
+                'exec-role4': 'Директор по постпродакшну и монтажу', 'exec-desc4': 'Мастерски создает финальный нарратив благодаря экспертному монтажу, цветокоррекции и рабочим процессам постпродакшна.',
+                'global-label': 'Глобальный Охват', 'global-title': 'Наши Локации и Люди', 'global-desc': 'Разнообразная команда специалистов, привносящих перспективу из самых креативных центров мира.',
+                'country-uz': 'Узбекистан', 'role-uz': 'Штаб-квартира и Все Производство',
+                'country-au': 'Австралия', 'role-au': 'Продакшн и Кинематография',
+                'country-gb': 'Великобритания', 'role-gb': 'Менеджмент',
+                'country-za': 'Южная Африка', 'role-za': 'Менеджмент',
+                'country-pk': 'Пакистан', 'role-pk': 'Монтаж и Постпродакшн',
+                'country-ca': 'Канада', 'role-ca': 'Продакшн и Фотография',
+                'partner-label': 'Надежные Партнеры', 'partner-title': 'Стратегические Партнеры',
+                'partner-ngk': 'Официальный партнер по гонкам', 'partner-studio': 'Студия и Логистика',
+                'partners-header': 'Партнеры и Компании, с которыми мы работали',
+                'contact-label': 'Связаться с нами', 'contact-title': 'Давайте Творить',
+                'contact-booking': 'Бронирование', 'contact-media': 'Медиа и Пресса', 'contact-email': 'Электронная почта',
+                'form-name': 'Полное Имя', 'form-email': 'Адрес Электронной Почты', 'form-project': 'Тип Проекта', 'form-vision': 'Ваше Видение', 'form-submit': 'Отправить Запрос',
+                'footer': 'Сделано с страстью.'
+            },
+            uz: {
+                'nav-home': 'Bosh Sahifa', 'nav-leadership': 'Rahbariyat', 'nav-team': 'Jamoa', 'nav-partners': 'Hamkorlar', 'nav-contact': 'Aloqa',
+                'hero-label': 'Vizual Hikoya', 'hero-subtitle': 'Global brendlar va vizyonerlar uchun premium kinematografiya va fotografiya.',
+                'scroll': 'Aylantiring',
+                'intro-label': 'Agentlik', 'intro-title': 'Yaratilgan Ko\'rishlar<br>Global Qamrov.',
+                'intro-desc': 'Qum tepaliklarining xom energiyasidan Formula 1ning yuqori riskli dunyosgacha, Duneworks Productions davrlarni belgilaydigan lahikalarni yozib oladi. Biz vizual mukammallikka bag\'ishlangan rejissyorlar, operatorlar va fotograflar jamoamiz.',
+                'intro-li4': '24 Soatlik Chidamlilik Seriyasi',
+                'social-label': 'Bog\'lanish', 'social-title': 'Kamera Orqasida', 'social-desc': 'Kundalik yangilanishlar, sahnadan ortiq kontent va global jamoamizdan so\'nggi yangiliklar uchun ijtimoiy tarmoqlarda bizga ergasing.',
+                'exec-label': 'Rahbariyat', 'exec-title': 'Ijroiya Jamoasi',
+                'exec-role1': 'Asoschi va Media Aloqalar Direktori', 'exec-desc1': 'Global sport va ko\'ngilochar sektorlarda yuqori darajadagi media aloqlalarni boshqarish va ijodiy viziyani boshqaradi.',
+                'exec-role2': 'Ham-asoschi va Boshqaruv Direktori', 'exec-desc2': 'Operatsiyalarni nazorat qilish va strategik o\'sishni ta\'minlash, murakkab xalqaro loyihalarning uzluksiz bajarilishini kafolatlaydi.',
+                'exec-role3': 'Ham-asoschi va Marketing Direktori', 'exec-desc3': 'Brend mavjudligini oshirish va innovatsion marketing strategiyalari orqali bizning hikoyalarimizni global auditoriyaga yetkazadi.',
+                'exec-role4': 'Post-Ishlab Chiqarish va Montaj Direktori', 'exec-desc4': 'Professional montaj, rang tuzatish va post-ishlab chiqarish jarayonlari orqali yakuniy hikoyani mohirona yaratadi.',
+                'global-label': 'Global Qamrov', 'global-title': 'Bizning Joylar va Odamlar', 'global-desc': 'Dunyoning eng ijodiy markazlaridan ko\'nikma keltiruvchi mutaxassisllarning xilma-xil jamoasi.',
+                'country-uz': 'O\'zbekiston', 'role-uz': 'Bosh Qarorgoh va Barcha Ishlab Chiqarish',
+                'country-au': 'Avstraliya', 'role-au': 'Ishlab Chiqarish va Kinematografiya',
+                'country-gb': 'Buyuk Britaniya', 'role-gb': 'Boshqaruv',
+                'country-za': 'Janubiy Afrika', 'role-za': 'Boshqaruv',
+                'country-pk': 'Pokiston', 'role-pk': 'Montaj va Post-Ishlab Chiqarish',
+                'country-ca': 'Kanada', 'role-ca': 'Ishlab Chiqarish va Fotografiya',
+                'partner-label': 'Ishonchli Hamkorlar', 'partner-title': 'Strategik Hamkorlar',
+                'partner-ngk': 'Poyga uchun Rasmiy Hamkor', 'partner-studio': 'Studiya va Logistika Hamkori',
+                'partners-header': 'Hamkorlar va Ishlagan Kompaniyalarimiz',
+                'contact-label': 'Biz Bilan Bog\'laning', 'contact-title': 'Yarataylik',
+                'contact-booking': 'Buyurtma So\'rovlari', 'contact-media': 'Media va Matbuot', 'contact-email': 'Email',
+                'form-name': 'To\'liq Ism', 'form-email': 'Email Manzili', 'form-project': 'Loyiha Turi', 'form-vision': 'Sizning Viziyangiz', 'form-submit': 'So\'rov Yuborish',
+                'footer': 'Ishq bilan yaratildi.'
+            }
+        };
+
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    // Use innerHTML for elements that might have <br> tags
+                    if (el.innerHTML.includes('<br>')) {
+                         el.innerHTML = translations[lang][key];
+                    } else {
+                         el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update button text
+            langBtn.textContent = lang.toUpperCase();
+            langDropdown.classList.remove('active');
+        }
+
+        // --- 4. Reveal Animations ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
