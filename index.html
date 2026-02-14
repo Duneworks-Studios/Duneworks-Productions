@@ -45,13 +45,10 @@
             pointer-events: none; z-index: 9999; 
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 12s steps(10) infinite;
-            opacity: 0.03; /* Desktop opacity */
+            opacity: 0.03;
         }
         
-        /* Mobile Grain - More Visible */
-        @media (max-width: 768px) {
-            .grain-overlay { opacity: 0.08; }
-        }
+        @media (max-width: 768px) { .grain-overlay { opacity: 0.08; } }
 
         @keyframes grain { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-5%, -10%); } 20% { transform: translate(-15%, 5%); } 30% { transform: translate(7%, -25%); } 40% { transform: translate(-5%, 25%); } 50% { transform: translate(-15%, 10%); } 60% { transform: translate(15%, 0%); } 70% { transform: translate(0%, 15%); } 80% { transform: translate(3%, 35%); } 90% { transform: translate(-10%, 10%); } }
 
@@ -164,13 +161,12 @@
         .contact-block a { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--text-primary); display: block; cursor: none; }
         .contact-block a:hover { color: var(--accent); }
 
-        /* Form - Fixed Duplication */
+        /* Form */
         .form-row { position: relative; margin-bottom: 30px; }
         .form-row input, .form-row textarea {
             width: 100%; background: transparent; border: none; border-bottom: 1px solid #333;
             padding: 15px 0; font-family: 'Montserrat', sans-serif; font-size: 1rem;
             color: var(--text-primary); transition: border-color 0.3s; cursor: none;
-            /* Ensure no placeholder is shown by default style, label is used instead */
         }
         .form-row input:focus, .form-row textarea:focus { outline: none; border-bottom-color: var(--accent); }
         
@@ -361,6 +357,11 @@
                     <span class="exec-role" data-i18n="exec-role4">Director Of Post Production and Editing</span>
                     <p class="exec-desc" data-i18n="exec-desc4">Masterfully crafting the final narrative through expert editing, color grading, and post-production workflows.</p>
                 </div>
+                <div class="exec-card">
+                    <span class="exec-name">Tauheed Moheddin</span>
+                    <span class="exec-role" data-i18n="exec-role5">Asst. Director Of Media Relations</span>
+                    <p class="exec-desc" data-i18n="exec-desc5">Facilitating media communications and supporting strategic outreach initiatives across key global markets.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -377,6 +378,11 @@
                     <span class="team-flag fi fi-uz"></span>
                     <h4 data-i18n="country-uz">Uzbekistan</h4>
                     <p data-i18n="role-uz">Headquarters & All Production</p>
+                </div>
+                <div class="team-card">
+                    <span class="team-flag fi fi-ae"></span>
+                    <h4 data-i18n="country-ae">United Arab Emirates</h4>
+                    <p data-i18n="role-ae">Secondary HQ & Main HQ for Motorsport Production</p>
                 </div>
                 <div class="team-card">
                     <span class="team-flag fi fi-au"></span>
@@ -403,6 +409,16 @@
                     <h4 data-i18n="country-ca">Canada</h4>
                     <p data-i18n="role-ca">Production & Photography</p>
                 </div>
+                <div class="team-card">
+                    <span class="team-flag fi fi-in"></span>
+                    <h4 data-i18n="country-in">India</h4>
+                    <p data-i18n="role-in">Production</p>
+                </div>
+                <div class="team-card">
+                    <span class="team-flag fi fi-kw"></span>
+                    <h4 data-i18n="country-kw">Kuwait</h4>
+                    <p data-i18n="role-kw">Management</p>
+                </div>
             </div>
         </div>
     </section>
@@ -416,7 +432,8 @@
             <div class="partner-highlight-container">
                 <div class="partner-highlight">
                     <img src="https://i.postimg.cc/f3cjw1dg/image-(23).png" alt="NGK Spark Plugs">
-                    <p data-i18n="partner-ngk">Official Partner for Racing</p>
+                    <!-- Updated Text -->
+                    <p data-i18n="partner-ngk">Official Partner for Motorsport Media</p>
                 </div>
                 <div class="partner-highlight">
                     <img src="https://i.postimg.cc/Ffyg9wSP/duneworkslogo-11zon-removebg-preview-(1).png" alt="Duneworks Studios">
@@ -472,7 +489,6 @@
 
         <div class="booking-form-wrapper">
             <form class="booking-form" action="https://formsubmit.co/Duneworksstudios@gmail.com" method="POST">
-                <!-- No placeholders, just labels -->
                 <div class="form-row">
                     <input type="text" name="name" required id="name">
                     <label for="name" data-i18n="form-name">Full Name</label>
@@ -552,12 +568,10 @@
         const langBtn = document.getElementById('lang-btn');
         const langDropdown = document.getElementById('lang-dropdown');
 
-        // Toggle dropdown
         langBtn.addEventListener('click', () => {
             langDropdown.classList.toggle('active');
         });
 
-        // Close dropdown if clicked outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.lang-switcher')) {
                 langDropdown.classList.remove('active');
@@ -578,15 +592,19 @@
                 'exec-role2': 'Co-Founder & Management Director', 'exec-desc2': 'Overseeing operations and strategic growth, ensuring seamless execution of complex international projects.',
                 'exec-role3': 'Co-Founder & Marketing Director', 'exec-desc3': 'Driving brand presence and innovative marketing strategies to connect our stories with a global audience.',
                 'exec-role4': 'Director Of Post Production and Editing', 'exec-desc4': 'Masterfully crafting the final narrative through expert editing, color grading, and post-production workflows.',
+                'exec-role5': 'Asst. Director Of Media Relations', 'exec-desc5': 'Facilitating media communications and supporting strategic outreach initiatives across key global markets.',
                 'global-label': 'Global Reach', 'global-title': 'Our Locations and People', 'global-desc': 'A diverse team of specialists bringing perspective from the world\'s most creative hubs.',
                 'country-uz': 'Uzbekistan', 'role-uz': 'Headquarters & All Production',
+                'country-ae': 'United Arab Emirates', 'role-ae': 'Secondary HQ & Main HQ for Motorsport Production',
                 'country-au': 'Australia', 'role-au': 'Production & Cinematography',
                 'country-gb': 'United Kingdom', 'role-gb': 'Management',
                 'country-za': 'South Africa', 'role-za': 'Management',
                 'country-pk': 'Pakistan', 'role-pk': 'Editing & Post Production',
                 'country-ca': 'Canada', 'role-ca': 'Production & Photography',
+                'country-in': 'India', 'role-in': 'Production',
+                'country-kw': 'Kuwait', 'role-kw': 'Management',
                 'partner-label': 'Trusted Collaborators', 'partner-title': 'Strategic Partners',
-                'partner-ngk': 'Official Partner for Racing', 'partner-studio': 'Studio & Logistics Partner',
+                'partner-ngk': 'Official Partner for Motorsport Media', 'partner-studio': 'Studio & Logistics Partner',
                 'partners-header': 'Partners & Companies We Have Worked For',
                 'contact-label': 'Contact Us', 'contact-title': "Let's Create",
                 'contact-booking': 'Booking Inquiries', 'contact-media': 'Media & Press', 'contact-email': 'Email',
@@ -606,15 +624,19 @@
                 'exec-role2': 'Соучредитель & Директор по управлению', 'exec-desc2': 'Контролирует операции и стратегический рост, обеспечивая бесшовное выполнение сложных международных проектов.',
                 'exec-role3': 'Соучредитель & Директор по маркетингу', 'exec-desc3': 'Управляет присутствием бренда и инновационными маркетинговыми стратегиями, связывая наши истории с мировой аудиторией.',
                 'exec-role4': 'Директор по постпродакшну и монтажу', 'exec-desc4': 'Мастерски создает финальный нарратив благодаря экспертному монтажу, цветокоррекции и рабочим процессам постпродакшна.',
+                'exec-role5': 'Зам. директора по медиа отношениям', 'exec-desc5': 'Содействие медиа коммуникациям и поддержка стратегических инициатив по охвату ключевых глобальных рынков.',
                 'global-label': 'Глобальный Охват', 'global-title': 'Наши Локации и Люди', 'global-desc': 'Разнообразная команда специалистов, привносящих перспективу из самых креативных центров мира.',
                 'country-uz': 'Узбекистан', 'role-uz': 'Штаб-квартира и Все Производство',
+                'country-ae': 'ОАЭ', 'role-ae': 'Вторичная штаб-квартира и Осн. база Моторспорт Продакшн',
                 'country-au': 'Австралия', 'role-au': 'Продакшн и Кинематография',
                 'country-gb': 'Великобритания', 'role-gb': 'Менеджмент',
                 'country-za': 'Южная Африка', 'role-za': 'Менеджмент',
                 'country-pk': 'Пакистан', 'role-pk': 'Монтаж и Постпродакшн',
                 'country-ca': 'Канада', 'role-ca': 'Продакшн и Фотография',
+                'country-in': 'Индия', 'role-in': 'Продакшн',
+                'country-kw': 'Кувейт', 'role-kw': 'Менеджмент',
                 'partner-label': 'Надежные Партнеры', 'partner-title': 'Стратегические Партнеры',
-                'partner-ngk': 'Официальный партнер по гонкам', 'partner-studio': 'Студия и Логистика',
+                'partner-ngk': 'Официальный партнер Motorsport Media', 'partner-studio': 'Студия и Логистика',
                 'partners-header': 'Партнеры и Компании, с которыми мы работали',
                 'contact-label': 'Связаться с нами', 'contact-title': 'Давайте Творить',
                 'contact-booking': 'Бронирование', 'contact-media': 'Медиа и Пресса', 'contact-email': 'Электронная почта',
@@ -634,15 +656,19 @@
                 'exec-role2': 'Ham-asoschi va Boshqaruv Direktori', 'exec-desc2': 'Operatsiyalarni nazorat qilish va strategik o\'sishni ta\'minlash, murakkab xalqaro loyihalarning uzluksiz bajarilishini kafolatlaydi.',
                 'exec-role3': 'Ham-asoschi va Marketing Direktori', 'exec-desc3': 'Brend mavjudligini oshirish va innovatsion marketing strategiyalari orqali bizning hikoyalarimizni global auditoriyaga yetkazadi.',
                 'exec-role4': 'Post-Ishlab Chiqarish va Montaj Direktori', 'exec-desc4': 'Professional montaj, rang tuzatish va post-ishlab chiqarish jarayonlari orqali yakuniy hikoyani mohirona yaratadi.',
+                'exec-role5': 'Media Aloqalar Direktori O\'rinbosari', 'exec-desc5': 'Media kommunikatsiyalarni osonlashtirish va asosiy global bozorlarda strategik tashabbuslarni qo\'llab-quvvatlash.',
                 'global-label': 'Global Qamrov', 'global-title': 'Bizning Joylar va Odamlar', 'global-desc': 'Dunyoning eng ijodiy markazlaridan ko\'nikma keltiruvchi mutaxassisllarning xilma-xil jamoasi.',
                 'country-uz': 'O\'zbekiston', 'role-uz': 'Bosh Qarorgoh va Barcha Ishlab Chiqarish',
+                'country-ae': 'Birlashgan Arab Amirliklari', 'role-ae': 'Ikkinchi Bosh Qarorgoh va Motorsport Ishlab Chiqarish Bosh Bazasi',
                 'country-au': 'Avstraliya', 'role-au': 'Ishlab Chiqarish va Kinematografiya',
                 'country-gb': 'Buyuk Britaniya', 'role-gb': 'Boshqaruv',
                 'country-za': 'Janubiy Afrika', 'role-za': 'Boshqaruv',
                 'country-pk': 'Pokiston', 'role-pk': 'Montaj va Post-Ishlab Chiqarish',
                 'country-ca': 'Kanada', 'role-ca': 'Ishlab Chiqarish va Fotografiya',
+                'country-in': 'Hindiston', 'role-in': 'Ishlab Chiqarish',
+                'country-kw': 'Kuveyt', 'role-kw': 'Boshqaruv',
                 'partner-label': 'Ishonchli Hamkorlar', 'partner-title': 'Strategik Hamkorlar',
-                'partner-ngk': 'Poyga uchun Rasmiy Hamkor', 'partner-studio': 'Studiya va Logistika Hamkori',
+                'partner-ngk': 'Motorsport Media rasmiy hamkori', 'partner-studio': 'Studiya va Logistika Hamkori',
                 'partners-header': 'Hamkorlar va Ishlagan Kompaniyalarimiz',
                 'contact-label': 'Biz Bilan Bog\'laning', 'contact-title': 'Yarataylik',
                 'contact-booking': 'Buyurtma So\'rovlari', 'contact-media': 'Media va Matbuot', 'contact-email': 'Email',
@@ -656,7 +682,6 @@
             elements.forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
-                    // Use innerHTML for elements that might have <br> tags
                     if (el.innerHTML.includes('<br>')) {
                          el.innerHTML = translations[lang][key];
                     } else {
@@ -665,7 +690,6 @@
                 }
             });
             
-            // Update button text
             langBtn.textContent = lang.toUpperCase();
             langDropdown.classList.remove('active');
         }
