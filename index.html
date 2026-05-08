@@ -247,16 +247,19 @@
         }
         
         .nav-logo {
-            font-family: var(--font-accent);
-            font-size: var(--text-xl);
-            font-weight: 400;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--text-primary);
+            display: flex;
+            align-items: center;
         }
         
-        .nav-logo span {
-            color: var(--accent-primary);
+        .nav-logo img {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            transition: filter var(--transition-base);
+        }
+        
+        .nav-logo:hover img {
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px var(--accent-primary));
         }
         
         .nav-links {
@@ -1576,15 +1579,16 @@
         }
         
         .footer-logo {
-            font-family: var(--font-accent);
-            font-size: var(--text-2xl);
-            font-weight: 400;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .footer-logo span {
-            color: var(--accent-primary);
+        .footer-logo img {
+            height: 48px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
         }
         
         .footer-tagline {
@@ -1942,8 +1946,12 @@
                 padding: var(--space-xl) var(--container-padding);
             }
             
-            .footer-logo {
-                font-size: var(--text-xl);
+            .footer-logo img {
+                height: 36px;
+            }
+            
+            .nav-logo img {
+                height: 32px;
             }
             
             .footer-tagline {
@@ -2092,7 +2100,9 @@
     <!-- Navigation -->
     <nav class="nav" id="nav">
         <div class="nav-container">
-            <a href="#home" class="nav-logo">Dune<span>works</span></a>
+            <a href="#home" class="nav-logo">
+                <img src="https://i.postimg.cc/jR3Nszp0/Gemini-Generated-Image-5vnzno5vnzno5vnz-Photoroom.png" alt="Duneworks Productions">
+            </a>
             
             <div class="nav-links">
                 <a href="#home" class="nav-link" data-i18n="nav-home">Home</a>
@@ -2630,23 +2640,26 @@
                 </div>
             </div>
             
-            <form class="contact-form reveal reveal-delay-1" id="bookingForm">
+            <form class="contact-form reveal reveal-delay-1" id="bookingForm" action="https://formsubmit.co/Duneworksstudios@gmail.com" method="POST">
                 <div class="form-row">
-                    <label class="form-label" data-i18n="form-name">Name</label>
-                    <input type="text" class="form-input" placeholder="Your name" required>
+                    <label class="form-label" data-i18n="form-name">Full Name</label>
+                    <input type="text" name="name" class="form-input" placeholder="Your name" required>
                 </div>
                 <div class="form-row">
-                    <label class="form-label" data-i18n="form-email">Email</label>
-                    <input type="email" class="form-input" placeholder="your@email.com" required>
+                    <label class="form-label" data-i18n="form-email">Email Address</label>
+                    <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
                 </div>
                 <div class="form-row">
-                    <label class="form-label" data-i18n="form-company">Company / Project</label>
-                    <input type="text" class="form-input" placeholder="Company or project name">
+                    <label class="form-label" data-i18n="form-company">Project Type</label>
+                    <input type="text" name="service" class="form-input" placeholder="Project type">
                 </div>
                 <div class="form-row">
-                    <label class="form-label" data-i18n="form-message">Message</label>
-                    <textarea class="form-input" placeholder="Tell us about your project..." required></textarea>
+                    <label class="form-label" data-i18n="form-message">Your Vision</label>
+                    <textarea name="message" class="form-input" placeholder="Tell us about your project..." required></textarea>
                 </div>
+                <input type="hidden" name="_subject" value="New Luxury Inquiry">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
                 <button type="submit" class="form-submit" data-i18n="form-submit">
                     Send Inquiry
                 </button>
@@ -2657,7 +2670,9 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-logo">Dune<span>works</span></div>
+            <div class="footer-logo">
+                <img src="https://i.postimg.cc/jR3Nszp0/Gemini-Generated-Image-5vnzno5vnzno5vnz-Photoroom.png" alt="Duneworks Productions">
+            </div>
             <p class="footer-tagline" data-i18n="footer-tagline">
                 Premium motorsport media and creative production for the world's leading brands.
             </p>
@@ -3024,24 +3039,15 @@
         revealElements.forEach(el => revealObserver.observe(el));
         
         // ============================================
-        // FORM HANDLING
+        // FORM HANDLING - FormSubmit.co Integration
         // ============================================
         const bookingForm = document.getElementById('bookingForm');
         bookingForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Show success feedback
+            // FormSubmit.co handles the actual submission
+            // This is just for UI feedback before redirect
             const submitBtn = bookingForm.querySelector('.form-submit');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Message Sent!';
-            submitBtn.style.background = 'var(--accent-primary)';
-            submitBtn.style.color = 'var(--bg-primary)';
-            
-            setTimeout(() => {
-                submitBtn.textContent = originalText;
-                submitBtn.style.background = '';
-                submitBtn.style.color = '';
-                bookingForm.reset();
-            }, 3000);
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
         });
         
         // ============================================
