@@ -141,7 +141,12 @@
             max-width: 300px;
             object-fit: contain;
             margin: 0 22px;
-            transform: translateY(-2px);
+            transform: translateY(1px);
+        }
+        /* Slight gap only between RUNA → Connect → shavi without widening outer marquee step much */
+        .partner-logo-img.partner-logo-runa + .partner-logo-img.partner-logo-connect,
+        .partner-logo-img.partner-logo-connect + .partner-logo-img.partner-logo-shavi {
+            margin-left: 28px;
         }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
