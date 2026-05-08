@@ -472,44 +472,40 @@
             animation: fadeInUp 0.8s var(--transition-dramatic) forwards;
         }
         
-        .hero-label {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-xs);
-            font-size: var(--text-xs);
-            font-weight: 600;
-            letter-spacing: 0.25em;
+        .hero-brand {
+            display: block;
+            font-family: var(--font-accent);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 400;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--accent-primary);
-            margin-bottom: var(--space-sm);
-        }
-        
-        .hero-label::before {
-            content: '';
-            width: 24px;
-            height: 1px;
-            background: var(--accent-primary);
+            margin-bottom: var(--space-md);
+            text-shadow: 0 0 40px rgba(201,169,98,0.3);
         }
         
         .hero-main-title {
             font-family: var(--font-display);
-            font-size: clamp(2rem, 6vw, 4rem);
+            font-size: clamp(3.5rem, 10vw, 7rem);
             font-weight: 400;
-            line-height: 1.1;
+            line-height: 1;
             color: white;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            text-shadow: 0 8px 40px rgba(0,0,0,0.6);
+            margin-bottom: var(--space-md);
         }
         
         .hero-main-title em {
             font-style: italic;
             color: var(--accent-primary);
+            text-shadow: 0 0 60px rgba(201,169,98,0.4);
         }
         
         .hero-subtitle {
-            font-size: var(--text-sm);
-            color: var(--text-secondary);
-            margin-top: var(--space-sm);
-            letter-spacing: 0.05em;
+            font-family: var(--font-accent);
+            font-size: clamp(1.25rem, 3vw, 2rem);
+            color: rgba(255,255,255,0.85);
+            line-height: 1.4;
+            letter-spacing: 0.02em;
         }
         
         .hero-middle {
@@ -1651,17 +1647,20 @@
                 gap: var(--space-md);
             }
             
+            .hero-brand {
+                font-size: clamp(1.125rem, 4vw, 1.5rem);
+                letter-spacing: 0.15em;
+                margin-bottom: var(--space-sm);
+            }
+            
             .hero-main-title {
-                font-size: clamp(1.75rem, 8vw, 2.5rem);
+                font-size: clamp(2.5rem, 10vw, 4rem);
+                line-height: 1.05;
+                margin-bottom: var(--space-sm);
             }
             
             .hero-subtitle {
-                font-size: var(--text-xs);
-                margin-top: var(--space-xs);
-            }
-            
-            .hero-label {
-                font-size: 0.6rem;
+                font-size: clamp(1rem, 4vw, 1.5rem);
             }
             
             .hero-description {
@@ -2089,9 +2088,9 @@
         <div class="hero-content">
             <!-- Top Section: Title -->
             <div class="hero-top">
-                <span class="hero-label" data-i18n="hero-label">The Agency</span>
+                <span class="hero-brand">Duneworks Production</span>
                 <h1 class="hero-main-title">Visions Crafted.<br><em>Global Reach.</em></h1>
-                <p class="hero-subtitle">Premium motorsport media & commercial film production</p>
+                <p class="hero-subtitle">Premium Media Service<br>Commercial Film Production</p>
             </div>
             
             <!-- Middle Section: Description -->
