@@ -2,298 +2,1776 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duneworks Productions | Global Cinematography</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Duneworks Productions | Premium Motorsport & Creative Media</title>
+    <meta name="description" content="Duneworks Productions - A global creative media agency specializing in premium motorsport content, Formula 1, and commercial film production.">
+    
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
+    
     <style>
-        /* --- Core Variables --- */
+        /* ============================================
+           DESIGN SYSTEM: DUNEWORKS PRODUCTIONS 2026
+           Premium Cinematic Creative Studio
+           ============================================ */
+        
         :root {
-            --bg-primary: #09090b;
-            --bg-secondary: #111113;
-            --bg-light: #f0f0f0;
-            --text-primary: #f5f5f5;
-            --text-secondary: #888;
-            --accent: #c5a059;
+            /* Core Colors - Cinematic Dark */
+            --bg-primary: #070708;
+            --bg-secondary: #0d0d0f;
+            --bg-tertiary: #121214;
+            --bg-elevated: #1a1a1d;
+            --bg-light: #f5f5f7;
+            
+            /* Text Colors */
+            --text-primary: #fafafa;
+            --text-secondary: #a0a0a8;
+            --text-tertiary: #6e6e78;
+            --text-muted: #4a4a52;
+            --text-dark: #1a1a1d;
+            
+            /* Accent - Refined Gold */
+            --accent-primary: #c9a962;
+            --accent-secondary: #d4b978;
+            --accent-glow: rgba(201, 169, 98, 0.15);
+            --accent-subtle: rgba(201, 169, 98, 0.08);
+            
+            /* Gradients */
+            --gradient-hero: linear-gradient(180deg, 
+                rgba(7, 7, 8, 0) 0%, 
+                rgba(7, 7, 8, 0.4) 50%, 
+                rgba(7, 7, 8, 0.95) 100%);
+            --gradient-gold: linear-gradient(135deg, #c9a962 0%, #e8d4a8 50%, #c9a962 100%);
+            --gradient-card: linear-gradient(180deg, rgba(26, 26, 29, 0.6) 0%, rgba(13, 13, 15, 0.9) 100%);
+            
+            /* Spacing System - 8px base */
+            --space-xs: 0.5rem;    /* 8px */
+            --space-sm: 1rem;      /* 16px */
+            --space-md: 1.5rem;    /* 24px */
+            --space-lg: 2rem;      /* 32px */
+            --space-xl: 3rem;      /* 48px */
+            --space-2xl: 4rem;     /* 64px */
+            --space-3xl: 6rem;     /* 96px */
+            --space-4xl: 8rem;     /* 128px */
+            
+            /* Typography Scale */
+            --font-display: 'Playfair Display', 'Cormorant Garamond', serif;
+            --font-body: 'Inter', 'Montserrat', sans-serif;
+            --font-accent: 'Cormorant Garamond', serif;
+            
+            --text-xs: clamp(0.75rem, 0.8vw, 0.875rem);
+            --text-sm: clamp(0.875rem, 0.9vw, 1rem);
+            --text-base: clamp(1rem, 1vw, 1.125rem);
+            --text-lg: clamp(1.125rem, 1.2vw, 1.25rem);
+            --text-xl: clamp(1.25rem, 1.5vw, 1.5rem);
+            --text-2xl: clamp(1.5rem, 2vw, 2rem);
+            --text-3xl: clamp(2rem, 2.5vw, 2.5rem);
+            --text-4xl: clamp(2.5rem, 3.5vw, 3.5rem);
+            --text-5xl: clamp(3rem, 5vw, 5rem);
+            --text-6xl: clamp(4rem, 7vw, 7rem);
+            --text-7xl: clamp(5rem, 10vw, 10rem);
+            
+            /* Layout */
+            --max-width: 1440px;
+            --section-padding: clamp(4rem, 10vw, 8rem);
+            --container-padding: clamp(1rem, 4vw, 3rem);
+            
+            /* Effects */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 48px rgba(0,0,0,0.5);
+            --shadow-glow: 0 0 60px var(--accent-glow);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-base: 0.3s ease;
+            --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-dramatic: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        /* --- Reset & Base --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; background-color: var(--bg-primary); cursor: none; }
-        body { font-family: 'Montserrat', sans-serif; font-weight: 300; color: var(--text-primary); overflow-x: hidden; line-height: 1.8; background: var(--bg-primary); }
-
-        /* --- Camera Cursor (PC ONLY) --- */
-        .cursor {
-            width: 40px; height: 40px; position: fixed; pointer-events: none; z-index: 10000;
-            transform: translate(-50%, -50%); transition: transform 0.1s ease, opacity 0.3s ease;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23c5a059' stroke-width='3'%3E%3Crect x='10' y='25' width='80' height='50' rx='10' /%3E%3Ccircle cx='50' cy='50' r='15' /%3E%3Crect x='60' y='30' width='15' height='10' rx='2' fill='%23c5a059' stroke='none'/%3E%3C/svg%3E");
-            background-size: contain; background-repeat: no-repeat; display: block;
+        
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        .cursor.hover-active { transform: translate(-50%, -50%) scale(1.5); opacity: 0.8; }
-
-        /* --- Grain --- */
+        
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: var(--bg-primary);
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: color var(--transition-base);
+        }
+        
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        
+        ul, ol {
+            list-style: none;
+        }
+        
+        /* ============================================
+           CINEMATIC EFFECTS & OVERLAYS
+           ============================================ */
+        
+        /* Film Grain Overlay */
         .grain-overlay {
-            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; pointer-events: none; z-index: 9999;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            animation: grain 12s steps(10) infinite; opacity: 0.03;
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            animation: grain 8s steps(10) infinite;
         }
-        @media (max-width: 768px) { .grain-overlay { opacity: 0.08; } }
+        
         @keyframes grain {
-            0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-5%, -10%); } 20% { transform: translate(-15%, 5%); }
-            30% { transform: translate(7%, -25%); } 40% { transform: translate(-5%, 25%); } 50% { transform: translate(-15%, 10%); }
-            60% { transform: translate(15%, 0%); } 70% { transform: translate(0%, 15%); } 80% { transform: translate(3%, 35%); }
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            20% { transform: translate(-15%, 5%); }
+            30% { transform: translate(7%, -25%); }
+            40% { transform: translate(-5%, 25%); }
+            50% { transform: translate(-15%, 10%); }
+            60% { transform: translate(15%, 0%); }
+            70% { transform: translate(0%, 15%); }
+            80% { transform: translate(3%, 35%); }
             90% { transform: translate(-10%, 10%); }
         }
-
-        /* --- Typography --- */
-        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 300; letter-spacing: 2px; mix-blend-mode: difference; color: white; }
-        a { text-decoration: none; color: inherit; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 50px; }
-        .section-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: block; }
-
-        /* --- Navigation --- */
-        header { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 30px 0; mix-blend-mode: difference; }
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: white; position: relative; z-index: 1002; }
-        .nav-links { display: flex; gap: 50px; list-style: none; align-items: center; }
-        .nav-links a { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: white; transition: opacity 0.3s; }
-        .nav-links a:hover { opacity: 0.7; }
-        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: white; z-index: 1002; }
-
-        /* --- Language Switcher --- */
-        .lang-switcher { position: relative; z-index: 1003; margin-left: 20px; }
-        .lang-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 15px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; }
-        .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
-        .lang-dropdown { position: absolute; top: 100%; right: 0; background: #111; border: 1px solid #333; display: none; flex-direction: column; min-width: 100px; margin-top: 5px; }
-        .lang-dropdown.active { display: flex; }
-        .lang-dropdown button { background: transparent; border: none; color: #ccc; padding: 10px; text-align: left; font-size: 0.7rem; cursor: pointer; transition: 0.3s; }
-        .lang-dropdown button:hover { background: #222; color: var(--accent); }
-
-        /* --- Hero --- */
-        #home { height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; background: url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop') center/cover no-repeat; }
-        #home::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1; }
-        .hero-content { position: relative; z-index: 2; width: 100%; padding: 0 50px; }
-        .hero-title-wrap { overflow: hidden; display: block; margin-bottom: -10px; }
-        .hero-title { font-size: clamp(3rem, 11vw, 11rem); line-height: 0.85; white-space: nowrap; }
-        .hero-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; letter-spacing: 4px; color: #ccc; margin-top: 40px; text-transform: uppercase; }
-        .scroll-indicator { position: absolute; bottom: 50px; right: 50px; writing-mode: vertical-rl; font-size: 0.7rem; letter-spacing: 3px; color: #ccc; animation: bounce 2s infinite; z-index: 2; }
-
-        /* --- Intro --- */
-        #intro { padding: 150px 0; background: var(--bg-primary); display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; border-bottom: 1px solid #222; }
-        .intro-text h2 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 30px; }
-        .intro-text p { color: var(--text-secondary); margin-bottom: 20px; }
-
-        /* --- Social Media Hub --- */
-        #social-hub { min-height: 100vh; display: flex; align-items: center; background: var(--bg-primary); padding: 100px 0; border-top: 1px solid #222; }
-        .social-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .social-info h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px; }
-        .social-info p { color: var(--text-secondary); margin-bottom: 40px; }
-        .social-cards { display: grid; gap: 20px; }
-        .social-card { display: flex; align-items: center; gap: 20px; padding: 30px; border: 1px solid #222; transition: all 0.4s ease; background: rgba(255,255,255,0.02); cursor: none; }
-        .social-card:hover { border-color: var(--accent); background: rgba(197, 160, 89, 0.05); transform: translateX(10px); }
-        .social-card i { font-size: 2rem; color: var(--accent); }
-        .social-card h3 { font-size: 1.5rem; color: var(--text-primary); mix-blend-mode: normal; margin-bottom: 5px; }
-        .social-card span { font-size: 0.8rem; color: var(--text-secondary); }
-
-        /* --- Executive Team Section --- */
-        #executive-team { padding: 150px 0; background: var(--bg-secondary); text-align: center; border-top: 1px solid #222; }
-        .exec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; max-width: 1400px; margin-left: auto; margin-right: auto; }
-        .exec-card { border: 1px solid #333; padding: 50px 30px; transition: all 0.4s ease; position: relative; overflow: hidden; cursor: none; }
-        .exec-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent); transform: scaleX(0); transition: transform 0.4s ease; }
-        .exec-card:hover::before { transform: scaleX(1); }
-        .exec-card:hover { border-color: var(--accent); background: rgba(0,0,0,0.3); }
-        .exec-name { font-size: clamp(1.8rem, 3vw, 2.5rem); margin-bottom: 10px; display: block; color: var(--text-primary); mix-blend-mode: normal; }
-        .exec-role { font-family: 'Montserrat', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); display: block; margin-bottom: 20px; }
-        .exec-desc { font-size: 0.9rem; color: var(--text-secondary); }
-
-        /* --- Global Team Section --- */
-        #team { padding: 150px 0; background: var(--bg-primary); text-align: center; }
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 60px; justify-items: center; }
-        .team-card { border: 1px solid #222; padding: 40px 20px; transition: background 0.3s, border-color 0.3s; cursor: none; width: 100%; max-width: 300px; }
-        .team-card:hover { background: rgba(197, 160, 89, 0.05); border-color: var(--accent); }
-        .team-flag { width: 48px; height: 32px; display: inline-block; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border-radius: 2px; background-size: cover; background-position: center; }
-        .team-card h4 { font-size: 1.5rem; margin-bottom: 10px; mix-blend-mode: normal; color: var(--text-primary); }
-        .team-card p { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
-
-        /* --- Close Partners Section --- */
-        #close-partners { padding: 150px 50px; background: var(--bg-light); display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .partner-highlight-container { display: flex; justify-content: center; gap: 100px; margin-top: 60px; flex-wrap: wrap; }
-        .partner-highlight { display: flex; flex-direction: column; align-items: center; cursor: none; }
-        .partner-highlight img { height: 60px; filter: grayscale(100%); opacity: 0.8; transition: all 0.3s; margin-bottom: 20px; }
-        .partner-highlight:hover img { filter: grayscale(0%); opacity: 1; }
-        .partner-highlight p { color: #333; font-weight: 500; }
-
-        /* --- Partners Marquee --- */
-        #partners { padding: 100px 0 80px; background: var(--bg-primary); overflow: hidden; border-top: 1px solid #222; border-bottom: 1px solid #222; text-align: center; }
-        .partners-header { margin-bottom: 40px; }
-        .partners-header h2 { font-size: 2rem; color: var(--text-primary); mix-blend-mode: normal; }
-        .marquee-container { display: flex; width: max-content; align-items: center; animation: marquee 35s linear infinite; }
-        .partner-logo-img { height: 60px; width: 150px; object-fit: contain; filter: grayscale(100%) brightness(0.7); opacity: 0.6; margin: 0 50px; transition: all 0.3s ease; }
-        .partner-logo-img:hover { filter: grayscale(0%) brightness(1); opacity: 1; }
-        .partner-logo-img.partner-logo-connect,
-        .partner-logo-img.partner-logo-shavi,
-        .partner-logo-img.partner-logo-runa {
-            height: 132px;
-            width: auto;
-            max-width: 300px;
-            object-fit: contain;
-            margin: 0 22px;
-            transform: translateY(1px);
-        }
-        /* Slight gap only between RUNA → Connect → shavi without widening outer marquee step much */
-        .partner-logo-img.partner-logo-runa + .partner-logo-img.partner-logo-connect,
-        .partner-logo-img.partner-logo-connect + .partner-logo-img.partner-logo-shavi {
-            margin-left: 28px;
-        }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* --- Booking --- */
-        #booking { padding: 150px 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; background: #050505; }
-        .booking-info { padding-right: 50px; }
-        .booking-info h2 { font-size: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: 20px; }
-        .contact-block { margin-bottom: 40px; mix-blend-mode: normal; }
-        .contact-block span { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-bottom: 10px; }
-        .contact-block a { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--text-primary); display: block; cursor: none; }
-        .contact-block a:hover { color: var(--accent); }
-
-        /* Form */
-        .form-row { position: relative; margin-bottom: 30px; }
-        .form-row input, .form-row textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #333; padding: 15px 0; font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--text-primary); transition: border-color 0.3s; cursor: none; }
-        .form-row input:focus, .form-row textarea:focus { outline: none; border-bottom-color: var(--accent); }
         
-        /* Floating Label Logic */
-        .form-row label { position: absolute; top: 15px; left: 0; font-size: 0.8rem; color: var(--text-secondary); pointer-events: none; transition: all 0.3s; }
-        .form-row input:focus + label, .form-row input:valid + label, .form-row textarea:focus + label, .form-row textarea:valid + label { top: -10px; font-size: 0.7rem; color: var(--accent); }
-        .btn-gold { padding: 18px 40px; background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'Montserrat', sans-serif; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; cursor: none; transition: all 0.4s; }
-        .btn-gold:hover { color: #000; background: var(--accent); }
-
-        /* --- Footer --- */
-        footer { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #222; font-size: 0.75rem; color: var(--text-secondary); }
-
-        /* --- MOBILE RESPONSIVE STYLES --- */
-        @media (hover: none) and (pointer: coarse) {
-            html { cursor: auto !important; } .cursor { display: none !important; } * { cursor: auto !important; }
+        /* Vignette */
+        .vignette {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            background: radial-gradient(ellipse at center, transparent 50%, rgba(7,7,8,0.4) 100%);
         }
+        
+        /* ============================================
+           CUSTOM CURSOR
+           ============================================ */
+        
+        .cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
+        }
+        
+        .cursor svg {
+            width: 100%;
+            height: 100%;
+            fill: #fff;
+            filter: drop-shadow(0 0 8px rgba(201, 169, 98, 0.6));
+        }
+        
+        .cursor.hover {
+            transform: scale(1.8);
+        }
+        
+        @media (pointer: coarse) {
+            .cursor { display: none; }
+        }
+        
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: var(--space-md) var(--container-padding);
+            transition: all var(--transition-slow);
+        }
+        
+        .nav.visible {
+            background: rgba(7, 7, 8, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .nav-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-logo {
+            font-family: var(--font-accent);
+            font-size: var(--text-xl);
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+        }
+        
+        .nav-logo span {
+            color: var(--accent-primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+        
+        .nav-link {
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            position: relative;
+            padding: var(--space-xs) 0;
+            transition: color var(--transition-base);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent-primary);
+            transition: width var(--transition-base);
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-language {
+            position: relative;
+        }
+        
+        .lang-toggle {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+            padding: var(--space-xs) var(--space-sm);
+            border: 1px solid var(--text-muted);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-base);
+        }
+        
+        .lang-toggle:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+        
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: var(--space-xs);
+            background: var(--bg-elevated);
+            border: 1px solid var(--text-muted);
+            border-radius: var(--radius-md);
+            padding: var(--space-xs);
+            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all var(--transition-base);
+        }
+        
+        .nav-language:hover .lang-dropdown,
+        .lang-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm);
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+        
+        .lang-option:hover {
+            background: var(--accent-subtle);
+            color: var(--text-primary);
+        }
+        
+        .lang-option .fi {
+            width: 20px;
+            height: 14px;
+            border-radius: 2px;
+        }
+        
+        .nav-mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: var(--space-sm);
+            z-index: 1001;
+        }
+        
+        .nav-mobile-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all var(--transition-base);
+        }
+        
+        .nav-mobile-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .nav-mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .nav-mobile-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+        
+        .nav-mobile {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xl);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-slow);
+        }
+        
+        .nav-mobile.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .nav-mobile .nav-link {
+            font-size: var(--text-2xl);
+            font-family: var(--font-accent);
+        }
+        
         @media (max-width: 768px) {
-            /* Navigation */
-            header { padding: 20px 0; mix-blend-mode: normal; background: rgba(9, 9, 11, 0.98); border-bottom: 1px solid #222; }
-            .logo { font-size: 1.5rem; color: var(--text-primary); }
-            .nav-links { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #09090b; flex-direction: column; justify-content: center; align-items: center; gap: 40px; z-index: 1001; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; pointer-events: none; }
-            .nav-links.active { opacity: 1; visibility: visible; pointer-events: auto; }
-            .nav-links a { font-size: 2rem; font-weight: 400; color: var(--text-primary); }
-            .nav-links a:hover { color: var(--accent); }
-            /* Mobile Lang Switcher */
-            .lang-switcher { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); margin-left: 0; }
-            .lang-btn { border-color: #555; }
-            .lang-dropdown { right: 0; background: #000; }
-            .menu-toggle { display: block; }
-
-            /* Hero */
-            #home { padding-top: 80px; align-items: center; text-align: center; }
-            .hero-content { width: 100%; padding: 0 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-            .hero-title { white-space: normal; font-size: clamp(2.5rem, 12vw, 4rem); line-height: 1; text-align: center; }
-            .hero-subtitle { text-align: center; margin-top: 30px; line-height: 1.5; }
-            .scroll-indicator { right: 50%; transform: translateX(50%); bottom: 30px; }
-
-            /* Layouts */
-            .container { padding: 0 20px; }
-            #intro, #booking, #team, .social-grid-layout { grid-template-columns: 1fr; padding: 80px 0; gap: 50px; }
-            .exec-grid { grid-template-columns: 1fr; padding: 0 20px; }
-            .exec-card { padding: 40px 20px; }
-            .team-grid { grid-template-columns: 1fr; gap: 20px; padding: 0 20px; }
-            #close-partners { padding: 80px 0; }
-            .partner-highlight-container { gap: 50px; flex-direction: column; }
-            .booking-info { padding-right: 0; margin-bottom: 40px; text-align: center; }
-            .contact-block a { font-size: 1.3rem; }
-            .btn-gold { width: 100%; padding: 20px; }
-            footer { flex-direction: column; gap: 10px; text-align: center; padding: 30px 20px; }
+            .nav-links { display: none; }
+            .nav-mobile-toggle { display: flex; }
+            .nav-language { display: none; }
+        }
+        
+        /* ============================================
+           HERO SECTION - CINEMATIC
+           ============================================ */
+        
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: var(--section-padding) var(--container-padding);
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(201, 169, 98, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(201, 169, 98, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, transparent 0%, var(--bg-primary) 100%);
+            z-index: 1;
+        }
+        
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a962' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            margin-bottom: var(--space-lg);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s var(--transition-dramatic) forwards;
+        }
+        
+        .hero-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--accent-primary);
+        }
+        
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: var(--text-7xl);
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-lg);
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 1s var(--transition-dramatic) 0.2s forwards;
+        }
+        
+        .hero-title span {
+            display: block;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent-primary);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-description {
+            max-width: 600px;
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-2xl);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s var(--transition-dramatic) 0.4s forwards;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: var(--space-md);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s var(--transition-dramatic) 0.6s forwards;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .btn-primary:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+        
+        .btn-secondary {
+            border: 1px solid var(--text-muted);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        
+        .hero-scroll {
+            position: absolute;
+            bottom: var(--space-xl);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: var(--text-xs);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            opacity: 0;
+            animation: fadeIn 1s ease 1.5s forwards;
+        }
+        
+        .hero-scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--accent-primary), transparent);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+        
+        @keyframes scrollLine {
+            0%, 100% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            51% { transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        /* ============================================
+           SECTION BASE
+           ============================================ */
+        
+        .section {
+            position: relative;
+            padding: var(--section-padding) var(--container-padding);
+        }
+        
+        .section-header {
+            max-width: var(--max-width);
+            margin: 0 auto var(--space-2xl);
+        }
+        
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            margin-bottom: var(--space-md);
+        }
+        
+        .section-label::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--accent-primary);
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: var(--text-5xl);
+            font-weight: 400;
+            line-height: 1.1;
+            max-width: 800px;
+        }
+        
+        .section-description {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-top: var(--space-md);
+        }
+        
+        /* ============================================
+           INTRO / MANIFESTO SECTION
+           ============================================ */
+        
+        .manifesto {
+            background: var(--bg-secondary);
+        }
+        
+        .manifesto-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4xl);
+            align-items: start;
+        }
+        
+        .manifesto-text {
+            position: sticky;
+            top: var(--space-3xl);
+        }
+        
+        .manifesto-text h2 {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .manifesto-text h2 em {
+            font-style: italic;
+            color: var(--accent-primary);
+        }
+        
+        .manifesto-text p {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .manifesto-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+            margin-top: var(--space-2xl);
+            padding-top: var(--space-2xl);
+            border-top: 1px solid var(--text-muted);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            font-weight: 500;
+            color: var(--accent-primary);
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: var(--space-xs);
+        }
+        
+        .manifesto-series {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .series-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--bg-tertiary);
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+        
+        .series-item:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-elevated);
+            transform: translateX(var(--space-sm));
+        }
+        
+        .series-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--accent-primary);
+            font-size: var(--text-xl);
+        }
+        
+        .series-content h4 {
+            font-family: var(--font-accent);
+            font-size: var(--text-lg);
+            font-weight: 500;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .series-content p {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+        }
+        
+        @media (max-width: 968px) {
+            .manifesto-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-2xl);
+            }
+            .manifesto-text {
+                position: relative;
+                top: 0;
+            }
+        }
+        
+        /* ============================================
+           SOCIAL HUB SECTION
+           ============================================ */
+        
+        .social {
+            background: var(--bg-primary);
+        }
+        
+        .social-grid {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-lg);
+        }
+        
+        .social-card {
+            position: relative;
+            padding: var(--space-xl);
+            background: var(--bg-secondary);
+            border: 1px solid var(--text-muted);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--transition-slow);
+        }
+        
+        .social-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-card);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        
+        .social-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .social-card:hover::before {
+            opacity: 1;
+        }
+        
+        .social-card-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .social-card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .social-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-subtle);
+            border-radius: var(--radius-md);
+            color: var(--accent-primary);
+            font-size: var(--text-2xl);
+            transition: all var(--transition-base);
+        }
+        
+        .social-card:hover .social-icon {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+        
+        .social-card h3 {
+            font-family: var(--font-accent);
+            font-size: var(--text-xl);
+            font-weight: 500;
+        }
+        
+        .social-card h3 span {
+            display: block;
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+            font-weight: 400;
+            margin-top: var(--space-xs);
+        }
+        
+        .social-card p {
+            font-size: var(--text-base);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            transition: all var(--transition-base);
+        }
+        
+        .social-link i {
+            transition: transform var(--transition-base);
+        }
+        
+        .social-card:hover .social-link {
+            color: var(--accent-primary);
+        }
+        
+        .social-card:hover .social-link i {
+            transform: translateX(4px);
+        }
+        
+        @media (max-width: 768px) {
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ============================================
+           LEADERSHIP SECTION
+           ============================================ */
+        
+        .leadership {
+            background: var(--bg-secondary);
+        }
+        
+        .leadership-grid {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+        }
+        
+        @media (max-width: 1200px) {
+            .leadership-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .leadership-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .exec-card {
+            position: relative;
+            padding: var(--space-xl);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--text-muted);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--transition-slow);
+        }
+        
+        .exec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition-slow);
+        }
+        
+        .exec-card:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-elevated);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .exec-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .exec-role {
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .exec-name {
+            font-family: var(--font-accent);
+            font-size: var(--text-2xl);
+            font-weight: 500;
+            margin-bottom: var(--space-md);
+            line-height: 1.3;
+        }
+        
+        .exec-bio {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* ============================================
+           GLOBAL TEAM SECTION
+           ============================================ */
+        
+        .team {
+            background: var(--bg-primary);
+        }
+        
+        .team-map {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+        }
+        
+        @media (max-width: 1200px) {
+            .team-map {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 968px) {
+            .team-map {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .team-map {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .team-card {
+            position: relative;
+            padding: var(--space-lg);
+            background: var(--bg-secondary);
+            border: 1px solid var(--text-muted);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: all var(--transition-base);
+        }
+        
+        .team-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent-subtle);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        
+        .team-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+        }
+        
+        .team-card:hover::after {
+            opacity: 1;
+        }
+        
+        .team-card-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .team-flag {
+            font-size: var(--text-3xl);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .team-country {
+            font-family: var(--font-accent);
+            font-size: var(--text-xl);
+            font-weight: 500;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .team-role {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .team-hq {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            margin-top: var(--space-sm);
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--accent-subtle);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* ============================================
+           STRATEGIC PARTNERS SECTION
+           ============================================ */
+        
+        .partners-featured {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        .partners-featured .section-label {
+            color: var(--text-dark);
+        }
+        
+        .partners-featured .section-label::before {
+            background: var(--text-dark);
+        }
+        
+        .partners-featured .section-title {
+            color: var(--text-dark);
+        }
+        
+        .featured-grid {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-2xl);
+        }
+        
+        @media (max-width: 768px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .featured-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: var(--space-2xl);
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-base);
+        }
+        
+        .featured-card:hover {
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            transform: translateY(-6px);
+        }
+        
+        .featured-logo {
+            height: 80px;
+            width: auto;
+            max-width: 240px;
+            object-fit: contain;
+            margin-bottom: var(--space-lg);
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all var(--transition-base);
+        }
+        
+        .featured-card:hover .featured-logo {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        
+        .featured-card h3 {
+            font-family: var(--font-accent);
+            font-size: var(--text-xl);
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .featured-card p {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+        }
+        
+        /* ============================================
+           PARTNERS MARQUEE
+           ============================================ */
+        
+        .marquee-section {
+            background: var(--bg-primary);
+            padding: var(--space-2xl) 0;
+            overflow: hidden;
+        }
+        
+        .marquee-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            padding: 0 var(--container-padding);
+        }
+        
+        .marquee-header h2 {
+            font-family: var(--font-accent);
+            font-size: var(--text-2xl);
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+        
+        .marquee-container {
+            display: flex;
+            width: max-content;
+            animation: marquee 40s linear infinite;
+        }
+        
+        .marquee-container:hover {
+            animation-play-state: paused;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .partner-logo {
+            flex-shrink: 0;
+            height: 50px;
+            width: auto;
+            max-width: 140px;
+            object-fit: contain;
+            margin: 0 var(--space-xl);
+            filter: grayscale(100%) brightness(0.6);
+            opacity: 0.5;
+            transition: all var(--transition-base);
+        }
+        
+        .partner-logo:hover {
+            filter: grayscale(0%) brightness(1);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        /* Large partner logos in marquee */
+        .partner-logo.partner-logo-lg {
+            height: 70px;
+            max-width: 200px;
+            margin: 0 var(--space-lg);
+        }
+        
+        /* ============================================
+           CONTACT / BOOKING SECTION
+           ============================================ */
+        
+        .contact {
+            background: var(--bg-secondary);
+        }
+        
+        .contact-grid {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4xl);
+            align-items: start;
+        }
+        
+        @media (max-width: 968px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-3xl);
+            }
+        }
+        
+        .contact-info h2 {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            font-weight: 400;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .contact-info > p {
+            font-size: var(--text-lg);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .contact-block {
+            margin-bottom: var(--space-xl);
+        }
+        
+        .contact-label {
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .contact-value {
+            font-family: var(--font-accent);
+            font-size: var(--text-2xl);
+            font-weight: 400;
+            color: var(--text-primary);
+            transition: color var(--transition-base);
+        }
+        
+        .contact-value:hover {
+            color: var(--accent-primary);
+        }
+        
+        .contact-form {
+            background: var(--bg-tertiary);
+            padding: var(--space-2xl);
+            border: 1px solid var(--text-muted);
+            border-radius: var(--radius-lg);
+        }
+        
+        .form-row {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-sm);
+            transition: color var(--transition-base);
+        }
+        
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label {
+            color: var(--accent-primary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--space-sm) 0;
+            font-size: var(--text-base);
+            color: var(--text-primary);
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--text-muted);
+            transition: border-color var(--transition-base);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-submit {
+            width: 100%;
+            padding: var(--space-md);
+            background: transparent;
+            border: 1px solid var(--accent-primary);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-submit::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition-slow);
+            z-index: -1;
+        }
+        
+        .form-submit:hover {
+            color: var(--bg-primary);
+        }
+        
+        .form-submit:hover::before {
+            transform: scaleX(1);
+        }
+        
+        /* ============================================
+           FOOTER
+           ============================================ */
+        
+        .footer {
+            background: var(--bg-primary);
+            padding: var(--space-2xl) var(--container-padding);
+            border-top: 1px solid var(--text-muted);
+        }
+        
+        .footer-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+        
+        .footer-logo {
+            font-family: var(--font-accent);
+            font-size: var(--text-2xl);
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        
+        .footer-logo span {
+            color: var(--accent-primary);
+        }
+        
+        .footer-tagline {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        .footer-copy {
+            font-size: var(--text-xs);
+            color: var(--text-muted);
+        }
+        
+        /* ============================================
+           SCROLL REVEAL ANIMATIONS
+           ============================================ */
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        
+        /* ============================================
+           RESPONSIVE UTILITIES
+           ============================================ */
+        
+        @media (max-width: 768px) {
+            :root {
+                --section-padding: 3rem;
+                --container-padding: 1.25rem;
+            }
+            
+            .hero-title {
+                font-size: clamp(2.5rem, 12vw, 4rem);
+            }
+            
+            .section-title {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+            }
+            
+            .btn {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Cinematic Overlays -->
     <div class="grain-overlay"></div>
-    <div class="cursor" id="cursor"></div>
-
+    <div class="vignette"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-13v6h4V7H10zm0 8v2h4v-2h-4z"/>
+            <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1"/>
+        </svg>
+    </div>
+    
     <!-- Navigation -->
-    <header>
-        <nav class="container">
-            <a href="#home" class="logo">Duneworks</a>
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#home" data-i18n="nav-home">Home</a></li>
-                <li><a href="#executive-team" data-i18n="nav-leadership">Leadership</a></li>
-                <li><a href="#team" data-i18n="nav-team">Team</a></li>
-                <li><a href="#partners" data-i18n="nav-partners">Partners</a></li>
-                <li><a href="#booking" data-i18n="nav-contact">Contact</a></li>
-            </ul>
-            <!-- Language Switcher -->
-            <div class="lang-switcher">
-                <button class="lang-btn" id="lang-btn">EN</button>
-                <div class="lang-dropdown" id="lang-dropdown">
-                    <button onclick="setLanguage('en')">English</button>
-                    <button onclick="setLanguage('ru')">Русский</button>
-                    <button onclick="setLanguage('uz')">O'zbek</button>
+    <nav class="nav" id="nav">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">Dune<span>works</span></a>
+            
+            <div class="nav-links">
+                <a href="#home" class="nav-link" data-i18n="nav-home">Home</a>
+                <a href="#leadership" class="nav-link" data-i18n="nav-leadership">Leadership</a>
+                <a href="#team" class="nav-link" data-i18n="nav-team">Global Team</a>
+                <a href="#partners" class="nav-link" data-i18n="nav-partners">Partners</a>
+                <a href="#contact" class="nav-link" data-i18n="nav-contact">Contact</a>
+                
+                <div class="nav-language">
+                    <button class="lang-toggle" id="langToggle">
+                        <span class="fi fi-gb"></span>
+                        <span id="currentLang">EN</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown">
+                        <div class="lang-option" data-lang="en">
+                            <span class="fi fi-gb"></span>
+                            <span>English</span>
+                        </div>
+                        <div class="lang-option" data-lang="ru">
+                            <span class="fi fi-ru"></span>
+                            <span>Русский</span>
+                        </div>
+                        <div class="lang-option" data-lang="uz">
+                            <span class="fi fi-uz"></span>
+                            <span>O'zbek</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="menu-toggle" id="menu-btn">
-                <i class="fas fa-bars"></i>
-            </div>
-        </nav>
-    </header>
+            
+            <button class="nav-mobile-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Mobile Navigation -->
+    <div class="nav-mobile" id="mobileNav">
+        <a href="#home" class="nav-link" data-i18n="nav-home">Home</a>
+        <a href="#leadership" class="nav-link" data-i18n="nav-leadership">Leadership</a>
+        <a href="#team" class="nav-link" data-i18n="nav-team">Global Team</a>
+        <a href="#partners" class="nav-link" data-i18n="nav-partners">Partners</a>
+        <a href="#contact" class="nav-link" data-i18n="nav-contact">Contact</a>
+    </div>
 
-    <!-- Hero -->
-    <section id="home">
-        <div class="container">
-            <div class="hero-content">
-                <span class="section-label" style="mix-blend-mode: difference; color: white;" data-i18n="hero-label">Visual Storytelling</span>
-                <div class="hero-title-wrap"><h1 class="hero-title">DUNEWORKS</h1></div>
-                <div class="hero-title-wrap"><h1 class="hero-title" style="font-style: italic;">PRODUCTION</h1></div>
-                <p class="hero-subtitle" data-i18n="hero-subtitle">Premium cinematography & photography for global brands and visionaries.</p>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-label" data-i18n="hero-label">Premium Motorsport Media</div>
+            <h1 class="hero-title">
+                Duneworks
+                <span>Productions</span>
+            </h1>
+            <p class="hero-description" data-i18n="hero-description">
+                A global creative media agency crafting premium motorsport content for Formula 1, 
+                FIA, and world-class racing series. We transform vision into cinematic reality.
+            </p>
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary">
+                    <span data-i18n="cta-primary">Start a Project</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#partners" class="btn btn-secondary" data-i18n="cta-secondary">View Our Work</a>
             </div>
         </div>
-        <div class="scroll-indicator" data-i18n="scroll">Scroll</div>
+        <div class="hero-scroll">
+            <span data-i18n="scroll">Scroll</span>
+            <div class="hero-scroll-line"></div>
+        </div>
     </section>
 
-    <!-- Intro -->
-    <section id="intro">
-        <div class="intro-text">
-            <span class="section-label" data-i18n="intro-label">The Agency</span>
-            <h2 data-i18n="intro-title">Visions Crafted<br>Global Reach.</h2>
-            <p data-i18n="intro-desc">From the raw energy of the dunes to the high-stakes world of Formula 1, Duneworks Productions captures moments that define eras. We are a collective of directors, cinematographers, and photographers dedicated to visual excellence.</p>
+    <!-- Manifesto / Intro Section -->
+    <section class="section manifesto" id="intro">
+        <div class="section-header reveal">
+            <div class="section-label" data-i18n="intro-label">The Agency</div>
+            <h2 class="section-title" data-i18n="intro-title">Visions Crafted.<br>Global Reach.</h2>
         </div>
-        <div class="intro-text">
-            <ul style="list-style: none; border-left: 1px solid var(--accent); padding-left: 30px;">
-                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">Formula 1®</li>
-                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">FIA World Endurance</li>
-                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);">Formula 2, 3 & 4</li>
-                <li style="margin-bottom: 15px; font-size: 1.1rem; font-family: 'Cormorant Garamond'; color: var(--text-primary);" data-i18n="intro-li4">24 Hour Endurance Series</li>
-            </ul>
+        <div class="manifesto-content">
+            <div class="manifesto-text reveal">
+                <h2 data-i18n="intro-heading">
+                    We are <em>Duneworks Productions</em> — a global creative agency 
+                    specializing in premium motorsport media and commercial film production.
+                </h2>
+                <p data-i18n="intro-p1">
+                    From the paddocks of Formula 1 to the deserts of cross-continental rallies, 
+                    we capture the essence of motorsport with cinematic precision. Our work spans 
+                    across FIA-sanctioned series, Formula 3, Asian Le Mans, and beyond.
+                </p>
+                <p data-i18n="intro-p2">
+                    With teams across 9 countries and partnerships with world-leading brands, 
+                    we deliver content that resonates with audiences worldwide. Every frame 
+                    tells a story. Every project is a masterpiece.
+                </p>
+                <div class="manifesto-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">9+</div>
+                        <div class="stat-label" data-i18n="stat-countries">Countries</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">14+</div>
+                        <div class="stat-label" data-i18n="stat-partners">Partners</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">F1</div>
+                        <div class="stat-label" data-i18n="stat-f1">Formula 1</div>
+                    </div>
+                </div>
+            </div>
+            <div class="manifesto-series reveal reveal-delay-2">
+                <div class="series-item">
+                    <div class="series-icon">
+                        <i class="fas fa-flag-checkered"></i>
+                    </div>
+                    <div class="series-content">
+                        <h4>Formula 1</h4>
+                        <p data-i18n="series-f1">Premier motorsport content creation</p>
+                    </div>
+                </div>
+                <div class="series-item">
+                    <div class="series-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="series-content">
+                        <h4>FIA Championships</h4>
+                        <p data-i18n="series-fia">FIA-sanctioned racing series coverage</p>
+                    </div>
+                </div>
+                <div class="series-item">
+                    <div class="series-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <div class="series-content">
+                        <h4>Formula 3</h4>
+                        <p data-i18n="series-f3">Rising talent and developmental series</p>
+                    </div>
+                </div>
+                <div class="series-item">
+                    <div class="series-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="series-content">
+                        <h4>Asian Le Mans</h4>
+                        <p data-i18n="series-lemans">Endurance racing across Asia-Pacific</p>
+                    </div>
+                </div>
+                <div class="series-item">
+                    <div class="series-icon">
+                        <i class="fas fa-horse-head"></i>
+                    </div>
+                    <div class="series-content">
+                        <h4>Ferrari Challenge</h4>
+                        <p data-i18n="series-ferrari">Prancing Horse exclusive content</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Social Media Hub -->
-    <section id="social-hub">
-        <div class="container">
-            <div class="social-grid-layout">
-                <div class="social-info">
-                    <span class="section-label" data-i18n="social-label">Connect</span>
-                    <h2 data-i18n="social-title">Behind The Lens</h2>
-                    <p data-i18n="social-desc">Follow our journey on social media for daily updates, behind-the-scenes content, and the latest from our global team.</p>
+    <section class="section social" id="social-hub">
+        <div class="section-header reveal">
+            <div class="section-label" data-i18n="social-label">Connect</div>
+            <h2 class="section-title" data-i18n="social-title">Follow Our Journey</h2>
+        </div>
+        <div class="social-grid reveal reveal-delay-1">
+            <a href="https://youtube.com/@Volraiden" target="_blank" class="social-card">
+                <div class="social-card-content">
+                    <div class="social-card-header">
+                        <div class="social-icon">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <h3>
+                            @Volraiden
+                            <span data-i18n="social-youtube-desc">YouTube Channel</span>
+                        </h3>
+                    </div>
+                    <p data-i18n="social-youtube-text">
+                        Exclusive behind-the-scenes content, race highlights, and cinematic 
+                        motorsport documentaries from the world's greatest racing series.
+                    </p>
+                    <span class="social-link">
+                        <span data-i18n="social-visit">Visit Channel</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
                 </div>
-                <div class="social-cards">
-                    <a href="https://www.youtube.com/@Volraiden" target="_blank" class="social-card">
-                        <i class="fab fa-youtube"></i>
-                        <div><h3>YouTube</h3><span>@Volraiden</span></div>
-                    </a>
-                    <a href="https://www.instagram.com/buckley.lens/" target="_blank" class="social-card">
-                        <i class="fab fa-instagram"></i>
-                        <div><h3>Instagram</h3><span>@Buckley.lens</span></div>
-                    </a>
-                    <a href="https://www.instagram.com/duneworkspr/" target="_blank" class="social-card">
-                        <i class="fab fa-instagram"></i>
-                        <div><h3>Instagram</h3><span>@Duneworkspr</span></div>
+            </a>
+            <a href="https://instagram.com/buckley.lens" target="_blank" class="social-card">
+                <div class="social-card-content">
+                    <div class="social-card-header">
+                        <div class="social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h3>
+                            @buckley.lens
+                            <span data-i18n="social-insta1-desc">Photography</span>
+                        </h3>
+                    </div>
+                    <p data-i18n="social-insta1-text">
+                        Stunning motorsport photography capturing the beauty, speed, and emotion 
+                        of racing. Every shot tells a story from the world's most iconic circuits.
+                    </p>
+                    <span class="social-link">
+                        <span data-i18n="social-follow">Follow</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+            <a href="https://instagram.com/duneworkspr" target="_blank" class="social-card">
+                <div class="social-card-content">
+                    <div class="social-card-header">
+                        <div class="social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h3>
+                            @duneworkspr
+                            <span data-i18n="social-insta2-desc">Official Account</span>
+                        </h3>
+                    </div>
+                    <p data-i18n="social-insta2-text">
+                        Official Duneworks Productions account showcasing our latest projects, 
+                        team updates, and exclusive content from the world of motorsport media.
+                    </p>
+                    <span class="social-link">
+                        <span data-i18n="social-follow">Follow</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+            <div class="social-card" style="background: var(--accent-subtle);">
+                <div class="social-card-content">
+                    <div class="social-card-header">
+                        <div class="social-icon" style="background: var(--accent-primary); color: var(--bg-primary);">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3 data-i18n="social-contact-title">Work With Us</h3>
+                    </div>
+                    <p data-i18n="social-contact-text">
+                        Ready to elevate your brand with premium motorsport content? 
+                        Let's create something extraordinary together.
+                    </p>
+                    <a href="#contact" class="social-link" style="color: var(--accent-primary);">
+                        <span data-i18n="social-getintouch">Get in Touch</span>
+                        <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
@@ -301,383 +1779,628 @@
     </section>
 
     <!-- Executive Team -->
-    <section id="executive-team">
-        <div class="container">
-            <span class="section-label" data-i18n="exec-label">Leadership</span>
-            <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px;" data-i18n="exec-title">Executive Team</h2>
-            <div class="exec-grid">
-                <div class="exec-card">
-                    <span class="exec-name">Daniel Lee Buckley</span>
-                    <span class="exec-role" data-i18n="exec-role1">Founder & Media Relations Director</span>
-                    <p class="exec-desc" data-i18n="exec-desc1">Leading the creative vision and managing high-level media relations across global sports and entertainment sectors.</p>
-                </div>
-                
-                <div class="exec-card">
-                    <span class="exec-name">Akbarshoh Ravshanov</span>
-                    <span class="exec-role" data-i18n="exec-role3">Co-Founder & Marketing Director</span>
-                    <p class="exec-desc" data-i18n="exec-desc3">Driving brand presence and innovative marketing strategies to connect our stories with a global audience.</p>
-                </div>
-
-                <div class="exec-card">
-                    <span class="exec-name">Muhammadali Nematullayev</span>
-                    <span class="exec-role" data-i18n="exec-role6">Casting Director</span>
-                    <p class="exec-desc" data-i18n="exec-desc6">Identifying and selecting the perfect talent to bring the director's vision to reality.</p>
-                </div>
-
-                <div class="exec-card">
-                    <span class="exec-name">Zain Ali Zaman</span>
-                    <span class="exec-role" data-i18n="exec-role4">Director Of Post Production and Editing</span>
-                    <p class="exec-desc" data-i18n="exec-desc4">Masterfully crafting the final narrative through expert editing, color grading, and post-production workflows.</p>
-                </div>
-
-                <div class="exec-card">
-                    <span class="exec-name">Tauheed Moheddin</span>
-                    <span class="exec-role" data-i18n="exec-role5">Asst. Director Of Media Relations</span>
-                    <p class="exec-desc" data-i18n="exec-desc5">Facilitating media communications and supporting strategic outreach initiatives across key global markets.</p>
-                </div>
-
-                <div class="exec-card">
-                    <span class="exec-name">Sarvar Tursunov</span>
-                    <span class="exec-role" data-i18n="exec-role7">Operations Manager</span>
-                    <p class="exec-desc" data-i18n="exec-desc7">Streamlining workflows and logistics to ensure seamless execution of daily operations and strategic initiatives.</p>
-                </div>
-
-                <div class="exec-card">
-                    <span class="exec-name">Amirsaid Samigjanov</span>
-                    <span class="exec-role" data-i18n="exec-role2">Lead Actor</span>
-                    <p class="exec-desc" data-i18n="exec-desc2">Bringing characters to life with compelling performances and artistic depth on the global stage.</p>
-                </div>
+    <section class="section leadership" id="leadership">
+        <div class="section-header reveal">
+            <div class="section-label" data-i18n="leadership-label">Leadership</div>
+            <h2 class="section-title" data-i18n="leadership-title">The Visionaries</h2>
+            <p class="section-description" data-i18n="leadership-desc">
+                Our executive team brings together decades of experience in motorsport media, 
+                creative production, and global brand strategy.
+            </p>
+        </div>
+        <div class="leadership-grid">
+            <div class="exec-card reveal">
+                <div class="exec-role" data-i18n="exec1-role">Founder & CEO</div>
+                <h3 class="exec-name">Daniel Lee Buckley</h3>
+                <p class="exec-bio" data-i18n="exec1-bio">
+                    Media Relations Director with extensive experience in Formula 1 paddocks 
+                    and motorsport industry leadership.
+                </p>
+            </div>
+            <div class="exec-card reveal reveal-delay-1">
+                <div class="exec-role" data-i18n="exec2-role">Co-Founder</div>
+                <h3 class="exec-name">Akbarshoh Ravshanov</h3>
+                <p class="exec-bio" data-i18n="exec2-bio">
+                    Marketing Director driving brand strategy and global partnership development 
+                    across international markets.
+                </p>
+            </div>
+            <div class="exec-card reveal reveal-delay-2">
+                <div class="exec-role" data-i18n="exec3-role">Casting Director</div>
+                <h3 class="exec-name">Muhammadali Nematullayev</h3>
+                <p class="exec-bio" data-i18n="exec3-bio">
+                    Expert in talent acquisition and casting for motorsport productions, 
+                    commercials, and brand campaigns.
+                </p>
+            </div>
+            <div class="exec-card reveal">
+                <div class="exec-role" data-i18n="exec4-role">Post Production Director</div>
+                <h3 class="exec-name">Zain Ali Zaman</h3>
+                <p class="exec-bio" data-i18n="exec4-bio">
+                    Director of Post Production and Editing, crafting cinematic narratives 
+                    from raw footage to final delivery.
+                </p>
+            </div>
+            <div class="exec-card reveal reveal-delay-1">
+                <div class="exec-role" data-i18n="exec5-role">Media Relations</div>
+                <h3 class="exec-name">Tauheed Moheddin</h3>
+                <p class="exec-bio" data-i18n="exec5-bio">
+                    Assistant Director of Media Relations, coordinating paddock access and 
+                    stakeholder communications.
+                </p>
+            </div>
+            <div class="exec-card reveal reveal-delay-2">
+                <div class="exec-role" data-i18n="exec6-role">Operations Manager</div>
+                <h3 class="exec-name">Sarvar Tursunov</h3>
+                <p class="exec-bio" data-i18n="exec6-bio">
+                    Operations Manager ensuring seamless production logistics across 
+                    global racing events and commercial shoots.
+                </p>
+            </div>
+            <div class="exec-card reveal reveal-delay-3">
+                <div class="exec-role" data-i18n="exec7-role">Lead Talent</div>
+                <h3 class="exec-name">Amirsaid Samigjanov</h3>
+                <p class="exec-bio" data-i18n="exec7-bio">
+                    Lead Actor and on-screen talent for commercial productions and 
+                    branded content campaigns.
+                </p>
             </div>
         </div>
     </section>
 
     <!-- Global Team -->
-    <section id="team">
-        <div class="container">
-            <span class="section-label" data-i18n="global-label">Global Reach</span>
-            <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px;" data-i18n="global-title">Our Locations and People</h2>
-            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;" data-i18n="global-desc">A diverse team of specialists bringing perspective from the world's most creative hubs.</p>
-            <div class="team-grid">
-                <div class="team-card">
-                    <span class="team-flag fi fi-uz"></span>
-                    <h4 data-i18n="country-uz">Uzbekistan</h4>
-                    <p data-i18n="role-uz">Headquarters & All Production</p>
+    <section class="section team" id="team">
+        <div class="section-header reveal">
+            <div class="section-label" data-i18n="team-label">Global Presence</div>
+            <h2 class="section-title" data-i18n="team-title">International Offices</h2>
+            <p class="section-description" data-i18n="team-desc">
+                Our distributed team operates across 9 countries, providing local expertise 
+                with global creative standards.
+            </p>
+        </div>
+        <div class="team-map">
+            <div class="team-card reveal">
+                <div class="team-card-content">
+                    <div class="team-flag">🇺🇿</div>
+                    <h4 class="team-country" data-i18n="team-uz">Uzbekistan</h4>
+                    <p class="team-role" data-i18n="team-hq">Global Headquarters</p>
+                    <span class="team-hq">
+                        <i class="fas fa-star"></i>
+                        HQ
+                    </span>
                 </div>
-                <div class="team-card">
-                    <span class="team-flag fi fi-ae"></span>
-                    <h4 data-i18n="country-ae">United Arab Emirates</h4>
-                    <p data-i18n="role-ae">Secondary HQ & Main HQ for Motorsport Production</p>
+            </div>
+            <div class="team-card reveal reveal-delay-1">
+                <div class="team-card-content">
+                    <div class="team-flag">🇦🇪</div>
+                    <h4 class="team-country" data-i18n="team-ae">United Arab Emirates</h4>
+                    <p class="team-role" data-i18n="team-secondary">Secondary HQ</p>
+                    <span class="team-hq">
+                        <i class="fas fa-star"></i>
+                        HQ
+                    </span>
                 </div>
-                <div class="team-card">
-                    <span class="team-flag fi fi-au"></span>
-                    <h4 data-i18n="country-au">Australia</h4>
-                    <p data-i18n="role-au">Production & Cinematography</p>
+            </div>
+            <div class="team-card reveal reveal-delay-2">
+                <div class="team-card-content">
+                    <div class="team-flag">🇦🇺</div>
+                    <h4 class="team-country" data-i18n="team-au">Australia</h4>
+                    <p class="team-role" data-i18n="team-pacific">Asia-Pacific</p>
                 </div>
-                <div class="team-card">
-                    <span class="team-flag fi fi-gb"></span>
-                    <h4 data-i18n="country-gb">United Kingdom</h4>
-                    <p data-i18n="role-gb">Management</p>
+            </div>
+            <div class="team-card reveal reveal-delay-3">
+                <div class="team-card-content">
+                    <div class="team-flag">🇬🇧</div>
+                    <h4 class="team-country" data-i18n="team-gb">United Kingdom</h4>
+                    <p class="team-role" data-i18n="team-europe">Europe</p>
                 </div>
-                <div class="team-card">
-                    <span class="team-flag fi fi-za"></span>
-                    <h4 data-i18n="country-za">South Africa</h4>
-                    <p data-i18n="role-za">Management</p>
+            </div>
+            <div class="team-card reveal">
+                <div class="team-card-content">
+                    <div class="team-flag">🇿🇦</div>
+                    <h4 class="team-country" data-i18n="team-za">South Africa</h4>
+                    <p class="team-role" data-i18n="team-africa">Africa</p>
                 </div>
-                <div class="team-card">
-                    <span class="team-flag fi fi-pk"></span>
-                    <h4 data-i18n="country-pk">Pakistan</h4>
-                    <p data-i18n="role-pk">Editing & Post Production</p>
+            </div>
+            <div class="team-card reveal reveal-delay-1">
+                <div class="team-card-content">
+                    <div class="team-flag">🇵🇰</div>
+                    <h4 class="team-country" data-i18n="team-pk">Pakistan</h4>
+                    <p class="team-role" data-i18n="team-southasia">South Asia</p>
                 </div>
-                <div class="team-card">
-                    <span class="team-flag fi fi-ca"></span>
-                    <h4 data-i18n="country-ca">Canada</h4>
-                    <p data-i18n="role-ca">Production & Photography</p>
+            </div>
+            <div class="team-card reveal reveal-delay-2">
+                <div class="team-card-content">
+                    <div class="team-flag">🇨🇦</div>
+                    <h4 class="team-country" data-i18n="team-ca">Canada</h4>
+                    <p class="team-role" data-i18n="team-namerica">North America</p>
                 </div>
-                <div class="team-card">
-                    <span class="team-flag fi fi-in"></span>
-                    <h4 data-i18n="country-in">India</h4>
-                    <p data-i18n="role-in">Production</p>
+            </div>
+            <div class="team-card reveal reveal-delay-3">
+                <div class="team-card-content">
+                    <div class="team-flag">🇮🇳</div>
+                    <h4 class="team-country" data-i18n="team-in">India</h4>
+                    <p class="team-role" data-i18n="team-southasia">South Asia</p>
                 </div>
-                <div class="team-card">
-                    <span class="team-flag fi fi-kw"></span>
-                    <h4 data-i18n="country-kw">Kuwait</h4>
-                    <p data-i18n="role-kw">Management</p>
+            </div>
+            <div class="team-card reveal">
+                <div class="team-card-content">
+                    <div class="team-flag">🇰🇼</div>
+                    <h4 class="team-country" data-i18n="team-kw">Kuwait</h4>
+                    <p class="team-role" data-i18n="team-middleeast">Middle East</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Close Partners -->
-    <section id="close-partners">
-        <div class="container" style="text-align: center;">
-            <span class="section-label" style="color: #000;" data-i18n="partner-label">Trusted Collaborators</span>
-            <h2 style="font-size: clamp(2rem, 4vw, 3rem); color: #000; mix-blend-mode: normal;" data-i18n="partner-title">Strategic Partners</h2>
-            <div class="partner-highlight-container">
-                <div class="partner-highlight">
-                    <img src="https://i.postimg.cc/f3cjw1dg/image-(23).png" alt="NGK Spark Plugs">
-                    <p data-i18n="partner-ngk">Official Partner for Motorsport Media</p>
-                </div>
-                <div class="partner-highlight">
-                    <img src="https://i.postimg.cc/5bgmLMMV/photo-2026-05-09-00-40-46-Photoroom.png" alt="Duneworks Studios">
-                    <p data-i18n="partner-studio">Studio & Logistics Partner</p>
-                </div>
+    <!-- Strategic Partners -->
+    <section class="section partners-featured" id="close-partners">
+        <div class="section-header reveal">
+            <div class="section-label" data-i18n="featured-label">Trusted Collaborators</div>
+            <h2 class="section-title" data-i18n="featured-title">Strategic Partners</h2>
+        </div>
+        <div class="featured-grid reveal reveal-delay-1">
+            <div class="featured-card">
+                <img src="https://i.postimg.cc/f3cjw1dg/image-(23).png" alt="NGK Spark Plugs" class="featured-logo">
+                <h3>NGK Spark Plugs</h3>
+                <p data-i18n="partner-ngk-desc">Official Partner for Motorsport Media</p>
+            </div>
+            <div class="featured-card">
+                <img src="https://i.postimg.cc/5bgmLMMV/photo-2026-05-09-00-40-46-Photoroom.png" alt="Duneworks Studios" class="featured-logo">
+                <h3>Duneworks Studios</h3>
+                <p data-i18n="partner-studio-desc">Studio & Logistics Partner</p>
             </div>
         </div>
     </section>
 
-    <!-- Partners Marquee (Updated) -->
-    <section id="partners">
-        <div class="partners-header">
-            <h2 data-i18n="partners-header">Partners & Companies We Have Worked For</h2>
+    <!-- Partners Marquee -->
+    <section class="marquee-section" id="partners">
+        <div class="marquee-header reveal">
+            <h2 data-i18n="partners-title">Partners & Companies We Have Worked For</h2>
         </div>
         <div class="marquee-container">
-            <!-- Original Set -->
-            <img src="https://i.postimg.cc/qtVxHpNZ/Adobe-Express-file-11.png" alt="Formula 1" class="partner-logo-img">
-            <img src="https://i.postimg.cc/LqK3FmJQ/image-(24)-(1).png" alt="FIA" class="partner-logo-img">
-            <img src="https://i.postimg.cc/SXFfbmnc/image-(20).png" alt="F3" class="partner-logo-img">
-            <img src="https://i.postimg.cc/CZGHF98r/image-(21)-(1).png" alt="Asian Le Mans" class="partner-logo-img">
-            <img src="https://i.postimg.cc/p9bJMPm7/Adobe-Express-file-(10).png" alt="Ferrari" class="partner-logo-img">
-            <img src="https://i.postimg.cc/4KkQRXYj/6a1ed52440b8152d.png" alt="SIPPY" class="partner-logo-img">
+            <!-- First Set -->
+            <img src="https://i.postimg.cc/qtVxHpNZ/Adobe-Express-file-11.png" alt="Formula 1" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/LqK3FmJQ/image-(24)-(1).png" alt="FIA" class="partner-logo">
+            <img src="https://i.postimg.cc/SXFfbmnc/image-(20).png" alt="F3" class="partner-logo">
+            <img src="https://i.postimg.cc/CZGHF98r/image-(21)-(1).png" alt="Asian Le Mans" class="partner-logo">
+            <img src="https://i.postimg.cc/p9bJMPm7/Adobe-Express-file-(10).png" alt="Ferrari" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/4KkQRXYj/6a1ed52440b8152d.png" alt="SIPPY" class="partner-logo">
+            <img src="https://i.postimg.cc/sM6pmZ3j/image.png" alt="Partner 1" class="partner-logo">
+            <img src="https://i.postimg.cc/vQ2YVT05/258c420b-8f68-462e-bf32-1a3c3e5b1174-Photoroom.png" alt="RUNA" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/ZJfVtzfQ/ugj-Photoroom.png" alt="Connect" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/56H3r3k5/image.png" alt="shavi" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/ftTyr8CG/image.png" alt="Partner 5" class="partner-logo">
+            <img src="https://i.postimg.cc/B8NQHx3p/image.png" alt="Partner 6" class="partner-logo">
             
-            <!-- Updated Partners -->
-            <img src="https://i.postimg.cc/sM6pmZ3j/image.png" alt="Partner 1" class="partner-logo-img">
-            <img src="https://i.postimg.cc/vQ2YVT05/258c420b-8f68-462e-bf32-1a3c3e5b1174-Photoroom.png" alt="RUNA" class="partner-logo-img partner-logo-runa">
-            <!-- Replaced Links -->
-            <img src="https://i.postimg.cc/ZJfVtzfQ/ugj-Photoroom.png" alt="Connect" class="partner-logo-img partner-logo-connect">
-            <img src="https://i.postimg.cc/56H3r3k5/image.png" alt="shavi" class="partner-logo-img partner-logo-shavi">
-            <!-- End Replaced -->
-            <img src="https://i.postimg.cc/ftTyr8CG/image.png" alt="Partner 5" class="partner-logo-img">
-            <img src="https://i.postimg.cc/B8NQHx3p/image.png" alt="Partner 6" class="partner-logo-img">
-
-            <!-- Duplicated Set for Infinite Scroll -->
-            <img src="https://i.postimg.cc/qtVxHpNZ/Adobe-Express-file-11.png" alt="Formula 1" class="partner-logo-img">
-            <img src="https://i.postimg.cc/LqK3FmJQ/image-(24)-(1).png" alt="FIA" class="partner-logo-img">
-            <img src="https://i.postimg.cc/SXFfbmnc/image-(20).png" alt="F3" class="partner-logo-img">
-            <img src="https://i.postimg.cc/CZGHF98r/image-(21)-(1).png" alt="Asian Le Mans" class="partner-logo-img">
-            <img src="https://i.postimg.cc/p9bJMPm7/Adobe-Express-file-(10).png" alt="Ferrari" class="partner-logo-img">
-            <img src="https://i.postimg.cc/4KkQRXYj/6a1ed52440b8152d.png" alt="SIPPY" class="partner-logo-img">
-            
-            <!-- Duplicated Updated Partners -->
-            <img src="https://i.postimg.cc/sM6pmZ3j/image.png" alt="Partner 1" class="partner-logo-img">
-            <img src="https://i.postimg.cc/vQ2YVT05/258c420b-8f68-462e-bf32-1a3c3e5b1174-Photoroom.png" alt="RUNA" class="partner-logo-img partner-logo-runa">
-            <!-- Replaced Links Duplicated -->
-            <img src="https://i.postimg.cc/ZJfVtzfQ/ugj-Photoroom.png" alt="Connect" class="partner-logo-img partner-logo-connect">
-            <img src="https://i.postimg.cc/56H3r3k5/image.png" alt="shavi" class="partner-logo-img partner-logo-shavi">
-            <!-- End Replaced -->
-            <img src="https://i.postimg.cc/ftTyr8CG/image.png" alt="Partner 5" class="partner-logo-img">
-            <img src="https://i.postimg.cc/B8NQHx3p/image.png" alt="Partner 6" class="partner-logo-img">
+            <!-- Duplicate for Infinite Scroll -->
+            <img src="https://i.postimg.cc/qtVxHpNZ/Adobe-Express-file-11.png" alt="Formula 1" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/LqK3FmJQ/image-(24)-(1).png" alt="FIA" class="partner-logo">
+            <img src="https://i.postimg.cc/SXFfbmnc/image-(20).png" alt="F3" class="partner-logo">
+            <img src="https://i.postimg.cc/CZGHF98r/image-(21)-(1).png" alt="Asian Le Mans" class="partner-logo">
+            <img src="https://i.postimg.cc/p9bJMPm7/Adobe-Express-file-(10).png" alt="Ferrari" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/4KkQRXYj/6a1ed52440b8152d.png" alt="SIPPY" class="partner-logo">
+            <img src="https://i.postimg.cc/sM6pmZ3j/image.png" alt="Partner 1" class="partner-logo">
+            <img src="https://i.postimg.cc/vQ2YVT05/258c420b-8f68-462e-bf32-1a3c3e5b1174-Photoroom.png" alt="RUNA" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/ZJfVtzfQ/ugj-Photoroom.png" alt="Connect" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/56H3r3k5/image.png" alt="shavi" class="partner-logo partner-logo-lg">
+            <img src="https://i.postimg.cc/ftTyr8CG/image.png" alt="Partner 5" class="partner-logo">
+            <img src="https://i.postimg.cc/B8NQHx3p/image.png" alt="Partner 6" class="partner-logo">
         </div>
     </section>
 
-    <!-- Booking -->
-    <section id="booking">
-        <div class="booking-info">
-            <span class="section-label" data-i18n="contact-label">Contact Us</span>
-            <h2 data-i18n="contact-title">Let's Create</h2>
-            <div class="contact-block">
-                <span data-i18n="contact-booking">Booking Inquiries</span>
-                <a href="tel:+998914142580">+998 91 414 25 80</a>
+    <!-- Contact / Booking -->
+    <section class="section contact" id="contact">
+        <div class="contact-grid">
+            <div class="contact-info reveal">
+                <div class="section-label" data-i18n="contact-label">Contact</div>
+                <h2 data-i18n="contact-title">Let's Create Together</h2>
+                <p data-i18n="contact-desc">
+                    Ready to bring your vision to life? Whether it's a Formula 1 paddock documentary, 
+                    a commercial production, or brand content — we're here to make it extraordinary.
+                </p>
+                
+                <div class="contact-block">
+                    <div class="contact-label" data-i18n="contact-email-label">Email</div>
+                    <a href="mailto:contact@duneworks.productions" class="contact-value">
+                        contact@duneworks.productions
+                    </a>
+                </div>
+                
+                <div class="contact-block">
+                    <div class="contact-label" data-i18n="contact-social-label">Social</div>
+                    <a href="https://instagram.com/duneworkspr" target="_blank" class="contact-value">
+                        @duneworkspr
+                    </a>
+                </div>
             </div>
-            <div class="contact-block">
-                <span data-i18n="contact-media">Media & Press</span>
-                <a href="tel:+998880754010">+998 88 075 4010</a>
-            </div>
-            <div class="contact-block">
-                <span data-i18n="contact-email">Email</span>
-                <a href="mailto:Duneworksstudios@gmail.com">Duneworksstudios@gmail.com</a>
-            </div>
-        </div>
-        <div class="booking-form-wrapper">
-            <form class="booking-form" action="https://formsubmit.co/Duneworksstudios@gmail.com" method="POST">
+            
+            <form class="contact-form reveal reveal-delay-1" id="bookingForm">
                 <div class="form-row">
-                    <input type="text" name="name" required id="name">
-                    <label for="name" data-i18n="form-name">Full Name</label>
+                    <label class="form-label" data-i18n="form-name">Name</label>
+                    <input type="text" class="form-input" placeholder="Your name" required>
                 </div>
                 <div class="form-row">
-                    <input type="email" name="email" required id="email">
-                    <label for="email" data-i18n="form-email">Email Address</label>
+                    <label class="form-label" data-i18n="form-email">Email</label>
+                    <input type="email" class="form-input" placeholder="your@email.com" required>
                 </div>
                 <div class="form-row">
-                    <input type="text" name="service" id="service">
-                    <label for="service" data-i18n="form-project">Project Type</label>
+                    <label class="form-label" data-i18n="form-company">Company / Project</label>
+                    <input type="text" class="form-input" placeholder="Company or project name">
                 </div>
                 <div class="form-row">
-                    <textarea name="message" rows="1" required id="message"></textarea>
-                    <label for="message" data-i18n="form-vision">Your Vision</label>
+                    <label class="form-label" data-i18n="form-message">Message</label>
+                    <textarea class="form-input" placeholder="Tell us about your project..." required></textarea>
                 </div>
-                <input type="hidden" name="_subject" value="New Luxury Inquiry">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
-                <button type="submit" class="btn-gold" data-i18n="form-submit">Send Inquiry</button>
+                <button type="submit" class="form-submit" data-i18n="form-submit">
+                    Send Inquiry
+                </button>
             </form>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <p>© 2026 Duneworks Productions. All Rights Reserved.</p>
-        <p data-i18n="footer">Made with Passion.</p>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">Dune<span>works</span></div>
+            <p class="footer-tagline" data-i18n="footer-tagline">
+                Premium motorsport media and creative production for the world's leading brands.
+            </p>
+            <p class="footer-copy">
+                © 2026 Duneworks Productions. <span data-i18n="footer-rights">All rights reserved.</span>
+            </p>
+        </div>
     </footer>
 
+    <!-- JavaScript -->
     <script>
-        // --- 1. Custom Cursor (PC Only) ---
-        const cursor = document.getElementById('cursor');
-        if (window.matchMedia("(pointer: fine)").matches) {
+        // ============================================
+        // CUSTOM CURSOR
+        // ============================================
+        const cursor = document.querySelector('.cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        
+        if (window.matchMedia('(pointer: fine)').matches) {
             document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-            });
-            const hoverTargets = document.querySelectorAll('.social-card, .exec-card, .team-card, .partner-highlight, .nav-links a, .btn-gold');
-            hoverTargets.forEach(target => {
-                target.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
-                target.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
-            });
-        } else {
-            cursor.style.display = 'none';
-        }
-
-        // --- 2. Mobile Navigation Logic ---
-        const menuBtn = document.getElementById('menu-btn');
-        const navLinks = document.getElementById('nav-links');
-        const navItems = document.querySelectorAll('.nav-links a');
-
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = menuBtn.querySelector('i');
-            if (navLinks.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            }, { passive: true });
+            
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * 0.15;
+                cursorY += (mouseY - cursorY) * 0.15;
+                cursor.style.transform = `translate(${cursorX - 12}px, ${cursorY - 12}px)`;
+                requestAnimationFrame(animateCursor);
             }
+            animateCursor();
+            
+            // Hover effects
+            const hoverElements = document.querySelectorAll('a, button, .social-card, .exec-card, .team-card, .featured-card, .series-item');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
+        
+        // ============================================
+        // NAVIGATION VISIBILITY & MOBILE
+        // ============================================
+        const nav = document.getElementById('nav');
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('visible');
+            } else {
+                nav.classList.remove('visible');
+            }
+        }, { passive: true });
+        
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
         });
-
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuBtn.querySelector('i').classList.remove('fa-times');
-                menuBtn.querySelector('i').classList.add('fa-bars');
+        
+        // Close mobile nav on link click
+        mobileNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileToggle.classList.remove('active');
+                mobileNav.classList.remove('active');
+                document.body.style.overflow = '';
             });
         });
-
-        // --- 3. Language Switcher Logic ---
-        const langBtn = document.getElementById('lang-btn');
-        const langDropdown = document.getElementById('lang-dropdown');
-        langBtn.addEventListener('click', () => { langDropdown.classList.toggle('active'); });
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.lang-switcher')) { langDropdown.classList.remove('active'); }
-        });
-
+        
+        // ============================================
+        // LANGUAGE SWITCHER
+        // ============================================
+        const langToggle = document.getElementById('langToggle');
+        const langDropdown = document.getElementById('langDropdown');
+        const currentLang = document.getElementById('currentLang');
+        
         const translations = {
             en: {
-                'nav-home': 'Home', 'nav-leadership': 'Leadership', 'nav-team': 'Team', 'nav-partners': 'Partners', 'nav-contact': 'Contact',
-                'hero-label': 'Visual Storytelling', 'hero-subtitle': 'Premium cinematography & photography for global brands and visionaries.',
-                'scroll': 'Scroll', 'intro-label': 'The Agency', 'intro-title': 'Visions Crafted<br>Global Reach.',
-                'intro-desc': 'From the raw energy of the dunes to the high-stakes world of Formula 1, Duneworks Productions captures moments that define eras. We are a collective of directors, cinematographers, and photographers dedicated to visual excellence.',
-                'intro-li4': '24 Hour Endurance Series',
-                'social-label': 'Connect', 'social-title': 'Behind The Lens', 'social-desc': 'Follow our journey on social media for daily updates, behind-the-scenes content, and the latest from our global team.',
-                'exec-label': 'Leadership', 'exec-title': 'Executive Team',
-                'exec-role1': 'Founder & Media Relations Director', 'exec-desc1': 'Leading the creative vision and managing high-level media relations across global sports and entertainment sectors.',
-                'exec-role2': 'Lead Actor', 'exec-desc2': 'Bringing characters to life with compelling performances and artistic depth on the global stage.',
-                'exec-role3': 'Co-Founder & Marketing Director', 'exec-desc3': 'Driving brand presence and innovative marketing strategies to connect our stories with a global audience.',
-                'exec-role4': 'Director Of Post Production and Editing', 'exec-desc4': 'Masterfully crafting the final narrative through expert editing, color grading, and post-production workflows.',
-                'exec-role5': 'Asst. Director Of Media Relations', 'exec-desc5': 'Facilitating media communications and supporting strategic outreach initiatives across key global markets.',
-                'exec-role6': 'Casting Director', 'exec-desc6': 'Identifying and selecting the perfect talent to bring the director\'s vision to reality.',
-                'exec-role7': 'Operations Manager', 'exec-desc7': 'Streamlining workflows and logistics to ensure seamless execution of daily operations and strategic initiatives.',
-                'global-label': 'Global Reach', 'global-title': 'Our Locations and People', 'global-desc': 'A diverse team of specialists bringing perspective from the world\'s most creative hubs.',
-                'country-uz': 'Uzbekistan', 'role-uz': 'Headquarters & All Production', 'country-ae': 'United Arab Emirates', 'role-ae': 'Secondary HQ & Main HQ for Motorsport Production',
-                'country-au': 'Australia', 'role-au': 'Production & Cinematography', 'country-gb': 'United Kingdom', 'role-gb': 'Management', 'country-za': 'South Africa', 'role-za': 'Management',
-                'country-pk': 'Pakistan', 'role-pk': 'Editing & Post Production', 'country-ca': 'Canada', 'role-ca': 'Production & Photography', 'country-in': 'India', 'role-in': 'Production',
-                'country-kw': 'Kuwait', 'role-kw': 'Management',
-                'partner-label': 'Trusted Collaborators', 'partner-title': 'Strategic Partners', 'partner-ngk': 'Official Partner for Motorsport Media', 'partner-studio': 'Studio & Logistics Partner',
-                'partners-header': 'Partners & Companies We Have Worked For',
-                'contact-label': 'Contact Us', 'contact-title': "Let's Create", 'contact-booking': 'Booking Inquiries', 'contact-media': 'Media & Press', 'contact-email': 'Email',
-                'form-name': 'Full Name', 'form-email': 'Email Address', 'form-project': 'Project Type', 'form-vision': 'Your Vision', 'form-submit': 'Send Inquiry',
-                'footer': 'Made with Passion.'
+                'nav-home': 'Home',
+                'nav-leadership': 'Leadership',
+                'nav-team': 'Global Team',
+                'nav-partners': 'Partners',
+                'nav-contact': 'Contact',
+                'hero-label': 'Premium Motorsport Media',
+                'hero-description': 'A global creative media agency crafting premium motorsport content for Formula 1, FIA, and world-class racing series. We transform vision into cinematic reality.',
+                'cta-primary': 'Start a Project',
+                'cta-secondary': 'View Our Work',
+                'scroll': 'Scroll',
+                'intro-label': 'The Agency',
+                'intro-title': 'Visions Crafted.<br>Global Reach.',
+                'intro-heading': 'We are <em>Duneworks Productions</em> — a global creative agency specializing in premium motorsport media and commercial film production.',
+                'intro-p1': 'From the paddocks of Formula 1 to the deserts of cross-continental rallies, we capture the essence of motorsport with cinematic precision.',
+                'intro-p2': 'With teams across 9 countries and partnerships with world-leading brands, we deliver content that resonates with audiences worldwide.',
+                'stat-countries': 'Countries',
+                'stat-partners': 'Partners',
+                'stat-f1': 'Formula 1',
+                'series-f1': 'Premier motorsport content creation',
+                'series-fia': 'FIA-sanctioned racing series coverage',
+                'series-f3': 'Rising talent and developmental series',
+                'series-lemans': 'Endurance racing across Asia-Pacific',
+                'series-ferrari': 'Prancing Horse exclusive content',
+                'social-label': 'Connect',
+                'social-title': 'Follow Our Journey',
+                'social-youtube-desc': 'YouTube Channel',
+                'social-youtube-text': 'Exclusive behind-the-scenes content, race highlights, and cinematic motorsport documentaries.',
+                'social-insta1-desc': 'Photography',
+                'social-insta1-text': 'Stunning motorsport photography capturing the beauty, speed, and emotion of racing.',
+                'social-insta2-desc': 'Official Account',
+                'social-insta2-text': 'Official Duneworks Productions account showcasing our latest projects and exclusive content.',
+                'social-visit': 'Visit Channel',
+                'social-follow': 'Follow',
+                'social-contact-title': 'Work With Us',
+                'social-contact-text': 'Ready to elevate your brand with premium motorsport content?',
+                'social-getintouch': 'Get in Touch',
+                'leadership-label': 'Leadership',
+                'leadership-title': 'The Visionaries',
+                'leadership-desc': 'Our executive team brings together decades of experience in motorsport media and creative production.',
+                'exec1-role': 'Founder & CEO',
+                'exec1-bio': 'Media Relations Director with extensive experience in Formula 1 paddocks.',
+                'exec2-role': 'Co-Founder',
+                'exec2-bio': 'Marketing Director driving brand strategy and global partnership development.',
+                'exec3-role': 'Casting Director',
+                'exec3-bio': 'Expert in talent acquisition for motorsport productions and brand campaigns.',
+                'exec4-role': 'Post Production Director',
+                'exec4-bio': 'Director of Post Production, crafting cinematic narratives from raw footage.',
+                'exec5-role': 'Media Relations',
+                'exec5-bio': 'Assistant Director coordinating paddock access and stakeholder communications.',
+                'exec6-role': 'Operations Manager',
+                'exec6-bio': 'Ensuring seamless production logistics across global racing events.',
+                'exec7-role': 'Lead Talent',
+                'exec7-bio': 'Lead Actor for commercial productions and branded content campaigns.',
+                'team-label': 'Global Presence',
+                'team-title': 'International Offices',
+                'team-desc': 'Our distributed team operates across 9 countries with global creative standards.',
+                'team-uz': 'Uzbekistan',
+                'team-hq': 'Global Headquarters',
+                'team-ae': 'United Arab Emirates',
+                'team-secondary': 'Secondary HQ',
+                'team-au': 'Australia',
+                'team-pacific': 'Asia-Pacific',
+                'team-gb': 'United Kingdom',
+                'team-europe': 'Europe',
+                'team-za': 'South Africa',
+                'team-africa': 'Africa',
+                'team-pk': 'Pakistan',
+                'team-southasia': 'South Asia',
+                'team-ca': 'Canada',
+                'team-namerica': 'North America',
+                'team-in': 'India',
+                'team-kw': 'Kuwait',
+                'team-middleeast': 'Middle East',
+                'featured-label': 'Trusted Collaborators',
+                'featured-title': 'Strategic Partners',
+                'partner-ngk-desc': 'Official Partner for Motorsport Media',
+                'partner-studio-desc': 'Studio & Logistics Partner',
+                'partners-title': 'Partners & Companies We Have Worked For',
+                'contact-label': 'Contact',
+                'contact-title': "Let's Create Together",
+                'contact-desc': 'Ready to bring your vision to life? We\'re here to make it extraordinary.',
+                'contact-email-label': 'Email',
+                'contact-social-label': 'Social',
+                'form-name': 'Name',
+                'form-email': 'Email',
+                'form-company': 'Company / Project',
+                'form-message': 'Message',
+                'form-submit': 'Send Inquiry',
+                'footer-tagline': 'Premium motorsport media and creative production for the world\'s leading brands.',
+                'footer-rights': 'All rights reserved.'
             },
             ru: {
-                'nav-home': 'Главная', 'nav-leadership': 'Руководство', 'nav-team': 'Команда', 'nav-partners': 'Партнеры', 'nav-contact': 'Контакты',
-                'hero-label': 'Визуальное Повествование', 'hero-subtitle': 'Премиальная кинематография и фотография для мировых брендов и визионеров.',
-                'scroll': 'Листать', 'intro-label': 'Агентство', 'intro-title': 'Воплощенные Видения<br>Глобальный Охват.',
-                'intro-desc': 'От необузданной энергии дюн до мира Формулы 1, Duneworks Productions запечатляет моменты, определяющие эпохи. Мы — коллектив режиссеров, кинооператоров и фотографов, преданных визуальному совершенству.',
-                'intro-li4': '24-часовая серия на выносливость',
-                'social-label': 'Связаться', 'social-title': 'За Кадром', 'social-desc': 'Следите за нашим путешествием в социальных сетях, чтобы получать ежедневные обновления, контент закулисья и новости от нашей глобальной команды.',
-                'exec-label': 'Лидерство', 'exec-title': 'Команда Руководителей',
-                'exec-role1': 'Основатель & Директор по медиа отношениям', 'exec-desc1': 'Возглавляет творческое видение и управляет медийными отношениями высокого уровня в сферах мирового спорта и развлечений.',
-                'exec-role2': 'Ведущий Актер', 'exec-desc2': 'Воплощает персонажей в жизнь с помощью убедительной игры и художественной глубины на мировой сцене.',
-                'exec-role3': 'Соучредитель & Директор по маркетингу', 'exec-desc3': 'Управляет присутствием бренда и инновационными маркетинговыми стратегиями, связывая наши истории с мировой аудиторией.',
-                'exec-role4': 'Директор по постпродакшну и монтажу', 'exec-desc4': 'Мастерски создает финальный нарратив благодаря экспертному монтажу, цветокоррекции и рабочим процессам постпродакшна.',
-                'exec-role5': 'Зам. директора по медиа отношениям', 'exec-desc5': 'Содействие медиа коммуникациям и поддержка стратегических инициатив по охвату ключевых глобальных рынков.',
-                'exec-role6': 'Директор по кастингу', 'exec-desc6': 'Выявление и подбор идеальных талантов для воплощения режиссерского замысла в реальность.',
-                'exec-role7': 'Операционный Менеджер', 'exec-desc7': 'Оптимизация рабочих процессов и логистики для обеспечения бесшовного выполнения ежедневных операций и стратегических инициатив.',
-                'global-label': 'Глобальный Охват', 'global-title': 'Наши Локации и Люди', 'global-desc': 'Разнообразная команда специалистов, привносящих перспективу из самых креативных центров мира.',
-                'country-uz': 'Узбекистан', 'role-uz': 'Штаб-квартира и Все Производство', 'country-ae': 'ОАЭ', 'role-ae': 'Вторичная штаб-квартира и Осн. база Моторспорт Продакшн',
-                'country-au': 'Австралия', 'role-au': 'Продакшн и Кинематография', 'country-gb': 'Великобритания', 'role-gb': 'Менеджмент', 'country-za': 'Южная Африка', 'role-za': 'Менеджмент',
-                'country-pk': 'Пакистан', 'role-pk': 'Монтаж и Постпродакшн', 'country-ca': 'Канада', 'role-ca': 'Продакшн и Фотография', 'country-in': 'Индия', 'role-in': 'Продакшн',
-                'country-kw': 'Кувейт', 'role-kw': 'Менеджмент',
-                'partner-label': 'Надежные Партнеры', 'partner-title': 'Стратегические Партнеры', 'partner-ngk': 'Официальный партнер Motorsport Media', 'partner-studio': 'Студия и Логистика',
-                'partners-header': 'Партнеры и Компании, с которыми мы работали',
-                'contact-label': 'Связаться с нами', 'contact-title': 'Давайте Творить', 'contact-booking': 'Бронирование', 'contact-media': 'Медиа и Пресса', 'contact-email': 'Электронная почта',
-                'form-name': 'Полное Имя', 'form-email': 'Адрес Электронной Почты', 'form-project': 'Тип Проекта', 'form-vision': 'Ваше Видение', 'form-submit': 'Отправить Запрос',
-                'footer': 'Сделано с страстью.'
+                'nav-home': 'Главная',
+                'nav-leadership': 'Руководство',
+                'nav-team': 'Команда',
+                'nav-partners': 'Партнеры',
+                'nav-contact': 'Контакты',
+                'hero-label': 'Премиум Медиа',
+                'hero-description': 'Глобальное креативное агентство, создающее премиальный контент для Формулы 1, FIA и мировых гоночных серий.',
+                'cta-primary': 'Начать Проект',
+                'cta-secondary': 'Наши Работы',
+                'scroll': 'Листать',
+                'intro-label': 'Агентство',
+                'intro-title': 'Воплощенные Видения.<br>Глобальный Охват.',
+                'intro-heading': 'Мы <em>Duneworks Productions</em> — глобальное креативное агентство, специализирующееся на премиальном автоспортивном контенте.',
+                'stat-countries': 'Стран',
+                'stat-partners': 'Партнеров',
+                'stat-f1': 'Формула 1',
+                'series-f1': 'Создание премиального контента',
+                'series-fia': 'Освещение серий FIA',
+                'series-f3': 'Восходящие таланты',
+                'series-lemans': 'Гонки на выносливость',
+                'series-ferrari': 'Эксклюзивный контент',
+                'social-label': 'Контакты',
+                'social-title': 'Следите за Нами',
+                'leadership-label': 'Руководство',
+                'leadership-title': 'Видение Будущего',
+                'leadership-desc': 'Наша команда руководителей объединяет десятилетия опыта в автоспортивных медиа.',
+                'team-label': 'Глобальное Присутствие',
+                'team-title': 'Международные Офисы',
+                'team-desc': 'Наша команда работает в 9 странах с глобальными креативными стандартами.',
+                'team-hq': 'Глобальный Офис',
+                'team-secondary': 'Второй Офис',
+                'featured-label': 'Надежные Партнеры',
+                'featured-title': 'Стратегические Партнеры',
+                'partners-title': 'Партнеры и Компании',
+                'contact-label': 'Контакты',
+                'contact-title': 'Создадим Вместе',
+                'contact-desc': 'Готовы воплотить ваше видение в жизнь? Мы здесь, чтобы сделать это экстраординарным.',
+                'form-name': 'Имя',
+                'form-email': 'Email',
+                'form-company': 'Компания',
+                'form-message': 'Сообщение',
+                'form-submit': 'Отправить',
+                'footer-tagline': 'Премиальные медиа и креативное производство для ведущих мировых брендов.',
+                'footer-rights': 'Все права защищены.'
             },
             uz: {
-                'nav-home': 'Bosh Sahifa', 'nav-leadership': 'Rahbariyat', 'nav-team': 'Jamoa', 'nav-partners': 'Hamkorlar', 'nav-contact': 'Aloqa',
-                'hero-label': 'Vizual Hikoya', 'hero-subtitle': 'Global brendlar va vizyonerlar uchun premium kinematografiya va fotografiya.',
-                'scroll': 'Aylantiring', 'intro-label': 'Agentlik', 'intro-title': 'Yaratilgan Ko\'rishlar<br>Global Qamrov.',
-                'intro-desc': 'Qum tepaliklarining xom energiyasidan Formula 1ning yuqori riskli dunyosgacha, Duneworks Productions davrlarni belgilaydigan lahzalarni yozib oladi. Biz vizual mukammallikka bag\'ishlangan rejissyorlar, operatorlar va fotograflar jamoamiz.',
-                'intro-li4': '24 Soatlik Chidamlilik Seriyasi',
-                'social-label': 'Bog\'lanish', 'social-title': 'Kamera Orqasida', 'social-desc': 'Kundalik yangilanishlar, sahnadan ortiq kontent va global jamoamizdan so\'nggi yangiliklar uchun ijtimoiy tarmoqlarda bizga ergashing.',
-                'exec-label': 'Rahbariyat', 'exec-title': 'Ijroiya Jamoasi',
-                'exec-role1': 'Asoschi va Media Aloqalar Direktori', 'exec-desc1': 'Global sport va ko\'ngilochar sektorlarda yuqori darajadagi media aloqlalarni boshqarish va ijodiy viziyani boshqaradi.',
-                'exec-role2': 'Bosh Aktyor', 'exec-desc2': 'Qahramonlarni hayotga global sahnada kuchli ijro va badiiy chuqurlik bilan keltiradi.',
-                'exec-role3': 'Ham-asoschi va Marketing Direktori', 'exec-desc3': 'Brend mavjudligini oshirish va innovatsion marketing strategiyalari orqali bizning hikoyalarimizni global auditoriyaga yetkazadi.',
-                'exec-role4': 'Post-Ishlab Chiqarish va Montaj Direktori', 'exec-desc4': 'Professional montaj, rang tuzatish va post-ishlab chiqarish jarayonlari orqali yakuniy hikoyani mohirona yaratadi.',
-                'exec-role5': 'Media Aloqalar Direktori O\'rinbosari', 'exec-desc5': 'Media kommunikatsiyalarni osonlashtirish va asosiy global bozorlarda strategik tashabbuslarni qo\'llab-quvvatlash.',
-                'exec-role6': 'Kasting Direktori', 'exec-desc6': 'Rejissyorning vizyonini hayotga keltirish uchun mukammal iste\'dodlarni aniqlash va tanlash.',
-                'exec-role7': 'Operatsiyalar Menejeri', 'exec-desc7': 'Kundalik operatsiyalar va strategik tashabbuslarning uzluksiz bajarilishini ta\'minlash uchun ish jarayonlari va logistikani optimallashtirish.',
-                'global-label': 'Global Qamrov', 'global-title': 'Bizning Joylar va Odamlar', 'global-desc': 'Dunyoning eng ijodiy markazlaridan ko\'nikma keltiruvchi mutaxassisllarning xilma-xil jamoasi.',
-                'country-uz': 'O\'zbekiston', 'role-uz': 'Bosh Qarorgoh va Barcha Ishlab Chiqarish', 'country-ae': 'Birlashgan Arab Amirliklari', 'role-ae': 'Ikkinchi Bosh Qarorgoh va Motorsport Ishlab Chiqarish Bosh Bazasi',
-                'country-au': 'Avstraliya', 'role-au': 'Ishlab Chiqarish va Kinematografiya', 'country-gb': 'Buyuk Britaniya', 'role-gb': 'Boshqaruv', 'country-za': 'Janubiy Afrika', 'role-za': 'Boshqaruv',
-                'country-pk': 'Pokiston', 'role-pk': 'Montaj va Post-Ishlab Chiqarish', 'country-ca': 'Kanada', 'role-ca': 'Ishlab Chiqarish va Fotografiya', 'country-in': 'Hindiston', 'role-in': 'Ishlab Chiqarish',
-                'country-kw': 'Kuveyt', 'role-kw': 'Boshqaruv',
-                'partner-label': 'Ishonchli Hamkorlar', 'partner-title': 'Strategik Hamkorlar', 'partner-ngk': 'Motorsport Media rasmiy hamkori', 'partner-studio': 'Studiya va Logistika Hamkori',
-                'partners-header': 'Hamkorlar va Ishlagan Kompaniyalarimiz',
-                'contact-label': 'Biz Bilan Bog\'laning', 'contact-title': 'Yarataylik', 'contact-booking': 'Buyurtma So\'rovlari', 'contact-media': 'Media va Matbuot', 'contact-email': 'Email',
-                'form-name': 'To\'liq Ism', 'form-email': 'Email Manzili', 'form-project': 'Loyiha Turi', 'form-vision': 'Sizning Viziyangiz', 'form-submit': 'So\'rov Yuborish',
-                'footer': 'Ishq bilan yaratildi.'
+                'nav-home': 'Bosh Sahifa',
+                'nav-leadership': 'Rahbariyat',
+                'nav-team': 'Jamoa',
+                'nav-partners': 'Hamkorlar',
+                'nav-contact': 'Aloqa',
+                'hero-label': 'Premium Media',
+                'hero-description': 'Global ijodiy agentlik bo\'lib, Formula 1, FIA va jahon klassidagi poyga seriyalari uchun premium kontent yaratadi.',
+                'cta-primary': 'Loyiha Boshlash',
+                'cta-secondary': 'Ishlarimiz',
+                'scroll': 'Aylantiring',
+                'intro-label': 'Agentlik',
+                'intro-title': 'Yaratilgan Ko\'rishlar.<br>Global Qamrov.',
+                'intro-heading': 'Biz <em>Duneworks Productions</em> — premium avtosport kontenti va tijorat kinosi uchun global ijodiy agentlik.',
+                'stat-countries': 'Davlatlar',
+                'stat-partners': 'Hamkorlar',
+                'stat-f1': 'Formula 1',
+                'series-f1': 'Premium kontent yaratish',
+                'series-fia': 'FIA litsenziyali seriyalar',
+                'series-f3': 'Yosh iste\'dodlar',
+                'series-lemans': 'Chidamlilik poyalari',
+                'series-ferrari': 'Eksklyuziv kontent',
+                'social-label': 'Aloqa',
+                'social-title': 'Bizni Kuzating',
+                'leadership-label': 'Rahbariyat',
+                'leadership-title': 'Kelajak Vizionerlari',
+                'leadership-desc': 'Bizning boshqaruv jamoamiz avtosport media sohasida o\'n yillik tajribani birlashtiradi.',
+                'team-label': 'Global Mavjudlik',
+                'team-title': 'Xalqaro Ofislar',
+                'team-desc': 'Bizning jamoamiz 9 ta davlatda global ijodiy standartlar bilan ishlaydi.',
+                'team-hq': 'Global Shtab',
+                'team-secondary': 'Ikkinchi Shtab',
+                'featured-label': 'Ishonchli Hamkorlar',
+                'featured-title': 'Strategik Hamkorlar',
+                'partners-title': 'Hamkorlar va Kompaniyalar',
+                'contact-label': 'Aloqa',
+                'contact-title': 'Birga Yarataylik',
+                'contact-desc': 'Tasavvuringizni hayotga keltirishga tayyormisiz? Biz uni ajoyib qilish uchun shu yerdamiz.',
+                'form-name': 'Ism',
+                'form-email': 'Email',
+                'form-company': 'Kompaniya',
+                'form-message': 'Xabar',
+                'form-submit': 'Yuborish',
+                'footer-tagline': 'Yetakchi jahon brendlari uchun premium avtosport media va ijodiy ishlab chiqarish.',
+                'footer-rights': 'Barcha huquqlar himoyalangan.'
             }
         };
-
+        
         function setLanguage(lang) {
-            const elements = document.querySelectorAll('[data-i18n]');
-            elements.forEach(el => {
+            const t = translations[lang];
+            if (!t) return;
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    if (el.innerHTML.includes('<br>')) { el.innerHTML = translations[lang][key]; } 
-                    else { el.textContent = translations[lang][key]; }
+                if (t[key]) {
+                    if (el.innerHTML !== t[key]) {
+                        el.innerHTML = t[key];
+                    }
                 }
             });
-            langBtn.textContent = lang.toUpperCase();
+            
+            // Update flag and label
+            const flagMap = { en: 'gb', ru: 'ru', uz: 'uz' };
+            currentLang.textContent = lang.toUpperCase();
+            langToggle.querySelector('.fi').className = `fi fi-${flagMap[lang]}`;
+            
+            // Close dropdown
             langDropdown.classList.remove('active');
         }
-
-        // --- 4. Reveal Animations ---
-        const observer = new IntersectionObserver((entries) => {
+        
+        // Language toggle
+        langToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('active');
+        });
+        
+        // Language options
+        document.querySelectorAll('.lang-option').forEach(option => {
+            option.addEventListener('click', () => {
+                setLanguage(option.dataset.lang);
+            });
+        });
+        
+        // Close on outside click
+        document.addEventListener('click', () => {
+            langDropdown.classList.remove('active');
+        });
+        
+        // ============================================
+        // SCROLL REVEAL ANIMATIONS
+        // ============================================
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
-
-        document.querySelectorAll('.team-card, .contact-block, .form-row, .social-card, .exec-card').forEach(el => {
-            el.style.opacity = 0;
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.8s ease-out';
-            observer.observe(el);
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+        
+        // ============================================
+        // FORM HANDLING
+        // ============================================
+        const bookingForm = document.getElementById('bookingForm');
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Show success feedback
+            const submitBtn = bookingForm.querySelector('.form-submit');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Message Sent!';
+            submitBtn.style.background = 'var(--accent-primary)';
+            submitBtn.style.color = 'var(--bg-primary)';
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = '';
+                submitBtn.style.color = '';
+                bookingForm.reset();
+            }, 3000);
+        });
+        
+        // ============================================
+        // SMOOTH SCROLL POLYFILL FOR SAFARI
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 </body>
