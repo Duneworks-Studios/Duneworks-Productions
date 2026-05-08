@@ -192,29 +192,26 @@
         }
         
         /* ============================================
-           CUSTOM CURSOR
+           CUSTOM CAMERA CURSOR (ORIGINAL RESTORED)
            ============================================ */
         
         .cursor {
+            width: 40px;
+            height: 40px;
             position: fixed;
-            width: 24px;
-            height: 24px;
             pointer-events: none;
             z-index: 10000;
-            mix-blend-mode: difference;
-            transition: transform 0.15s ease-out;
-            will-change: transform;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, opacity 0.3s ease;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23c9a962' stroke-width='3'%3E%3Crect x='10' y='25' width='80' height='50' rx='10' /%3E%3Ccircle cx='50' cy='50' r='15' /%3E%3Crect x='60' y='30' width='15' height='10' rx='2' fill='%23c9a962' stroke='none'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            display: block;
         }
         
-        .cursor svg {
-            width: 100%;
-            height: 100%;
-            fill: #fff;
-            filter: drop-shadow(0 0 8px rgba(201, 169, 98, 0.6));
-        }
-        
-        .cursor.hover {
-            transform: scale(1.8);
+        .cursor.hover-active {
+            transform: translate(-50%, -50%) scale(1.5);
+            opacity: 0.8;
         }
         
         @media (pointer: coarse) {
@@ -425,7 +422,7 @@
         }
         
         /* ============================================
-           HERO SECTION - CINEMATIC
+           HERO SECTION - CINEMATIC (RESTORED ORIGINAL)
            ============================================ */
         
         .hero {
@@ -433,44 +430,30 @@
             min-height: 100vh;
             min-height: 100dvh;
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: var(--section-padding) var(--container-padding);
+            align-items: center;
             overflow: hidden;
+            /* ORIGINAL HERO IMAGE RESTORED - camera/lens cinematic photo */
+            background: url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop') center/cover no-repeat;
         }
         
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-        }
-        
-        .hero-bg::before {
+        .hero::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(201, 169, 98, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(201, 169, 98, 0.05) 0%, transparent 50%),
-                linear-gradient(180deg, transparent 0%, var(--bg-primary) 100%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
             z-index: 1;
-        }
-        
-        .hero-bg::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a962' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.5;
-            z-index: 0;
         }
         
         .hero-content {
             position: relative;
             z-index: 2;
+            width: 100%;
             max-width: var(--max-width);
             margin: 0 auto;
-            width: 100%;
+            padding: 0 var(--container-padding);
         }
         
         .hero-label {
@@ -483,6 +466,8 @@
             text-transform: uppercase;
             color: var(--accent-primary);
             margin-bottom: var(--space-lg);
+            mix-blend-mode: difference;
+            color: white;
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInUp 1s var(--transition-dramatic) forwards;
@@ -495,46 +480,41 @@
             background: var(--accent-primary);
         }
         
+        .hero-title-wrap {
+            overflow: hidden;
+            display: block;
+            margin-bottom: -10px;
+        }
+        
         .hero-title {
             font-family: var(--font-display);
-            font-size: var(--text-7xl);
+            font-size: clamp(3rem, 11vw, 11rem);
             font-weight: 400;
-            line-height: 0.95;
-            letter-spacing: -0.02em;
-            margin-bottom: var(--space-lg);
+            line-height: 0.85;
+            white-space: nowrap;
+            letter-spacing: 2px;
+            mix-blend-mode: difference;
+            color: white;
             opacity: 0;
             transform: translateY(40px);
             animation: fadeInUp 1s var(--transition-dramatic) 0.2s forwards;
         }
         
-        .hero-title span {
-            display: block;
+        .hero-title.italic {
             font-style: italic;
             font-weight: 400;
-            color: var(--accent-primary);
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
-        .hero-description {
-            max-width: 600px;
-            font-size: var(--text-lg);
+        .hero-subtitle {
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+            letter-spacing: 0.25em;
             color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: var(--space-2xl);
+            margin-top: var(--space-xl);
+            text-transform: uppercase;
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInUp 1s var(--transition-dramatic) 0.4s forwards;
-        }
-        
-        .hero-cta {
-            display: flex;
-            gap: var(--space-md);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s var(--transition-dramatic) 0.6s forwards;
         }
         
         .btn {
@@ -878,6 +858,7 @@
         .social-card:hover .social-icon {
             background: var(--accent-primary);
             color: var(--bg-primary);
+            transform: scale(1.1) rotate(-5deg);
         }
         
         .social-card h3 {
@@ -923,7 +904,7 @@
         }
         
         .social-card:hover .social-link i {
-            transform: translateX(4px);
+            transform: translateX(8px);
         }
         
         @media (max-width: 768px) {
@@ -1085,8 +1066,11 @@
         }
         
         .team-flag {
-            font-size: var(--text-3xl);
+            width: 48px;
+            height: 36px;
+            border-radius: var(--radius-sm);
             margin-bottom: var(--space-sm);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .team-country {
@@ -1513,13 +1497,8 @@
     <div class="grain-overlay"></div>
     <div class="vignette"></div>
     
-    <!-- Custom Cursor -->
-    <div class="cursor">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-13v6h4V7H10zm0 8v2h4v-2h-4z"/>
-            <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1"/>
-        </svg>
-    </div>
+    <!-- Custom Camera Cursor -->
+    <div class="cursor"></div>
     
     <!-- Navigation -->
     <nav class="nav" id="nav">
@@ -1575,24 +1554,15 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-bg"></div>
         <div class="hero-content">
-            <div class="hero-label" data-i18n="hero-label">Premium Motorsport Media</div>
-            <h1 class="hero-title">
-                Duneworks
-                <span>Productions</span>
-            </h1>
-            <p class="hero-description" data-i18n="hero-description">
-                A global creative media agency crafting premium motorsport content for Formula 1, 
-                FIA, and world-class racing series. We transform vision into cinematic reality.
-            </p>
-            <div class="hero-cta">
-                <a href="#contact" class="btn btn-primary">
-                    <span data-i18n="cta-primary">Start a Project</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-                <a href="#partners" class="btn btn-secondary" data-i18n="cta-secondary">View Our Work</a>
+            <span class="hero-label" data-i18n="hero-label">Visual Storytelling</span>
+            <div class="hero-title-wrap">
+                <h1 class="hero-title">DUNEWORKS</h1>
             </div>
+            <div class="hero-title-wrap">
+                <h1 class="hero-title italic">PRODUCTION</h1>
+            </div>
+            <p class="hero-subtitle" data-i18n="hero-subtitle">Premium cinematography & photography for global brands and visionaries.</p>
         </div>
         <div class="hero-scroll">
             <span data-i18n="scroll">Scroll</span>
@@ -1851,83 +1821,74 @@
     <!-- Global Team -->
     <section class="section team" id="team">
         <div class="section-header reveal">
-            <div class="section-label" data-i18n="team-label">Global Presence</div>
-            <h2 class="section-title" data-i18n="team-title">International Offices</h2>
-            <p class="section-description" data-i18n="team-desc">
-                Our distributed team operates across 9 countries, providing local expertise 
-                with global creative standards.
+            <div class="section-label" data-i18n="global-label">Global Reach</div>
+            <h2 class="section-title" data-i18n="global-title">Our Locations and People</h2>
+            <p class="section-description" data-i18n="global-desc">
+                A diverse team of specialists bringing perspective from the world's most creative hubs.
             </p>
         </div>
         <div class="team-map">
             <div class="team-card reveal">
                 <div class="team-card-content">
-                    <div class="team-flag">🇺🇿</div>
-                    <h4 class="team-country" data-i18n="team-uz">Uzbekistan</h4>
-                    <p class="team-role" data-i18n="team-hq">Global Headquarters</p>
-                    <span class="team-hq">
-                        <i class="fas fa-star"></i>
-                        HQ
-                    </span>
+                    <span class="team-flag fi fi-uz"></span>
+                    <h4 class="team-country" data-i18n="country-uz">Uzbekistan</h4>
+                    <p class="team-role" data-i18n="role-uz">Headquarters & All Production</p>
                 </div>
             </div>
             <div class="team-card reveal reveal-delay-1">
                 <div class="team-card-content">
-                    <div class="team-flag">🇦🇪</div>
-                    <h4 class="team-country" data-i18n="team-ae">United Arab Emirates</h4>
-                    <p class="team-role" data-i18n="team-secondary">Secondary HQ</p>
-                    <span class="team-hq">
-                        <i class="fas fa-star"></i>
-                        HQ
-                    </span>
+                    <span class="team-flag fi fi-ae"></span>
+                    <h4 class="team-country" data-i18n="country-ae">United Arab Emirates</h4>
+                    <p class="team-role" data-i18n="role-ae">Secondary HQ & Main HQ for Motorsport Production</p>
                 </div>
             </div>
             <div class="team-card reveal reveal-delay-2">
                 <div class="team-card-content">
-                    <div class="team-flag">🇦🇺</div>
-                    <h4 class="team-country" data-i18n="team-au">Australia</h4>
-                    <p class="team-role" data-i18n="team-pacific">Asia-Pacific</p>
+                    <span class="team-flag fi fi-au"></span>
+                    <h4 class="team-country" data-i18n="country-au">Australia</h4>
+                    <p class="team-role" data-i18n="role-au">Production & Cinematography</p>
                 </div>
             </div>
             <div class="team-card reveal reveal-delay-3">
                 <div class="team-card-content">
-                    <div class="team-flag">🇬🇧</div>
-                    <h4 class="team-country" data-i18n="team-gb">United Kingdom</h4>
-                    <p class="team-role" data-i18n="team-europe">Europe</p>
+                    <span class="team-flag fi fi-gb"></span>
+                    <h4 class="team-country" data-i18n="country-gb">United Kingdom</h4>
+                    <p class="team-role" data-i18n="role-gb">Management</p>
                 </div>
             </div>
             <div class="team-card reveal">
                 <div class="team-card-content">
-                    <div class="team-flag">🇿🇦</div>
-                    <h4 class="team-country" data-i18n="team-za">South Africa</h4>
-                    <p class="team-role" data-i18n="team-africa">Africa</p>
+                    <span class="team-flag fi fi-za"></span>
+                    <h4 class="team-country" data-i18n="country-za">South Africa</h4>
+                    <p class="team-role" data-i18n="role-za">Management</p>
                 </div>
             </div>
             <div class="team-card reveal reveal-delay-1">
                 <div class="team-card-content">
-                    <div class="team-flag">🇵🇰</div>
-                    <h4 class="team-country" data-i18n="team-pk">Pakistan</h4>
-                    <p class="team-role" data-i18n="team-southasia">South Asia</p>
+                    <span class="team-flag fi fi-pk"></span>
+                    <h4 class="team-country" data-i18n="country-pk">Pakistan</h4>
+                    <p class="team-role" data-i18n="role-pk">Editing & Post Production</p>
                 </div>
             </div>
             <div class="team-card reveal reveal-delay-2">
                 <div class="team-card-content">
-                    <div class="team-flag">🇨🇦</div>
-                    <h4 class="team-country" data-i18n="team-ca">Canada</h4>
-                    <p class="team-role" data-i18n="team-namerica">North America</p>
+                    <span class="team-flag fi fi-ca"></span>
+                    <h4 class="team-country" data-i18n="country-ca">Canada</h4>
+                    <p class="team-role" data-i18n="role-ca">Production & Photography</p>
                 </div>
             </div>
             <div class="team-card reveal reveal-delay-3">
                 <div class="team-card-content">
-                    <div class="team-flag">🇮🇳</div>
-                    <h4 class="team-country" data-i18n="team-in">India</h4>
-                    <p class="team-role" data-i18n="team-southasia">South Asia</p>
+                    <span class="team-flag fi fi-in"></span>
+                    <h4 class="team-country" data-i18n="country-in">India</h4>
+                    <p class="team-role" data-i18n="role-in">Production</p>
                 </div>
             </div>
             <div class="team-card reveal">
                 <div class="team-card-content">
-                    <div class="team-flag">🇰🇼</div>
-                    <h4 class="team-country" data-i18n="team-kw">Kuwait</h4>
-                    <p class="team-role" data-i18n="team-middleeast">Middle East</p>
+                    <span class="team-flag fi fi-kw"></span>
+                    <h4 class="team-country" data-i18n="country-kw">Kuwait</h4>
+                    <p class="team-role" data-i18n="role-kw">Middle East Operations</p>
                 </div>
             </div>
         </div>
@@ -2055,7 +2016,7 @@
     <!-- JavaScript -->
     <script>
         // ============================================
-        // CUSTOM CURSOR
+        // CUSTOM CAMERA CURSOR (RESTORED)
         // ============================================
         const cursor = document.querySelector('.cursor');
         let mouseX = 0, mouseY = 0;
@@ -2070,16 +2031,17 @@
             function animateCursor() {
                 cursorX += (mouseX - cursorX) * 0.15;
                 cursorY += (mouseY - cursorY) * 0.15;
-                cursor.style.transform = `translate(${cursorX - 12}px, ${cursorY - 12}px)`;
+                cursor.style.left = cursorX + 'px';
+                cursor.style.top = cursorY + 'px';
                 requestAnimationFrame(animateCursor);
             }
             animateCursor();
             
-            // Hover effects
+            // Hover effects - using original class name
             const hoverElements = document.querySelectorAll('a, button, .social-card, .exec-card, .team-card, .featured-card, .series-item');
             hoverElements.forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
             });
         }
         
@@ -2124,11 +2086,11 @@
             en: {
                 'nav-home': 'Home',
                 'nav-leadership': 'Leadership',
-                'nav-team': 'Global Team',
+                'nav-team': 'Team',
                 'nav-partners': 'Partners',
                 'nav-contact': 'Contact',
-                'hero-label': 'Premium Motorsport Media',
-                'hero-description': 'A global creative media agency crafting premium motorsport content for Formula 1, FIA, and world-class racing series. We transform vision into cinematic reality.',
+                'hero-label': 'Visual Storytelling',
+                'hero-subtitle': 'Premium cinematography & photography for global brands and visionaries.',
                 'cta-primary': 'Start a Project',
                 'cta-secondary': 'View Our Work',
                 'scroll': 'Scroll',
@@ -2175,26 +2137,27 @@
                 'exec6-bio': 'Ensuring seamless production logistics across global racing events.',
                 'exec7-role': 'Lead Talent',
                 'exec7-bio': 'Lead Actor for commercial productions and branded content campaigns.',
-                'team-label': 'Global Presence',
-                'team-title': 'International Offices',
-                'team-desc': 'Our distributed team operates across 9 countries with global creative standards.',
-                'team-uz': 'Uzbekistan',
-                'team-hq': 'Global Headquarters',
-                'team-ae': 'United Arab Emirates',
-                'team-secondary': 'Secondary HQ',
-                'team-au': 'Australia',
-                'team-pacific': 'Asia-Pacific',
-                'team-gb': 'United Kingdom',
-                'team-europe': 'Europe',
-                'team-za': 'South Africa',
-                'team-africa': 'Africa',
-                'team-pk': 'Pakistan',
-                'team-southasia': 'South Asia',
-                'team-ca': 'Canada',
-                'team-namerica': 'North America',
-                'team-in': 'India',
-                'team-kw': 'Kuwait',
-                'team-middleeast': 'Middle East',
+                'global-label': 'Global Reach',
+                'global-title': 'Our Locations and People',
+                'global-desc': 'A diverse team of specialists bringing perspective from the world\'s most creative hubs.',
+                'country-uz': 'Uzbekistan',
+                'role-uz': 'Headquarters & All Production',
+                'country-ae': 'United Arab Emirates',
+                'role-ae': 'Secondary HQ & Main HQ for Motorsport Production',
+                'country-au': 'Australia',
+                'role-au': 'Production & Cinematography',
+                'country-gb': 'United Kingdom',
+                'role-gb': 'Management',
+                'country-za': 'South Africa',
+                'role-za': 'Management',
+                'country-pk': 'Pakistan',
+                'role-pk': 'Editing & Post Production',
+                'country-ca': 'Canada',
+                'role-ca': 'Production & Photography',
+                'country-in': 'India',
+                'role-in': 'Production',
+                'country-kw': 'Kuwait',
+                'role-kw': 'Middle East Operations',
                 'featured-label': 'Trusted Collaborators',
                 'featured-title': 'Strategic Partners',
                 'partner-ngk-desc': 'Official Partner for Motorsport Media',
@@ -2219,8 +2182,8 @@
                 'nav-team': 'Команда',
                 'nav-partners': 'Партнеры',
                 'nav-contact': 'Контакты',
-                'hero-label': 'Премиум Медиа',
-                'hero-description': 'Глобальное креативное агентство, создающее премиальный контент для Формулы 1, FIA и мировых гоночных серий.',
+                'hero-label': 'Визуальное Повествование',
+                'hero-subtitle': 'Премиальная кинематография и фотография для мировых брендов и визионеров.',
                 'cta-primary': 'Начать Проект',
                 'cta-secondary': 'Наши Работы',
                 'scroll': 'Листать',
@@ -2240,10 +2203,27 @@
                 'leadership-label': 'Руководство',
                 'leadership-title': 'Видение Будущего',
                 'leadership-desc': 'Наша команда руководителей объединяет десятилетия опыта в автоспортивных медиа.',
-                'team-label': 'Глобальное Присутствие',
-                'team-title': 'Международные Офисы',
-                'team-desc': 'Наша команда работает в 9 странах с глобальными креативными стандартами.',
-                'team-hq': 'Глобальный Офис',
+                'global-label': 'Глобальное Присутствие',
+                'global-title': 'Наши Локации и Люди',
+                'global-desc': 'Разнообразная команда специалистов, приносящая перспективу из самых креативных центров мира.',
+                'country-uz': 'Узбекистан',
+                'role-uz': 'Штаб-квартира и все производство',
+                'country-ae': 'ОАЭ',
+                'role-ae': 'Вторая штаб-квартира и главная для автоспорта',
+                'country-au': 'Австралия',
+                'role-au': 'Продакшн и кинематография',
+                'country-gb': 'Великобритания',
+                'role-gb': 'Менеджмент',
+                'country-za': 'ЮАР',
+                'role-za': 'Менеджмент',
+                'country-pk': 'Пакистан',
+                'role-pk': 'Монтаж и пост-продакшн',
+                'country-ca': 'Канада',
+                'role-ca': 'Продакшн и фотография',
+                'country-in': 'Индия',
+                'role-in': 'Продакшн',
+                'country-kw': 'Кувейт',
+                'role-kw': 'Операции на Ближнем Востоке',
                 'team-secondary': 'Второй Офис',
                 'featured-label': 'Надежные Партнеры',
                 'featured-title': 'Стратегические Партнеры',
@@ -2265,8 +2245,8 @@
                 'nav-team': 'Jamoa',
                 'nav-partners': 'Hamkorlar',
                 'nav-contact': 'Aloqa',
-                'hero-label': 'Premium Media',
-                'hero-description': 'Global ijodiy agentlik bo\'lib, Formula 1, FIA va jahon klassidagi poyga seriyalari uchun premium kontent yaratadi.',
+                'hero-label': 'Vizual Hikoya',
+                'hero-subtitle': 'Global brendlar va vizyonerlar uchun premium kinematografiya va fotografiya.',
                 'cta-primary': 'Loyiha Boshlash',
                 'cta-secondary': 'Ishlarimiz',
                 'scroll': 'Aylantiring',
@@ -2286,10 +2266,27 @@
                 'leadership-label': 'Rahbariyat',
                 'leadership-title': 'Kelajak Vizionerlari',
                 'leadership-desc': 'Bizning boshqaruv jamoamiz avtosport media sohasida o\'n yillik tajribani birlashtiradi.',
-                'team-label': 'Global Mavjudlik',
-                'team-title': 'Xalqaro Ofislar',
-                'team-desc': 'Bizning jamoamiz 9 ta davlatda global ijodiy standartlar bilan ishlaydi.',
-                'team-hq': 'Global Shtab',
+                'global-label': 'Global Mavjudlik',
+                'global-title': 'Bizning Lokatsiyalar va Odamlar',
+                'global-desc': 'Dunyoning eng ijodiy markazlaridan kelgan turli xil mutaxassislar jamoasi.',
+                'country-uz': 'O\'zbekiston',
+                'role-uz': 'Bosh ofis va barcha ishlab chiqarish',
+                'country-ae': 'BAA',
+                'role-ae': 'Ikkinchi bosh ofis va avtosport uchun bosh ofis',
+                'country-au': 'Avstraliya',
+                'role-au': 'Ishlab chiqarish va kinematografiya',
+                'country-gb': 'Buyuk Britaniya',
+                'role-gb': 'Boshqaruv',
+                'country-za': 'Janubiy Afrika',
+                'role-za': 'Boshqaruv',
+                'country-pk': 'Pokiston',
+                'role-pk': 'Montaj va post-ishlab chiqarish',
+                'country-ca': 'Kanada',
+                'role-ca': 'Ishlab chiqarish va fotografiya',
+                'country-in': 'Hindiston',
+                'role-in': 'Ishlab chiqarish',
+                'country-kw': 'Quvayt',
+                'role-kw': 'Yaqin Sharq operatsiyalari',
                 'team-secondary': 'Ikkinchi Shtab',
                 'featured-label': 'Ishonchli Hamkorlar',
                 'featured-title': 'Strategik Hamkorlar',
