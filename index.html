@@ -1953,12 +1953,21 @@
         
         /* Small Mobile Adjustments */
         @media (max-width: 380px) {
-            .hero-title {
-                font-size: clamp(1.75rem, 10vw, 2.5rem);
+            .hero-brand {
+                font-size: 1rem;
+                letter-spacing: 0.1em;
             }
             
-            .hero-tagline {
-                font-size: 0.9rem;
+            .hero-main-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.875rem;
+            }
+            
+            .hero-series-item strong {
+                font-size: var(--text-xs);
             }
             
             .team-map {
@@ -1981,13 +1990,59 @@
                 font-size: var(--text-xl);
             }
             
-            .hero-services {
+            .hero-series {
                 flex-direction: column;
                 gap: var(--space-xs);
             }
             
             .hero-service-divider {
                 display: none;
+            }
+        }
+        
+        /* Tablet Optimizations */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .hero-content {
+                max-width: 700px;
+                padding: calc(100px + var(--space-xl)) var(--container-padding) var(--space-xl);
+            }
+            
+            .hero-main-title {
+                font-size: clamp(3rem, 8vw, 5rem);
+            }
+            
+            .manifesto-content {
+                gap: var(--space-xl);
+            }
+            
+            .leadership-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .team-map {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Large Mobile Landscape */
+        @media (min-width: 480px) and (max-width: 768px) and (orientation: landscape) {
+            .hero {
+                min-height: auto;
+                padding: var(--space-3xl) 0;
+            }
+            
+            .hero-content {
+                min-height: auto;
+                padding: calc(80px + var(--space-lg)) var(--container-padding) var(--space-lg);
+            }
+            
+            .hero-series {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .hero-series-item {
+                flex: 1 1 calc(50% - var(--space-xs));
             }
         }
         
