@@ -130,11 +130,16 @@
         #partners { padding: 100px 0 80px; background: var(--bg-primary); overflow: hidden; border-top: 1px solid #222; border-bottom: 1px solid #222; text-align: center; }
         .partners-header { margin-bottom: 40px; }
         .partners-header h2 { font-size: 2rem; color: var(--text-primary); mix-blend-mode: normal; }
-        .marquee-container { display: flex; width: max-content; animation: marquee 35s linear infinite; }
+        .marquee-container { display: flex; width: max-content; align-items: center; animation: marquee 35s linear infinite; }
         .partner-logo-img { height: 60px; width: 150px; object-fit: contain; filter: grayscale(100%) brightness(0.7); opacity: 0.6; margin: 0 50px; transition: all 0.3s ease; }
         .partner-logo-img:hover { filter: grayscale(0%) brightness(1); opacity: 1; }
         .partner-logo-img.partner-logo-connect,
-        .partner-logo-img.partner-logo-shavi { height: 120px; width: 300px; object-fit: contain; }
+        .partner-logo-img.partner-logo-shavi {
+            height: 132px;
+            width: 330px;
+            object-fit: contain;
+            transform: translateY(-12px);
+        }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* --- Booking --- */
