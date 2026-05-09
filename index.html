@@ -2144,6 +2144,8 @@
             cursor: pointer;
             overflow: hidden;
             transition: all var(--duna-transition-base);
+            z-index: 10;
+            pointer-events: auto;
         }
         
         .nav-ai-btn::before {
@@ -2214,7 +2216,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             cursor: pointer;
-            z-index: 999;
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2223,6 +2225,7 @@
                 0 0 20px rgba(201, 169, 98, 0.15),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
             transition: all var(--duna-transition-slow);
+            pointer-events: auto;
         }
         
         .duna-floating-btn:hover {
@@ -2327,15 +2330,17 @@
             background: rgba(7, 7, 8, 0.8);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
+            z-index: 10000;
             opacity: 0;
             visibility: hidden;
             transition: all var(--duna-transition-slow);
+            pointer-events: none;
         }
         
         .duna-chat-overlay.active {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
         }
         
         .duna-chat-container {
@@ -2353,13 +2358,14 @@
                 0 24px 80px rgba(0, 0, 0, 0.6),
                 0 0 60px rgba(201, 169, 98, 0.1),
                 inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            z-index: 1001;
+            z-index: 10001;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             opacity: 0;
             transform: scale(0.9) translateY(20px);
             transition: all var(--duna-transition-slow);
+            pointer-events: auto;
         }
         
         .duna-chat-container.active {
@@ -2939,7 +2945,7 @@
             bottom: 0;
             right: 0;
             border-radius: 0;
-            z-index: 1002;
+            z-index: 10001;
         }
         
         .duna-chat-container.fullscreen .duna-chat-messages {
@@ -4112,22 +4118,33 @@ TONE & STYLE:
 
 IMPORTANT: Keep responses focused on Duneworks-related topics. If asked about unrelated topics, gently redirect to how Duneworks can help with creative/production needs.`;
             
-            // DOM Elements
-            const elements = {
-                navAiBtn: document.getElementById('navAiBtn'),
-                floatingBtn: document.getElementById('dunaFloatingBtn'),
-                chatOverlay: document.getElementById('dunaChatOverlay'),
-                chatContainer: document.getElementById('dunaChatContainer'),
-                chatMessages: document.getElementById('dunaChatMessages'),
-                chatInput: document.getElementById('dunaChatInput'),
-                sendBtn: document.getElementById('dunaSendBtn'),
-                closeBtn: document.getElementById('dunaCloseBtn'),
-                clearBtn: document.getElementById('dunaClearBtn'),
-                fullscreenBtn: document.getElementById('dunaFullscreenBtn'),
-                fullscreenIcon: document.getElementById('dunaFullscreenIcon'),
-                typing: document.getElementById('dunaTyping'),
-                welcome: document.getElementById('dunaWelcome'),
-                particles: document.getElementById('dunaParticles'),
+            // DOM Elements - will be populated after DOM is ready
+            let elements = {};
+            
+            // Initialize elements after DOM is ready
+            const initializeElements = () => {
+                elements = {
+                    navAiBtn: document.getElementById('navAiBtn'),
+                    floatingBtn: document.getElementById('dunaFloatingBtn'),
+                    chatOverlay: document.getElementById('dunaChatOverlay'),
+                    chatContainer: document.getElementById('dunaChatContainer'),
+                    chatMessages: document.getElementById('dunaChatMessages'),
+                    chatInput: document.getElementById('dunaChatInput'),
+                    sendBtn: document.getElementById('dunaSendBtn'),
+                    closeBtn: document.getElementById('dunaCloseBtn'),
+                    clearBtn: document.getElementById('dunaClearBtn'),
+                    fullscreenBtn: document.getElementById('dunaFullscreenBtn'),
+                    fullscreenIcon: document.getElementById('dunaFullscreenIcon'),
+                    typing: document.getElementById('dunaTyping'),
+                    welcome: document.getElementById('dunaWelcome'),
+                    particles: document.getElementById('dunaParticles'),
+                };
+                
+                // Debug logging
+                console.log('[Duna AI] Elements initialized:');
+                console.log('  navAiBtn:', elements.navAiBtn ? '✓' : '✗');
+                console.log('  floatingBtn:', elements.floatingBtn ? '✓' : '✗');
+                console.log('  chatContainer:', elements.chatContainer ? '✓' : '✗');
             };
             
             // State
@@ -4804,100 +4821,168 @@ What would you like to know more about? Or feel free to ask me about our upcomin
             };
             
             // ============================================
-            // EVENT HANDLERS
+            // INITIALIZATION (runs after DOM is ready)
             // ============================================
             
-            // Open chat
-            elements.navAiBtn?.addEventListener('click', openChat);
-            elements.floatingBtn?.addEventListener('click', openChat);
-            
-            // Close chat
-            elements.closeBtn?.addEventListener('click', closeChat);
-            elements.chatOverlay?.addEventListener('click', closeChat);
-            
-            // Fullscreen toggle
-            elements.fullscreenBtn?.addEventListener('click', toggleFullscreen);
-            
-            // Clear conversation
-            elements.clearBtn?.addEventListener('click', () => {
-                if (confirm('Clear this conversation?')) {
-                    clearConversation();
+            const initDunaAI = () => {
+                console.log('[Duna AI] Starting initialization...');
+                
+                // Initialize elements
+                initializeElements();
+                
+                // Verify critical elements exist
+                if (!elements.navAiBtn) {
+                    console.error('[Duna AI] CRITICAL: navAiBtn not found!');
                 }
-            });
-            
-            // Send message
-            const sendMessage = () => {
-                const text = elements.chatInput.value.trim();
-                if (!text || state.isTyping) return;
+                if (!elements.floatingBtn) {
+                    console.error('[Duna AI] CRITICAL: floatingBtn not found!');
+                }
+                if (!elements.chatContainer) {
+                    console.error('[Duna AI] CRITICAL: chatContainer not found!');
+                }
                 
-                // Add user message
-                addUserMessage(text);
+                // ============================================
+                // EVENT HANDLERS
+                // ============================================
                 
-                // Clear input
-                elements.chatInput.value = '';
-                elements.chatInput.style.height = 'auto';
+                // Open chat - BOTH buttons
+                if (elements.navAiBtn) {
+                    elements.navAiBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('[Duna AI] Navbar button clicked - opening chat');
+                        openChat();
+                    });
+                    console.log('[Duna AI] Navbar button listener attached ✓');
+                }
                 
-                // Send to AI
-                sendToAI(text);
+                if (elements.floatingBtn) {
+                    elements.floatingBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('[Duna AI] Floating button clicked - opening chat');
+                        openChat();
+                    });
+                    console.log('[Duna AI] Floating button listener attached ✓');
+                }
+                
+                // Close chat
+                if (elements.closeBtn) {
+                    elements.closeBtn.addEventListener('click', closeChat);
+                }
+                if (elements.chatOverlay) {
+                    elements.chatOverlay.addEventListener('click', closeChat);
+                }
+                
+                // Fullscreen toggle
+                if (elements.fullscreenBtn) {
+                    elements.fullscreenBtn.addEventListener('click', toggleFullscreen);
+                }
+                
+                // Clear conversation
+                if (elements.clearBtn) {
+                    elements.clearBtn.addEventListener('click', () => {
+                        if (confirm('Clear this conversation?')) {
+                            clearConversation();
+                        }
+                    });
+                }
+                
+                // Send message
+                const sendMessage = () => {
+                    if (!elements.chatInput) return;
+                    const text = elements.chatInput.value.trim();
+                    if (!text || state.isTyping) return;
+                    
+                    // Add user message
+                    addUserMessage(text);
+                    
+                    // Clear input
+                    elements.chatInput.value = '';
+                    elements.chatInput.style.height = 'auto';
+                    
+                    // Send to AI
+                    sendToAI(text);
+                };
+                
+                if (elements.sendBtn) {
+                    elements.sendBtn.addEventListener('click', sendMessage);
+                }
+                
+                // Input key handling
+                if (elements.chatInput) {
+                    elements.chatInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            sendMessage();
+                        }
+                    });
+                    elements.chatInput.addEventListener('input', autoResizeTextarea);
+                }
+                
+                // Suggestion chips
+                document.querySelectorAll('.duna-suggestion-chip').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        const prompt = chip.dataset.prompt;
+                        if (elements.chatInput) {
+                            elements.chatInput.value = prompt;
+                            sendMessage();
+                        }
+                    });
+                });
+                
+                // Escape key to close
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && state.isOpen) {
+                        closeChat();
+                    }
+                });
+                
+                // ============================================
+                // FINAL SETUP
+                // ============================================
+                
+                console.log('🌟 Duna AI initialized - Your creative production assistant');
+                console.log(`🔌 Mode: ${DUNA_CONFIG.useRealAPI ? 'DeepSeek API (LIVE)' : 'Demo/Simulated'}`);
+                
+                // Update status indicator based on mode
+                const statusEl = document.getElementById('dunaChatStatus');
+                if (statusEl) {
+                    statusEl.textContent = DUNA_CONFIG.useRealAPI ? 'AI Powered' : 'Demo Mode';
+                    if (!DUNA_CONFIG.useRealAPI) {
+                        statusEl.style.color = 'var(--duna-text-tertiary)';
+                    }
+                }
+                
+                // SECURITY NOTICE
+                if (DUNA_CONFIG.useRealAPI) {
+                    console.warn('⚠️  SECURITY: API key is exposed in client-side code.');
+                    console.warn('   For production, implement a secure backend proxy.');
+                    console.warn('   See: https://platform.deepseek.com/docs for best practices.');
+                }
+                
+                // Pulse animation on floating button after 5 seconds
+                setTimeout(() => {
+                    if (!state.isOpen && elements.floatingBtn) {
+                        elements.floatingBtn.classList.add('pulse-glow');
+                        setTimeout(() => {
+                            if (elements.floatingBtn) {
+                                elements.floatingBtn.classList.remove('pulse-glow');
+                            }
+                        }, 3000);
+                    }
+                }, 5000);
+                
+                console.log('[Duna AI] Initialization complete ✓');
             };
             
-            elements.sendBtn?.addEventListener('click', sendMessage);
-            
-            // Input key handling
-            elements.chatInput?.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            
-            elements.chatInput?.addEventListener('input', autoResizeTextarea);
-            
-            // Suggestion chips
-            document.querySelectorAll('.duna-suggestion-chip').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    const prompt = chip.dataset.prompt;
-                    elements.chatInput.value = prompt;
-                    sendMessage();
-                });
-            });
-            
-            // Escape key to close
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && state.isOpen) {
-                    closeChat();
-                }
-            });
-            
-            // Initialize
-            console.log('🌟 Duna AI initialized - Your creative production assistant');
-            console.log(`🔌 Mode: ${DUNA_CONFIG.useRealAPI ? 'DeepSeek API (LIVE)' : 'Demo/Simulated'}`);
-            
-            // Update status indicator based on mode
-            const statusEl = document.getElementById('dunaChatStatus');
-            if (statusEl) {
-                statusEl.textContent = DUNA_CONFIG.useRealAPI ? 'AI Powered' : 'Demo Mode';
-                if (!DUNA_CONFIG.useRealAPI) {
-                    statusEl.style.color = 'var(--duna-text-tertiary)';
-                }
+            // Run initialization when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDunaAI);
+            } else {
+                // DOM already loaded
+                initDunaAI();
             }
-            
-            // SECURITY NOTICE
-            if (DUNA_CONFIG.useRealAPI) {
-                console.warn('⚠️  SECURITY: API key is exposed in client-side code.');
-                console.warn('   For production, implement a secure backend proxy.');
-                console.warn('   See: https://platform.deepseek.com/docs for best practices.');
-            }
-            
-            // Pulse animation on floating button after 5 seconds
-            setTimeout(() => {
-                if (!state.isOpen) {
-                    elements.floatingBtn?.classList.add('pulse-glow');
-                    setTimeout(() => {
-                        elements.floatingBtn?.classList.remove('pulse-glow');
-                    }, 3000);
-                }
-            }, 5000);
         })();
     </script>
     
