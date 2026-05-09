@@ -2211,8 +2211,8 @@
             width: 60px;
             height: 60px;
             border-radius: var(--duna-radius-full);
-            background: linear-gradient(135deg, rgba(26, 26, 29, 0.9) 0%, rgba(13, 13, 15, 0.95) 100%);
-            border: 1px solid rgba(201, 169, 98, 0.3);
+            background: linear-gradient(135deg, rgba(26, 26, 29, 0.6) 0%, rgba(13, 13, 15, 0.8) 100%);
+            border: 1px solid rgba(201, 169, 98, 0.4);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             cursor: pointer;
@@ -2220,57 +2220,78 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.4),
-                0 0 20px rgba(201, 169, 98, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                0 0 30px rgba(201, 169, 98, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 0 60px rgba(201, 169, 98, 0.1);
             transition: all var(--duna-transition-slow);
             pointer-events: auto;
         }
-        
-        .duna-floating-btn:hover {
-            transform: scale(1.1) translateY(-2px);
-            box-shadow: 
-                0 12px 40px rgba(0, 0, 0, 0.5),
-                0 0 30px rgba(201, 169, 98, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            border-color: rgba(201, 169, 98, 0.5);
+
+        .duna-floating-btn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.3) 0%, transparent 50%, rgba(201, 169, 98, 0.2) 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity var(--duna-transition-slow);
         }
-        
+
+        .duna-floating-btn:hover {
+            transform: scale(1.15) translateY(-3px);
+            box-shadow:
+                0 16px 48px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(201, 169, 98, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 0 80px rgba(201, 169, 98, 0.15);
+            border-color: rgba(201, 169, 98, 0.6);
+        }
+
+        .duna-floating-btn:hover::before {
+            opacity: 1;
+        }
+
         .duna-floating-btn:active {
             transform: scale(0.95);
         }
-        
+
         .duna-floating-btn .ai-orb {
             width: 28px;
             height: 28px;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
+
         .duna-floating-btn .ai-orb svg {
             width: 100%;
             height: 100%;
             color: var(--duna-accent-primary);
-            filter: drop-shadow(0 0 10px var(--duna-accent-glow));
+            filter: drop-shadow(0 0 12px var(--duna-accent-glow));
             transition: all var(--duna-transition-base);
         }
-        
+
         .duna-floating-btn:hover .ai-orb svg {
-            filter: drop-shadow(0 0 20px var(--duna-accent-glow));
+            filter: drop-shadow(0 0 24px var(--duna-accent-glow));
+            transform: scale(1.05);
         }
-        
+
         /* Idle pulse animation */
         @keyframes orbPulse {
-            0%, 100% { 
-                transform: scale(1); 
+            0%, 100% {
+                transform: scale(1);
                 filter: drop-shadow(0 0 10px var(--duna-accent-glow));
             }
-            50% { 
-                transform: scale(1.05); 
+            50% {
+                transform: scale(1.05);
                 filter: drop-shadow(0 0 20px var(--duna-accent-glow));
             }
         }
-        
+
         .duna-floating-btn.idle .ai-orb svg {
             animation: orbPulse 3s ease-in-out infinite;
         }
@@ -2411,12 +2432,51 @@
             flex-direction: column;
         }
         
+        .duna-chat-title {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
         .duna-chat-title h3 {
             font-family: var(--font-accent);
             font-size: var(--text-sm);
             font-weight: 500;
             color: var(--duna-text-primary);
             letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Preview Badge */
+        .duna-preview-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.15rem 0.5rem;
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.15) 0%, rgba(212, 185, 120, 0.1) 100%);
+            border: 1px solid rgba(201, 169, 98, 0.3);
+            border-radius: var(--duna-radius-sm);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--duna-accent-primary);
+        }
+
+        .duna-preview-badge::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: var(--duna-accent-primary);
+            border-radius: 50%;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
         }
         
         .duna-chat-status {
@@ -2499,7 +2559,104 @@
         .duna-chat-messages::-webkit-scrollbar-thumb:hover {
             background: rgba(201, 169, 98, 0.3);
         }
-        
+
+        /* Sneak Peek / Demo Announcement Card */
+        .duna-sneak-peek {
+            margin: 0 0 1rem 0;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.08) 0%, rgba(26, 26, 29, 0.6) 100%);
+            border: 1px solid rgba(201, 169, 98, 0.25);
+            border-radius: var(--duna-radius-lg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(201, 169, 98, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+            animation: sneakPeekGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes sneakPeekGlow {
+            0%, 100% {
+                box-shadow:
+                    0 4px 24px rgba(0, 0, 0, 0.3),
+                    0 0 30px rgba(201, 169, 98, 0.1),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                border-color: rgba(201, 169, 98, 0.25);
+            }
+            50% {
+                box-shadow:
+                    0 4px 24px rgba(0, 0, 0, 0.3),
+                    0 0 40px rgba(201, 169, 98, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                border-color: rgba(201, 169, 98, 0.35);
+            }
+        }
+
+        .duna-sneak-peek::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .duna-sneak-peek-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .duna-sneak-peek-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--duna-accent-primary);
+            border-radius: 50%;
+            animation: dotPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--duna-accent-glow);
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .duna-sneak-peek h4 {
+            font-family: var(--font-accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--duna-accent-primary);
+            letter-spacing: 0.05em;
+            margin: 0;
+        }
+
+        .duna-sneak-peek-subtitle {
+            font-size: 0.7rem;
+            color: var(--duna-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .duna-sneak-peek p {
+            font-size: 0.75rem;
+            color: var(--duna-text-tertiary);
+            line-height: 1.5;
+            margin: 0;
+        }
+
         /* Welcome Screen */
         .duna-welcome {
             display: flex;
@@ -4137,6 +4294,7 @@ IMPORTANT: Keep responses focused on Duneworks-related topics. If asked about un
                     fullscreenIcon: document.getElementById('dunaFullscreenIcon'),
                     typing: document.getElementById('dunaTyping'),
                     welcome: document.getElementById('dunaWelcome'),
+                    sneakPeek: document.getElementById('dunaSneakPeek'),
                     particles: document.getElementById('dunaParticles'),
                 };
                 
@@ -4298,8 +4456,11 @@ IMPORTANT: Keep responses focused on Duneworks-related topics. If asked about un
                 
                 elements.chatMessages.appendChild(messageEl);
                 
-                // Hide welcome screen
+                // Hide welcome screen and sneak peek
                 elements.welcome.classList.add('hidden');
+                if (elements.sneakPeek) {
+                    elements.sneakPeek.style.display = 'none';
+                }
                 
                 // Add to state
                 state.messages.push({ id: messageId, role: 'user', content: text });
@@ -4813,8 +4974,11 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                 const messages = elements.chatMessages.querySelectorAll('.duna-message');
                 messages.forEach(msg => msg.remove());
                 
-                // Show welcome
+                // Show welcome and sneak peek
                 elements.welcome.classList.remove('hidden');
+                if (elements.sneakPeek) {
+                    elements.sneakPeek.style.display = 'block';
+                }
                 
                 // Clear storage
                 localStorage.removeItem(DUNA_CONFIG.storageKey);
@@ -4993,16 +5157,11 @@ What would you like to know more about? Or feel free to ask me about our upcomin
     <!-- Floating Chat Button -->
     <button class="duna-floating-btn idle" id="dunaFloatingBtn" aria-label="Open Duna AI Chat">
         <div class="ai-orb">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M12 2v4"/>
-                <path d="M12 18v4"/>
-                <path d="M4.93 4.93l2.83 2.83"/>
-                <path d="M16.24 16.24l2.83 2.83"/>
-                <path d="M2 12h4"/>
-                <path d="M18 12h4"/>
-                <path d="M4.93 19.07l2.83-2.83"/>
-                <path d="M16.24 7.76l2.83-2.83"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                <path d="M8 10h.01"/>
+                <path d="M12 10h.01"/>
+                <path d="M16 10h.01"/>
             </svg>
         </div>
     </button>
@@ -5021,19 +5180,17 @@ What would you like to know more about? Or feel free to ask me about our upcomin
             <div class="duna-chat-header-left">
                 <div class="duna-chat-avatar">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M12 2v4"/>
-                        <path d="M12 18v4"/>
-                        <path d="M4.93 4.93l2.83 2.83"/>
-                        <path d="M16.24 16.24l2.83 2.83"/>
-                        <path d="M2 12h4"/>
-                        <path d="M18 12h4"/>
-                        <path d="M4.93 19.07l2.83-2.83"/>
-                        <path d="M16.24 7.76l2.83-2.83"/>
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        <path d="M8 10h.01"/>
+                        <path d="M12 10h.01"/>
+                        <path d="M16 10h.01"/>
                     </svg>
                 </div>
                 <div class="duna-chat-title">
-                    <h3>Duna AI</h3>
+                    <h3>
+                        Duna AI
+                        <span class="duna-preview-badge">Preview</span>
+                    </h3>
                     <span class="duna-chat-status" id="dunaChatStatus">Online</span>
                 </div>
             </div>
@@ -5064,19 +5221,24 @@ What would you like to know more about? Or feel free to ask me about our upcomin
         
         <!-- Chat Messages -->
         <div class="duna-chat-messages" id="dunaChatMessages">
+            <!-- Sneak Peek Announcement -->
+            <div class="duna-sneak-peek" id="dunaSneakPeek">
+                <div class="duna-sneak-peek-header">
+                    <div class="duna-sneak-peek-dot"></div>
+                    <h4>Sneak Peek of Duna AI</h4>
+                </div>
+                <div class="duna-sneak-peek-subtitle">Early Demo Experience</div>
+                <p>Duna AI is currently in development. This preview showcases some future capabilities of the platform.</p>
+            </div>
+
             <!-- Welcome Screen -->
             <div class="duna-welcome" id="dunaWelcome">
                 <div class="duna-welcome-orb">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M12 2v4"/>
-                        <path d="M12 18v4"/>
-                        <path d="M4.93 4.93l2.83 2.83"/>
-                        <path d="M16.24 16.24l2.83 2.83"/>
-                        <path d="M2 12h4"/>
-                        <path d="M18 12h4"/>
-                        <path d="M4.93 19.07l2.83-2.83"/>
-                        <path d="M16.24 7.76l2.83-2.83"/>
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        <path d="M8 10h.01"/>
+                        <path d="M12 10h.01"/>
+                        <path d="M16 10h.01"/>
                     </svg>
                 </div>
                 <h2>Hello, I'm <span>Duna AI</span></h2>
