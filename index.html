@@ -246,6 +246,12 @@
             justify-content: space-between;
         }
         
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+        
         .nav-logo {
             display: flex;
             align-items: center;
@@ -421,7 +427,13 @@
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .nav-mobile-toggle { display: flex; }
-            .nav-language { display: none; }
+            .nav-language { 
+                display: block;
+                margin-right: var(--space-xs);
+            }
+            .nav-right {
+                gap: var(--space-xs);
+            }
         }
         
         /* ============================================
@@ -1080,10 +1092,10 @@
         }
         
         .leadership-grid {
-            max-width: var(--max-width);
+            max-width: 800px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: var(--space-lg);
         }
         
@@ -3219,28 +3231,30 @@
                 <img src="https://i.postimg.cc/jR3Nszp0/Gemini-Generated-Image-5vnzno5vnzno5vnz-Photoroom.png" alt="Duneworks Productions">
             </a>
             
-            <div class="nav-links">
-                <a href="#home" class="nav-link" data-i18n="nav-home">Home</a>
-                <a href="#leadership" class="nav-link" data-i18n="nav-leadership">Leadership</a>
-                <a href="#team" class="nav-link" data-i18n="nav-team">Global Team</a>
-                <a href="#partners" class="nav-link" data-i18n="nav-partners">Partners</a>
-                <a href="#contact" class="nav-link" data-i18n="nav-contact">Contact</a>
-                
-                <!-- Duna AI Button -->
-                <button class="nav-ai-btn" id="navAiBtn" aria-label="Open Duna AI">
-                    <svg class="ai-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M12 2v4"/>
-                        <path d="M12 18v4"/>
-                        <path d="M4.93 4.93l2.83 2.83"/>
-                        <path d="M16.24 16.24l2.83 2.83"/>
-                        <path d="M2 12h4"/>
-                        <path d="M18 12h4"/>
-                        <path d="M4.93 19.07l2.83-2.83"/>
-                        <path d="M16.24 7.76l2.83-2.83"/>
-                    </svg>
-                    <span class="ai-text">Duna AI</span>
-                </button>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="#home" class="nav-link" data-i18n="nav-home">Home</a>
+                    <a href="#leadership" class="nav-link" data-i18n="nav-leadership">Leadership</a>
+                    <a href="#team" class="nav-link" data-i18n="nav-team">Global Team</a>
+                    <a href="#partners" class="nav-link" data-i18n="nav-partners">Partners</a>
+                    <a href="#contact" class="nav-link" data-i18n="nav-contact">Contact</a>
+                    
+                    <!-- Duna AI Button -->
+                    <button class="nav-ai-btn" id="navAiBtn" aria-label="Open Duna AI">
+                        <svg class="ai-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 2v4"/>
+                            <path d="M12 18v4"/>
+                            <path d="M4.93 4.93l2.83 2.83"/>
+                            <path d="M16.24 16.24l2.83 2.83"/>
+                            <path d="M2 12h4"/>
+                            <path d="M18 12h4"/>
+                            <path d="M4.93 19.07l2.83-2.83"/>
+                            <path d="M16.24 7.76l2.83-2.83"/>
+                        </svg>
+                        <span class="ai-text">Duna AI</span>
+                    </button>
+                </div>
                 
                 <div class="nav-language">
                     <button class="lang-toggle" id="langToggle">
@@ -3263,13 +3277,13 @@
                         </div>
                     </div>
                 </div>
+                
+                <button class="nav-mobile-toggle" id="mobileToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-            
-            <button class="nav-mobile-toggle" id="mobileToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
     </nav>
     
@@ -3550,73 +3564,48 @@
 
     <!-- Executive Team -->
     <section class="section leadership" id="leadership">
-        <div class="section-header reveal">
-            <div class="section-label" data-i18n="leadership-label">Leadership</div>
-            <h2 class="section-title" data-i18n="leadership-title">The Visionaries</h2>
-            <p class="section-description" data-i18n="leadership-desc">
-                Our executive team brings together decades of experience in motorsport media, 
-                creative production, and global brand strategy.
+    <div class="section-header reveal">
+        <div class="section-label" data-i18n="leadership-label">Leadership</div>
+        <h2 class="section-title" data-i18n="leadership-title">The Visionaries</h2>
+        <p class="section-description" data-i18n="leadership-desc">
+            Our executive team brings together decades of experience in motorsport media,
+            creative production, and global brand strategy.
+        </p>
+    </div>
+
+    <div class="leadership-grid">
+        <div class="exec-card reveal">
+            <div class="exec-role">Founder & Chief Executive Officer</div>
+            <h3 class="exec-name">Daniel Lee Buckley</h3>
+            <p class="exec-bio">
+                Founder of Duneworks Productions. Photographer, cinematographer, and creative director leading the vision and growth of the company.
             </p>
         </div>
-        <div class="leadership-grid">
-            <div class="exec-card reveal">
-                <div class="exec-role" data-i18n="exec1-role">Founder & CEO</div>
-                <h3 class="exec-name">Daniel Lee Buckley</h3>
-                <p class="exec-bio" data-i18n="exec1-bio">
-                    Media Relations Director with extensive experience in Formula 1 paddocks 
-                    and motorsport industry leadership.
-                </p>
-            </div>
-            <div class="exec-card reveal reveal-delay-1">
-                <div class="exec-role" data-i18n="exec2-role">Co-Founder</div>
-                <h3 class="exec-name">Akbarshoh Ravshanov</h3>
-                <p class="exec-bio" data-i18n="exec2-bio">
-                    Marketing Director driving brand strategy and global partnership development 
-                    across international markets.
-                </p>
-            </div>
-            <div class="exec-card reveal reveal-delay-2">
-                <div class="exec-role" data-i18n="exec3-role">Casting Director</div>
-                <h3 class="exec-name">Muhammadali Nematullayev</h3>
-                <p class="exec-bio" data-i18n="exec3-bio">
-                    Expert in talent acquisition and casting for motorsport productions, 
-                    commercials, and brand campaigns.
-                </p>
-            </div>
-            <div class="exec-card reveal">
-                <div class="exec-role" data-i18n="exec4-role">Post Production Director</div>
-                <h3 class="exec-name">Zain Ali Zaman</h3>
-                <p class="exec-bio" data-i18n="exec4-bio">
-                    Director of Post Production and Editing, crafting cinematic narratives 
-                    from raw footage to final delivery.
-                </p>
-            </div>
-            <div class="exec-card reveal reveal-delay-1">
-                <div class="exec-role" data-i18n="exec5-role">Media Relations</div>
-                <h3 class="exec-name">Tauheed Moheddin</h3>
-                <p class="exec-bio" data-i18n="exec5-bio">
-                    Assistant Director of Media Relations, coordinating paddock access and 
-                    stakeholder communications.
-                </p>
-            </div>
-            <div class="exec-card reveal reveal-delay-2">
-                <div class="exec-role" data-i18n="exec6-role">Operations Manager</div>
-                <h3 class="exec-name">Sarvar Tursunov</h3>
-                <p class="exec-bio" data-i18n="exec6-bio">
-                    Operations Manager ensuring seamless production logistics across
-                    global racing events and commercial shoots.
-                </p>
-            </div>
-            <div class="exec-card reveal">
-                <div class="exec-role" data-i18n="exec7-role">Lead Actor</div>
-                <h3 class="exec-name">Amirsaid Samigjanov</h3>
-                <p class="exec-bio" data-i18n="exec7-bio">
-                    Lead Actor bringing characters to life in motorsport productions,
-                    commercials, and cinematic storytelling.
-                </p>
-            </div>
+
+        <div class="exec-card reveal reveal-delay-1">
+            <div class="exec-role">Casting Director</div>
+            <h3 class="exec-name">Muhammadali Nematullayev</h3>
+            <p class="exec-bio">
+                Expert in modelling and casting talent for productions and team operations.
+            </p>
         </div>
-    </section>
+
+        <div class="exec-card reveal reveal-delay-2">
+            <div class="exec-role">Operations Manager</div>
+            <h3 class="exec-name">Sarvar Tursunov</h3>
+            <p class="exec-bio">
+                Manages the team and works to keep operations stable and efficient.
+            </p>
+        </div>
+        <div class="exec-card reveal reveal-delay-3">
+    <div class="exec-role">Production Manager</div>
+    <h3 class="exec-name">Xayrullayev Kamronbek</h3>
+    <p class="exec-bio">
+        Oversees production operations, manages team coordination, develops client relationships, and secures new production opportunities for Duneworks Productions.
+    </p>
+</div>
+    </div>
+</section>
 
     <!-- Global Team -->
     <section class="section team" id="team">
@@ -3932,20 +3921,10 @@
                 'leadership-label': 'Leadership',
                 'leadership-title': 'The Visionaries',
                 'leadership-desc': 'Our executive team brings together decades of experience in motorsport media and creative production.',
-                'exec1-role': 'Founder & CEO',
-                'exec1-bio': 'Media Relations Director with extensive experience in Formula 1 paddocks.',
-                'exec2-role': 'Co-Founder',
-                'exec2-bio': 'Marketing Director driving brand strategy and global partnership development.',
-                'exec3-role': 'Casting Director',
-                'exec3-bio': 'Expert in talent acquisition for motorsport productions and brand campaigns.',
-                'exec4-role': 'Post Production Director',
-                'exec4-bio': 'Director of Post Production, crafting cinematic narratives from raw footage.',
-                'exec5-role': 'Media Relations',
-                'exec5-bio': 'Assistant Director coordinating paddock access and stakeholder communications.',
-                'exec6-role': 'Operations Manager',
-                'exec6-bio': 'Ensuring seamless production logistics across global racing events.',
-                'exec7-role': 'Lead Actor',
-                'exec7-bio': 'Lead Actor bringing characters to life in motorsport productions, commercials, and cinematic storytelling.',
+                'exec1-role': 'Casting Director',
+                'exec1-bio': 'Expert in talent acquisition and casting for motorsport productions, commercials, and brand campaigns.',
+                'exec2-role': 'Operations Manager',
+                'exec2-bio': 'Operations Manager ensuring seamless production logistics across global racing events and commercial shoots.',
                 'global-label': 'Global Reach',
                 'global-title': 'Our Locations and People',
                 'global-desc': 'A diverse team of specialists bringing perspective from the world\'s most creative hubs.',
@@ -4016,8 +3995,10 @@
                 'leadership-label': 'Руководство',
                 'leadership-title': 'Видение Будущего',
                 'leadership-desc': 'Наша команда руководителей объединяет десятилетия опыта в автоспортивных медиа.',
-                'exec7-role': 'Ведущий Актер',
-                'exec7-bio': 'Ведущий актер, воплощающий персонажей в автоспортивных продакшнах, рекламе и кинематографическом повествовании.',
+                'exec1-role': 'Кастинг-директор',
+                'exec1-bio': 'Эксперт в области подбора талантов и кастинга для автоспортивных продакшнов, рекламы и брендовых кампаний.',
+                'exec2-role': 'Операционный менеджер',
+                'exec2-bio': 'Операционный менеджер, обеспечивающий бесперебойную логистику производства на глобальных гоночных мероприятиях и коммерческих съемках.',
                 'global-label': 'Глобальное Присутствие',
                 'global-title': 'Наши Локации и Люди',
                 'global-desc': 'Разнообразная команда специалистов, приносящая перспективу из самых креативных центров мира.',
@@ -4084,8 +4065,10 @@
                 'leadership-label': 'Rahbariyat',
                 'leadership-title': 'Kelajak Vizionerlari',
                 'leadership-desc': 'Bizning boshqaruv jamoamiz avtosport media sohasida o\'n yillik tajribani birlashtiradi.',
-                'exec7-role': 'Bosh Aktior',
-                'exec7-bio': 'Avtosport ishlab chiqarishlari, reklama va kinematografik hikoyalarida qahramonlarni jonlantiruvchi bosh aktior.',
+                'exec1-role': 'Kasting Direktori',
+                'exec1-bio': 'Avtosport loyihalari, reklama va brend kampaniyalari uchun kasting va iste\'dodlarni jalb qilish bo\'yicha mutaxassis.',
+                'exec2-role': 'Operatsion Menejer',
+                'exec2-bio': 'Global poyga tadbirlari va tijorat suratga olish ishlarida ishlab chiqarish logistikasini uzluksiz ta\'minlaydigan operatsion menejer.',
                 'global-label': 'Global Mavjudlik',
                 'global-title': 'Bizning Lokatsiyalar va Odamlar',
                 'global-desc': 'Dunyoning eng ijodiy markazlaridan kelgan turli xil mutaxassislar jamoasi.',
