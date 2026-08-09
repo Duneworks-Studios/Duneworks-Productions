@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Duneworks Productions | Premium Motorsport & Creative Media</title>
     <meta name="description" content="Duneworks Productions - A global creative media agency specializing in premium motorsport content, Formula 1, and commercial film production.">
+    <script>
+        (function () {
+            try {
+                var p = localStorage.getItem('dw-palette');
+                document.documentElement.setAttribute('data-palette', p === 'og' ? 'og' : 'reborn');
+            } catch (e) {
+                document.documentElement.setAttribute('data-palette', 'reborn');
+            }
+            document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
     
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -108,6 +119,10 @@
             --transition-base: 0.3s ease;
             --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             --transition-dramatic: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            /* Easing-only curve (no bundled duration) — required inside `animation:`
+               shorthands that also declare their own duration/delay values, since
+               --transition-dramatic's own 1.2s would otherwise consume that slot. */
+            --ease-dramatic: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         :root[data-theme="light"] {
@@ -176,6 +191,24 @@
             --duna-accent-cyan-glow: rgba(212, 185, 120, 0.28);
         }
 
+        /* Duna accent in light theme — the dark-mode accents above (pure white
+           for Reborn, bright gold for OG) are unreadable on a light panel, so
+           mirror the same darker tones the rest of the site already uses. */
+        :root[data-theme="light"] {
+            --duna-accent-primary: #17171a;
+            --duna-accent-secondary: #55555c;
+            --duna-accent-glow: rgba(23, 23, 26, 0.18);
+            --duna-accent-cyan: #55555c;
+            --duna-accent-cyan-glow: rgba(23, 23, 26, 0.14);
+        }
+        :root[data-theme="light"][data-palette="og"] {
+            --duna-accent-primary: #8d7138;
+            --duna-accent-secondary: #b1914b;
+            --duna-accent-glow: rgba(141, 113, 56, 0.22);
+            --duna-accent-cyan: #b1914b;
+            --duna-accent-cyan-glow: rgba(141, 113, 56, 0.18);
+        }
+
         /* OG typographic details - classic serif identity */
         :root[data-palette="og"] .hero-main-title em,
         :root[data-palette="og"] .manifesto-text h2 em,
@@ -228,6 +261,7 @@
         }
 
         :root[data-palette="og"] .hero-logo { display: none; }
+        :root:not([data-palette="og"]) .hero-logo { display: none; }
         :root:not([data-palette="og"]) .hero-brand { display: none; }
 
         @keyframes heroLogoFloat {
@@ -402,32 +436,33 @@
             transition: opacity 420ms ease, visibility 420ms ease;
         }
         .site-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        .loader-inner { text-align: center; display: grid; gap: 1rem; justify-items: center; }
+        .loader-inner { text-align: center; display: grid; gap: 1.5rem; justify-items: center; }
         .loader-logo {
-            width: min(220px, 54vw);
+            width: min(180px, 46vw);
             filter: drop-shadow(0 10px 30px rgba(0,0,0,0.32));
-            animation: loaderMark 1.4s var(--transition-dramatic) both;
+            animation: loaderMark 1.4s var(--ease-dramatic) both;
         }
-        .loader-line {
-            width: 140px;
-            height: 1px;
-            background: rgba(255,255,255,0.14);
-            overflow: hidden;
-            position: relative;
+        .loader-logo.logo-og { display: none; }
+        :root[data-palette="og"] .loader-logo.logo-reborn { display: none; }
+        :root[data-palette="og"] .loader-logo.logo-og { display: inline; }
+        .loader-count {
+            font-family: var(--font-accent, 'Inter', sans-serif);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            letter-spacing: 0.32em;
+            color: rgba(250,250,250,0.55);
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
         }
-        .loader-line::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            transform: translateX(-100%);
-            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-            animation: loaderSweep 1.2s ease-in-out infinite;
+        .loader-count-value {
+            display: inline-block;
+            min-width: 2.8em;
+            color: var(--accent-primary, #fff);
+            font-variant-numeric: tabular-nums;
         }
-        .loader-copy {
-            font-size: 0.72rem;
-            letter-spacing: 0.24em;
-            text-transform: uppercase;
-            color: rgba(250,250,250,0.72);
+        .loader-count-bracket {
+            opacity: 0.4;
         }
 
         .space-layer {
@@ -477,7 +512,6 @@
             from { opacity: 0; transform: scale(0.985) translateY(4px); filter: blur(8px); }
             to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
         }
-        @keyframes loaderSweep { to { transform: translateX(100%); } }
         @keyframes starDrift { from { transform: translate3d(0,0,0); } to { transform: translate3d(-4%,3%,0); } }
         @keyframes nebulaDrift { from { transform: translate3d(-1%, -1%, 0) scale(1); } to { transform: translate3d(1%, 1%, 0) scale(1.04); } }
 
@@ -501,29 +535,35 @@
         :root[data-theme="light"] .hero-main-title,
         :root[data-theme="light"] .section-title,
         :root[data-theme="light"] .manifesto-text h2,
-        :root[data-theme="light"] .contact-title,
-        :root[data-theme="light"] .duna-chat-title h3,
-        :root[data-theme="light"] .duna-welcome h2,
-        :root[data-theme="light"] .duna-message-content,
-        :root[data-theme="light"] .duna-chat-input { color: var(--text-primary); }
+        :root[data-theme="light"] .contact-title { color: var(--text-primary); }
         :root[data-theme="light"] .hero-description,
         :root[data-theme="light"] .section-description,
         :root[data-theme="light"] .exec-bio,
-        :root[data-theme="light"] .team-role,
-        :root[data-theme="light"] .duna-chat-status,
-        :root[data-theme="light"] .duna-chat-hint { color: var(--text-secondary); }
+        :root[data-theme="light"] .team-role { color: var(--text-secondary); }
         :root[data-theme="light"] .exec-card,
         :root[data-theme="light"] .team-card,
         :root[data-theme="light"] .contact-form,
         :root[data-theme="light"] .featured-card,
-        :root[data-theme="light"] .social-card,
-        :root[data-theme="light"] .duna-message,
-        :root[data-theme="light"] .duna-chat-header,
-        :root[data-theme="light"] .duna-chat-input-area {
+        :root[data-theme="light"] .social-card {
             background: rgba(255,255,255,0.62);
             border-color: rgba(23,23,26,0.14);
         }
-        :root[data-theme="light"] .duna-message.user { background: rgba(23,23,26,0.12); }
+
+        /* Duna AI — light theme: retint the whole surface/text/border system in
+           one place so every component (bubbles, chips, banner, input) adapts
+           automatically instead of needing per-selector patches. */
+        :root[data-theme="light"] {
+            --duna-bg-elevated: #f0efec;
+            --duna-text-primary: #17171a;
+            --duna-text-secondary: #5c5c63;
+            --duna-text-tertiary: #8a8a90;
+            --duna-border-soft: rgba(23, 23, 26, 0.12);
+            --duna-border-softer: rgba(23, 23, 26, 0.08);
+            --duna-border-strong: rgba(23, 23, 26, 0.28);
+            --duna-surface-soft: rgba(23, 23, 26, 0.035);
+            --duna-surface-hover: rgba(23, 23, 26, 0.07);
+            --duna-on-accent: #fafafa;
+        }
         :root[data-theme="light"] .duna-chat-container.fullscreen .duna-chat-messages { max-width: 920px; }
         .duna-chat-container.fullscreen { box-shadow: none; }
         .duna-chat-container.fullscreen .duna-chat-header,
@@ -537,10 +577,10 @@
 
         @media (max-width: 768px) {
             .theme-switch { width: 108px; height: 26px; }
-            .loader-copy { font-size: 0.66rem; }
+            .loader-count { font-size: 0.6875rem; letter-spacing: 0.24em; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .site-loader, .loader-logo, .loader-line::after, .space-layer::before, .space-layer::after { animation: none !important; transition: none !important; }
+            .site-loader, .loader-logo, .space-layer::before, .space-layer::after { animation: none !important; transition: none !important; }
         }
         
         /* Reset & Base */
@@ -652,9 +692,56 @@
             transform: translate(-50%, -50%) scale(1.5);
             opacity: 0.8;
         }
-        
+
         @media (pointer: coarse) {
             .cursor { display: none; }
+        }
+
+        /* Reborn: minimal dot/ring cursor with contextual text label */
+        :root:not([data-palette="og"]) .cursor {
+            width: 8px;
+            height: 8px;
+            background-image: none;
+            background: var(--text-primary);
+            border-radius: 50%;
+            border: none;
+            transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                        background 0.28s ease, opacity 0.3s ease, transform 0.12s ease;
+            mix-blend-mode: difference;
+        }
+
+        :root:not([data-palette="og"]) .cursor.hover-active {
+            width: 34px;
+            height: 34px;
+            background: transparent;
+            border: 1px solid var(--text-primary);
+            transform: translate(-50%, -50%);
+        }
+
+        :root:not([data-palette="og"]) .cursor-label {
+            opacity: 0;
+            font-size: 0.5625rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--bg-primary);
+            white-space: nowrap;
+            transition: opacity 0.2s ease;
+        }
+
+        :root:not([data-palette="og"]) .cursor.cursor-text {
+            width: 68px;
+            height: 68px;
+            background: var(--text-primary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            mix-blend-mode: normal;
+        }
+
+        :root:not([data-palette="og"]) .cursor.cursor-text .cursor-label {
+            opacity: 1;
         }
         
         /* ============================================
@@ -701,8 +788,8 @@
             transition: transform var(--transition-base), filter var(--transition-base);
         }
 
-        .nav-logo img.logo-reborn { height: 30px; }
-        .nav-logo img.logo-og { height: 46px; }
+        .nav-logo img.logo-reborn,
+        .nav-logo img.logo-og { height: 20px; }
 
         .logo-og { display: none; }
         :root[data-palette="og"] .logo-reborn { display: none; }
@@ -747,6 +834,15 @@
         
         .nav-link:hover::after {
             width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+            background: var(--accent-primary);
         }
         
         .nav-language {
@@ -931,7 +1027,7 @@
         .hero-top {
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.8s var(--transition-dramatic) forwards;
+            animation: fadeInUp 0.8s var(--ease-dramatic) forwards;
         }
         
         .hero-brand {
@@ -976,7 +1072,7 @@
         .hero-middle {
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.8s var(--transition-dramatic) 0.2s forwards;
+            animation: fadeInUp 0.8s var(--ease-dramatic) 0.2s forwards;
         }
         
         .hero-description {
@@ -1008,7 +1104,7 @@
             margin: var(--space-md) 0;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.8s var(--transition-dramatic) 0.4s forwards;
+            animation: fadeInUp 0.8s var(--ease-dramatic) 0.4s forwards;
         }
         
         .hero-stat-item {
@@ -1040,7 +1136,7 @@
             margin: var(--space-sm) 0;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.8s var(--transition-dramatic) 0.5s forwards;
+            animation: fadeInUp 0.8s var(--ease-dramatic) 0.5s forwards;
         }
         
         .hero-series-item {
@@ -1097,7 +1193,7 @@
             margin-top: var(--space-sm);
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.8s var(--transition-dramatic) 0.6s forwards;
+            animation: fadeInUp 0.8s var(--ease-dramatic) 0.6s forwards;
         }
         
         .hero-cta {
@@ -1225,7 +1321,159 @@
         @keyframes fadeIn {
             to { opacity: 1; }
         }
-        
+
+        /* ============================================
+           REBORN — TYPOGRAPHIC HERO SYSTEM
+           OG keeps the original photographic hero untouched.
+           ============================================ */
+
+        :root:not([data-palette="og"]) .hero {
+            background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
+                        linear-gradient(180deg, #050506 0%, #08080a 55%, #050506 100%);
+        }
+
+        :root:not([data-palette="og"]) .hero::before {
+            background: none;
+        }
+
+        :root:not([data-palette="og"]) .hero-content {
+            justify-content: center;
+            gap: var(--space-xl);
+            padding-top: 120px;
+        }
+
+        .hero-og-detail { display: contents; }
+        :root:not([data-palette="og"]) .hero-og-detail { display: none; }
+
+        .hero-reborn-statement {
+            display: none;
+            font-family: var(--font-accent);
+            font-size: clamp(0.8125rem, 1.4vw, 1rem);
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            opacity: 0;
+            transform: translateY(14px);
+            animation: fadeInUp 0.9s var(--ease-dramatic) 0.5s forwards;
+        }
+
+        .hero-reborn-statement span {
+            margin: 0 0.75em;
+            color: var(--accent-primary);
+            opacity: 0.6;
+        }
+
+        :root:not([data-palette="og"]) .hero-reborn-statement { display: block; }
+
+        .hero-mark {
+            display: none;
+        }
+
+        :root:not([data-palette="og"]) .hero-mark {
+            display: block;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(3.5rem, 13vw, 9.5rem);
+            line-height: 0.92;
+            letter-spacing: 0.01em;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+            transition: letter-spacing 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: letter-spacing;
+        }
+
+        :root:not([data-palette="og"]) .hero-main-title {
+            font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+            text-shadow: none;
+        }
+
+        :root:not([data-palette="og"]) .hero-main-title em {
+            font-style: normal;
+            color: var(--text-primary);
+        }
+
+        :root:not([data-palette="og"]) .hero-subtitle {
+            font-size: var(--text-xs);
+            letter-spacing: 0.15em;
+            color: var(--text-tertiary);
+        }
+
+        /* Abstract visual system — orbital lines + slow light sweep (Reborn only) */
+        .hero-visual-system {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        :root:not([data-palette="og"]) .hero-visual-system { display: block; }
+
+        .hero-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .hero-orbit-1 {
+            width: min(90vw, 1100px);
+            height: min(90vw, 1100px);
+            animation: orbitSpin 140s linear infinite;
+        }
+
+        .hero-orbit-2 {
+            width: min(60vw, 760px);
+            height: min(60vw, 760px);
+            border-color: rgba(255,255,255,0.045);
+            animation: orbitSpin 180s linear infinite reverse;
+        }
+
+        @keyframes orbitSpin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .hero-light-sweep {
+            position: absolute;
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 45%);
+            animation: lightSweep 22s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes lightSweep {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(6%, 8%); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-orbit, .hero-light-sweep { animation: none; }
+        }
+
+        @media (max-width: 768px) {
+            :root:not([data-palette="og"]) .hero-main-title {
+                font-size: clamp(2.5rem, 15vw, 4rem);
+            }
+            .hero-reborn-statement {
+                font-size: 0.6875rem;
+                letter-spacing: 0.18em;
+                text-align: center;
+                padding: 0 var(--space-md);
+            }
+            .hero-reborn-statement span { display: block; margin: 0.35em 0 0; }
+            .hero-orbit-1, .hero-orbit-2 { opacity: 0.6; }
+        }
+
         /* ============================================
            SECTION BASE
            ============================================ */
@@ -1856,18 +2104,13 @@
 
         .partner-logo:hover {
             opacity: 1;
-            animation: logoPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            filter: drop-shadow(0 10px 22px rgba(255, 255, 255, 0.35));
+            transform: scale(1.06) translateY(-3px);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease, opacity 0.3s ease;
+            filter: drop-shadow(0 8px 18px rgba(255, 255, 255, 0.22));
         }
 
         :root[data-theme="light"] .partner-logo:hover {
-            filter: drop-shadow(0 10px 22px rgba(23, 23, 26, 0.3));
-        }
-
-        @keyframes logoPop {
-            0% { transform: scale(1) translateY(0); }
-            60% { transform: scale(1.22) translateY(-7px); }
-            100% { transform: scale(1.15) translateY(-5px); }
+            filter: drop-shadow(0 8px 18px rgba(23, 23, 26, 0.2));
         }
         
         /* Large partner logos in marquee */
@@ -2063,8 +2306,8 @@
             opacity: 0.95;
         }
 
-        .footer-logo img.logo-reborn { height: 44px; }
-        .footer-logo img.logo-og { height: 64px; }
+        .footer-logo img.logo-reborn,
+        .footer-logo img.logo-og { height: 28px; }
         
         .footer-tagline {
             font-size: var(--text-sm);
@@ -2084,16 +2327,16 @@
         
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(30px) scale(0.98);
             filter: blur(6px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
             filter: blur(0);
         }
         
@@ -2425,11 +2668,11 @@
                 padding: var(--space-xl) var(--container-padding);
             }
             
-            .footer-logo img.logo-reborn { height: 36px; }
-            .footer-logo img.logo-og { height: 52px; }
+            .footer-logo img.logo-reborn,
+            .footer-logo img.logo-og { height: 22px; }
 
-            .nav-logo img.logo-reborn { height: 24px; }
-            .nav-logo img.logo-og { height: 38px; }
+            .nav-logo img.logo-reborn,
+            .nav-logo img.logo-og { height: 16px; }
             
             .footer-tagline {
                 font-size: var(--text-sm);
@@ -2589,6 +2832,16 @@
             --duna-text-primary: #fafafa;
             --duna-text-secondary: #a0a0a8;
             --duna-text-tertiary: #6e6e78;
+
+            --duna-border-soft: rgba(255, 255, 255, 0.1);
+            --duna-border-softer: rgba(255, 255, 255, 0.05);
+            --duna-border-strong: rgba(255, 255, 255, 0.3);
+            --duna-surface-soft: rgba(255, 255, 255, 0.03);
+            --duna-surface-hover: rgba(255, 255, 255, 0.08);
+            /* Foreground for icons/text sitting on top of the accent color
+               itself (avatars, send button, user bubble) — always the
+               opposite of however bright/dark the accent happens to be. */
+            --duna-on-accent: var(--duna-bg-primary);
             
             --duna-radius-sm: 8px;
             --duna-radius-md: 12px;
@@ -2790,7 +3043,7 @@
             right: 0;
             padding: 0.5rem 1rem;
             background: var(--duna-bg-elevated);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--duna-border-soft);
             border-radius: var(--duna-radius-md);
             font-size: var(--text-xs);
             color: var(--duna-text-secondary);
@@ -2849,7 +3102,7 @@
             right: 2rem;
             width: 420px;
             max-width: calc(100vw - 2rem);
-            height: 600px;
+            height: 670px;
             max-height: calc(100vh - 120px);
             background: linear-gradient(180deg, rgba(26, 26, 29, 0.98) 0%, rgba(13, 13, 15, 0.99) 100%);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -2879,8 +3132,11 @@
             align-items: center;
             justify-content: space-between;
             padding: 1rem 1.25rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--duna-border-softer);
             background: linear-gradient(180deg, rgba(26, 26, 29, 0.8) 0%, rgba(26, 26, 29, 0.4) 100%);
+        }
+        :root[data-theme="light"] .duna-chat-header {
+            background: linear-gradient(180deg, rgba(23, 23, 26, 0.04) 0%, rgba(23, 23, 26, 0.01) 100%);
         }
         
         .duna-chat-header-left {
@@ -2903,7 +3159,7 @@
         .duna-chat-avatar svg {
             width: 20px;
             height: 20px;
-            color: var(--duna-bg-primary);
+            color: var(--duna-on-accent);
         }
         
         .duna-chat-title {
@@ -2934,8 +3190,8 @@
             align-items: center;
             gap: 0.25rem;
             padding: 0.15rem 0.5rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(212, 185, 120, 0.1) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--duna-surface-hover);
+            border: 1px solid var(--duna-border-soft);
             border-radius: var(--duna-radius-sm);
             font-size: 0.65rem;
             font-weight: 600;
@@ -2991,7 +3247,7 @@
             height: 36px;
             border-radius: var(--duna-radius-md);
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--duna-border-soft);
             color: var(--duna-text-secondary);
             display: flex;
             align-items: center;
@@ -3001,8 +3257,8 @@
         }
         
         .duna-chat-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: var(--duna-surface-hover);
+            border-color: var(--duna-border-strong);
             color: var(--duna-text-primary);
         }
         
@@ -3015,10 +3271,10 @@
         .duna-chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 1.25rem;
+            padding: 1.1rem 1.25rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.85rem;
             scroll-behavior: smooth;
         }
         
@@ -3039,101 +3295,43 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Sneak Peek / Demo Announcement Card */
+        /* Preview notice — a slim single-line note, not a big card, so it never
+           crowds out the welcome state and suggestion chips beneath it. */
         .duna-sneak-peek {
-            margin: 0 0 1rem 0;
-            padding: 1rem 1.25rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(26, 26, 29, 0.6) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: var(--duna-radius-lg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow:
-                0 4px 24px rgba(0, 0, 0, 0.3),
-                0 0 30px rgba(255, 255, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            position: relative;
-            overflow: hidden;
-            animation: sneakPeekGlow 4s ease-in-out infinite;
-        }
-
-        @keyframes sneakPeekGlow {
-            0%, 100% {
-                box-shadow:
-                    0 4px 24px rgba(0, 0, 0, 0.3),
-                    0 0 30px rgba(255, 255, 255, 0.1),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-                border-color: rgba(255, 255, 255, 0.25);
-            }
-            50% {
-                box-shadow:
-                    0 4px 24px rgba(0, 0, 0, 0.3),
-                    0 0 40px rgba(255, 255, 255, 0.2),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-                border-color: rgba(255, 255, 255, 0.35);
-            }
-        }
-
-        .duna-sneak-peek::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        .duna-sneak-peek-header {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.5rem;
+            margin: 0 0 0.75rem 0;
+            padding: 0.5rem 0.75rem;
+            background: var(--duna-surface-soft);
+            border: 1px solid var(--duna-border-softer);
+            border-radius: var(--duna-radius-md);
         }
 
         .duna-sneak-peek-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
+            flex-shrink: 0;
             background: var(--duna-accent-primary);
             border-radius: 50%;
-            animation: dotPulse 2s ease-in-out infinite;
-            box-shadow: 0 0 10px var(--duna-accent-glow);
-        }
-
-        @keyframes dotPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.8; }
+            box-shadow: 0 0 8px var(--duna-accent-glow);
         }
 
         .duna-sneak-peek h4 {
             font-family: var(--font-accent);
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             font-weight: 500;
-            color: var(--duna-accent-primary);
-            letter-spacing: 0.05em;
+            color: var(--duna-text-secondary);
+            letter-spacing: 0.02em;
             margin: 0;
         }
 
         .duna-sneak-peek-subtitle {
-            font-size: 0.7rem;
-            color: var(--duna-text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
+            display: none;
         }
 
         .duna-sneak-peek p {
-            font-size: 0.75rem;
-            color: var(--duna-text-tertiary);
-            line-height: 1.5;
-            margin: 0;
+            display: none;
         }
 
         /* Welcome Screen */
@@ -3142,8 +3340,8 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: 2rem 1rem;
-            gap: 1.5rem;
+            padding: 0.25rem 0.25rem 0.5rem;
+            gap: 0.65rem;
         }
         
         .duna-welcome.hidden {
@@ -3151,33 +3349,25 @@
         }
         
         .duna-welcome-orb {
-            width: 80px;
-            height: 80px;
+            width: 52px;
+            height: 52px;
             border-radius: var(--duna-radius-full);
             background: linear-gradient(135deg, var(--duna-accent-primary) 0%, var(--duna-accent-secondary) 50%, var(--duna-accent-primary) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 
-                0 0 40px var(--duna-accent-glow),
-                0 0 80px rgba(255, 255, 255, 0.2);
-            animation: welcomeOrbFloat 6s ease-in-out infinite;
-        }
-        
-        @keyframes welcomeOrbFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
+            box-shadow: 0 0 24px var(--duna-accent-glow);
         }
         
         .duna-welcome-orb svg {
-            width: 40px;
-            height: 40px;
-            color: var(--duna-bg-primary);
+            width: 24px;
+            height: 24px;
+            color: var(--duna-on-accent);
         }
         
         .duna-welcome h2 {
             font-family: var(--font-display);
-            font-size: var(--text-2xl);
+            font-size: var(--text-lg);
             font-weight: 400;
             color: var(--duna-text-primary);
         }
@@ -3187,36 +3377,58 @@
         }
         
         .duna-welcome p {
-            font-size: var(--text-sm);
+            font-size: var(--text-xs);
             color: var(--duna-text-secondary);
             max-width: 280px;
-            line-height: 1.6;
+            line-height: 1.55;
+            margin: -0.35rem 0 0;
         }
         
-        /* Suggested Prompts */
+        /* Suggested Prompts — a tidy vertical list of full-width rows reads far
+           cleaner inside a narrow panel than pills that wrap unpredictably. */
         .duna-suggestions {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            justify-content: center;
+            flex-direction: column;
+            gap: 0.3rem;
+            width: 100%;
+            margin-top: 0.15rem;
         }
         
         .duna-suggestion-chip {
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--duna-radius-full);
-            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.5rem 0.85rem;
+            background: var(--duna-surface-soft);
+            border: 1px solid var(--duna-border-softer);
+            border-radius: var(--duna-radius-md);
+            font-size: 0.78rem;
+            text-align: left;
             color: var(--duna-text-secondary);
             cursor: pointer;
             transition: all var(--duna-transition-fast);
         }
+
+        .duna-suggestion-chip::after {
+            content: '→';
+            flex-shrink: 0;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: all var(--duna-transition-fast);
+            color: var(--duna-accent-primary);
+        }
         
         .duna-suggestion-chip:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: var(--duna-accent-primary);
-            transform: translateY(-1px);
+            background: var(--duna-surface-hover);
+            border-color: var(--duna-border-soft);
+            color: var(--duna-text-primary);
+        }
+
+        .duna-suggestion-chip:hover::after {
+            opacity: 1;
+            transform: translateX(0);
         }
         
         /* Message Bubbles */
@@ -3263,17 +3475,16 @@
         
         .duna-message.ai .duna-message-avatar {
             background: var(--duna-bg-elevated);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--duna-border-strong);
         }
         
         .duna-message-avatar svg {
             width: 18px;
             height: 18px;
-            color: var(--duna-message.user & { color: var(--duna-bg-primary); });
         }
         
         .duna-message.user .duna-message-avatar svg {
-            color: var(--duna-bg-primary);
+            color: var(--duna-on-accent);
         }
         
         .duna-message.ai .duna-message-avatar svg {
@@ -3290,14 +3501,14 @@
         
         .duna-message.user .duna-message-content {
             background: linear-gradient(135deg, var(--duna-accent-primary) 0%, var(--duna-accent-secondary) 100%);
-            color: var(--duna-bg-primary);
+            color: var(--duna-on-accent);
             border-bottom-right-radius: var(--duna-radius-sm);
         }
         
         .duna-message.ai .duna-message-content {
             background: var(--duna-bg-elevated);
             color: var(--duna-text-primary);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--duna-border-softer);
             border-bottom-left-radius: var(--duna-radius-sm);
         }
         
@@ -3342,8 +3553,11 @@
         /* Chat Input Area */
         .duna-chat-input-area {
             padding: 1rem 1.25rem 1.25rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid var(--duna-border-softer);
             background: linear-gradient(0deg, rgba(13, 13, 15, 0.8) 0%, rgba(13, 13, 15, 0.4) 100%);
+        }
+        :root[data-theme="light"] .duna-chat-input-area {
+            background: linear-gradient(0deg, rgba(23, 23, 26, 0.03) 0%, rgba(23, 23, 26, 0.01) 100%);
         }
         
         .duna-chat-input-container {
@@ -3352,14 +3566,14 @@
             gap: 0.75rem;
             padding: 0.5rem;
             background: var(--duna-bg-elevated);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--duna-border-soft);
             border-radius: var(--duna-radius-xl);
             transition: all var(--duna-transition-fast);
         }
         
         .duna-chat-input-container:focus-within {
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            border-color: var(--duna-accent-primary);
+            box-shadow: 0 0 20px var(--duna-accent-glow);
         }
         
         .duna-chat-input {
@@ -3387,7 +3601,7 @@
             border-radius: var(--duna-radius-full);
             background: var(--duna-accent-primary);
             border: none;
-            color: var(--duna-bg-primary);
+            color: var(--duna-on-accent);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -3504,8 +3718,8 @@
             gap: 0.5rem;
             padding: 0.5rem 1rem;
             margin-top: 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--duna-surface-hover);
+            border: 1px solid var(--duna-border-soft);
             border-radius: var(--duna-radius-md);
             font-size: var(--text-xs);
             color: var(--duna-accent-primary);
@@ -3514,7 +3728,8 @@
         }
         
         .duna-nav-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--duna-surface-hover);
+            border-color: var(--duna-border-strong);
             transform: translateX(4px);
         }
         
@@ -3691,14 +3906,18 @@
     <div class="theme-wipe" id="themeWipe" aria-hidden="true"><span class="theme-wipe-label">Reborn</span></div>
     <div class="site-loader" id="siteLoader" role="status" aria-label="Loading Duneworks Productions">
         <div class="loader-inner">
-            <img class="loader-logo" src="./assets/duneworks-logo.png" alt="Duneworks Productions logo">
-            <div class="loader-line" aria-hidden="true"></div>
-            <div class="loader-copy">Duneworks Productions</div>
+            <img class="loader-logo logo-reborn" src="./assets/duneworks-logo.png" alt="Duneworks Productions">
+            <img class="loader-logo logo-og" src="./assets/logo-og.png" alt="Duneworks Productions">
+            <div class="loader-count" aria-hidden="true">
+                <span class="loader-count-bracket">[</span>
+                <span class="loader-count-value" id="loaderPercent">000</span>
+                <span class="loader-count-bracket">]</span>
+            </div>
         </div>
     </div>
     
-    <!-- Custom Camera Cursor -->
-    <div class="cursor"></div>
+    <!-- Custom Cursor: camera icon (OG) / minimal dot-ring with label (Reborn) -->
+    <div class="cursor"><span class="cursor-label"></span></div>
     
     <!-- Navigation -->
     <nav class="nav" id="nav">
@@ -3785,82 +4004,93 @@
             <div class="hero-top">
                 <img class="hero-logo" src="./assets/duneworks-logo.png" alt="Duneworks Productions">
                 <span class="hero-brand">Duneworks Production</span>
+                <div class="hero-mark" aria-hidden="true">DUNEWORKS</div>
                 <h1 class="hero-main-title">Visions Crafted.<br><em>Global Reach.</em></h1>
                 <p class="hero-subtitle">Premium Media Service<br>Commercial Film Production</p>
             </div>
             
-            <!-- Middle Section: Description -->
-            <div class="hero-middle">
-                <p class="hero-description">
-                    We are <strong>Duneworks Productions</strong> — a global creative agency specializing in premium motorsport media and commercial film production. From the paddocks of Formula 1 to the deserts of cross-continental rallies, we capture the essence of motorsport with cinematic precision. Our work spans across FIA-sanctioned series, Formula 3, Asian Le Mans, and beyond.
-                </p>
-                <p class="hero-description-secondary">
-                    With teams across 9 countries and partnerships with world-leading brands, we deliver content that resonates with audiences worldwide. Every frame tells a story. Every project is a masterpiece.
-                </p>
+            <!-- OG-only: dense original layout (description, stats, series) -->
+            <div class="hero-og-detail">
+                <div class="hero-middle">
+                    <p class="hero-description">
+                        We are <strong>Duneworks Productions</strong> — a global creative agency specializing in premium motorsport media and commercial film production. From the paddocks of Formula 1 to the deserts of cross-continental rallies, we capture the essence of motorsport with cinematic precision. Our work spans across FIA-sanctioned series, Formula 3, Asian Le Mans, and beyond.
+                    </p>
+                    <p class="hero-description-secondary">
+                        With teams across 9 countries and partnerships with world-leading brands, we deliver content that resonates with audiences worldwide. Every frame tells a story. Every project is a masterpiece.
+                    </p>
+                </div>
+
+                <div class="hero-stats-row">
+                    <div class="hero-stat-item">
+                        <div class="hero-stat-number">9+</div>
+                        <div class="hero-stat-label">Countries</div>
+                    </div>
+                    <div class="hero-stat-item">
+                        <div class="hero-stat-number">14+</div>
+                        <div class="hero-stat-label">Partners</div>
+                    </div>
+                    <div class="hero-stat-item">
+                        <div class="hero-stat-number">F1</div>
+                        <div class="hero-stat-label">Formula 1</div>
+                    </div>
+                </div>
+
+                <div class="hero-series">
+                    <div class="hero-series-item">
+                        <i class="fas fa-flag-checkered"></i>
+                        <div>
+                            <strong>Formula 1</strong>
+                            <span>Premier motorsport content creation</span>
+                        </div>
+                    </div>
+                    <div class="hero-series-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>FIA Championships</strong>
+                            <span>FIA-sanctioned racing series coverage</span>
+                        </div>
+                    </div>
+                    <div class="hero-series-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <div>
+                            <strong>Formula 3</strong>
+                            <span>Rising talent and developmental series</span>
+                        </div>
+                    </div>
+                    <div class="hero-series-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Asian Le Mans</strong>
+                            <span>Endurance racing across Asia-Pacific</span>
+                        </div>
+                    </div>
+                    <div class="hero-series-item">
+                        <i class="fas fa-calendar-star"></i>
+                        <div>
+                            <strong>Premium Media Service</strong>
+                            <span>For Events</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <!-- Stats Row -->
-            <div class="hero-stats-row">
-                <div class="hero-stat-item">
-                    <div class="hero-stat-number">9+</div>
-                    <div class="hero-stat-label">Countries</div>
-                </div>
-                <div class="hero-stat-item">
-                    <div class="hero-stat-number">14+</div>
-                    <div class="hero-stat-label">Partners</div>
-                </div>
-                <div class="hero-stat-item">
-                    <div class="hero-stat-number">F1</div>
-                    <div class="hero-stat-label">Formula 1</div>
-                </div>
-            </div>
-            
-            <!-- Racing Series -->
-            <div class="hero-series">
-                <div class="hero-series-item">
-                    <i class="fas fa-flag-checkered"></i>
-                    <div>
-                        <strong>Formula 1</strong>
-                        <span>Premier motorsport content creation</span>
-                    </div>
-                </div>
-                <div class="hero-series-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <div>
-                        <strong>FIA Championships</strong>
-                        <span>FIA-sanctioned racing series coverage</span>
-                    </div>
-                </div>
-                <div class="hero-series-item">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <div>
-                        <strong>Formula 3</strong>
-                        <span>Rising talent and developmental series</span>
-                    </div>
-                </div>
-                <div class="hero-series-item">
-                    <i class="fas fa-clock"></i>
-                    <div>
-                        <strong>Asian Le Mans</strong>
-                        <span>Endurance racing across Asia-Pacific</span>
-                    </div>
-                </div>
-                <div class="hero-series-item">
-                    <i class="fas fa-calendar-star"></i>
-                    <div>
-                        <strong>Premium Media Service</strong>
-                        <span>For Events</span>
-                    </div>
-                </div>
-            </div>
-            
+
+            <!-- Reborn-only: lean typographic statement -->
+            <p class="hero-reborn-statement">Creative Technology<span aria-hidden="true">—</span>Media / Development / Production</p>
+
             <!-- CTA -->
             <div class="hero-bottom">
                 <a href="#contact" class="hero-cta hero-cta-primary">Start Your Project</a>
                 <a href="#contact" class="hero-cta hero-cta-secondary">View Our Work</a>
             </div>
         </div>
-        
+
+        <!-- Reborn-only abstract visual system -->
+        <div class="hero-visual-system" aria-hidden="true">
+            <div class="hero-orbit hero-orbit-1"></div>
+            <div class="hero-orbit hero-orbit-2"></div>
+            <div class="hero-light-sweep"></div>
+        </div>
+
         <div class="hero-scroll">
             <span>Scroll</span>
             <div class="hero-scroll-line"></div>
@@ -3961,7 +4191,7 @@
             <h2 class="section-title" data-i18n="social-title">Follow Our Journey</h2>
         </div>
         <div class="social-grid reveal reveal-delay-1">
-            <a href="https://youtube.com/@Volraiden" target="_blank" class="social-card">
+            <a href="https://youtube.com/@Volraiden" target="_blank" class="social-card" data-cursor-label="VIEW">
                 <div class="social-card-content">
                     <div class="social-card-header">
                         <div class="social-icon">
@@ -3982,7 +4212,7 @@
                     </span>
                 </div>
             </a>
-            <a href="https://instagram.com/buckley.lens" target="_blank" class="social-card">
+            <a href="https://instagram.com/buckley.lens" target="_blank" class="social-card" data-cursor-label="VIEW">
                 <div class="social-card-content">
                     <div class="social-card-header">
                         <div class="social-icon">
@@ -4003,7 +4233,7 @@
                     </span>
                 </div>
             </a>
-            <a href="https://instagram.com/duneworkspr" target="_blank" class="social-card">
+            <a href="https://instagram.com/duneworkspr" target="_blank" class="social-card" data-cursor-label="VIEW">
                 <div class="social-card-content">
                     <div class="social-card-header">
                         <div class="social-icon">
@@ -4365,8 +4595,32 @@
                 if (!loader) return;
                 loader.classList.add('hidden');
             };
-            window.setTimeout(hideLoader, 1200);
-            window.setTimeout(hideLoader, 2600);
+
+            const percentEl = document.getElementById('loaderPercent');
+            const MIN_MS = 500;
+            const MAX_MS = 1500;
+            const start = performance.now();
+            let pageReady = document.readyState === 'complete';
+            window.addEventListener('load', () => { pageReady = true; }, { once: true });
+
+            if (reduceMotionQuery.matches) {
+                if (percentEl) percentEl.textContent = '100';
+                window.setTimeout(hideLoader, 250);
+            } else {
+                const tick = () => {
+                    const elapsed = performance.now() - start;
+                    const done = (pageReady && elapsed >= MIN_MS) || elapsed >= MAX_MS;
+                    if (done) {
+                        if (percentEl) percentEl.textContent = '100';
+                        window.setTimeout(hideLoader, 220);
+                        return;
+                    }
+                    const pct = Math.min(97, Math.floor((elapsed / MAX_MS) * 100));
+                    if (percentEl) percentEl.textContent = String(pct).padStart(3, '0');
+                    requestAnimationFrame(tick);
+                };
+                requestAnimationFrame(tick);
+            }
         })();
 
         // ============================================
@@ -4397,7 +4651,50 @@
                 el.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
                 el.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
             });
+
+            // Reborn-only contextual cursor label ("VIEW" on social/work links)
+            const cursorLabel = cursor.querySelector('.cursor-label');
+            const isOG = () => document.documentElement.getAttribute('data-palette') === 'og';
+            document.querySelectorAll('[data-cursor-label]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    if (isOG() || !cursorLabel) return;
+                    cursorLabel.textContent = el.getAttribute('data-cursor-label');
+                    cursor.classList.add('cursor-text');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('cursor-text');
+                });
+            });
         }
+
+        // ============================================
+        // MAGNETIC BUTTONS
+        // One restrained, purposeful interaction: primary CTAs pull slightly
+        // toward the cursor within their bounds, then ease back on leave.
+        // ============================================
+        (function () {
+            const finePointer = window.matchMedia('(pointer: fine)').matches;
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (!finePointer || reduceMotion) return;
+
+            document.querySelectorAll('.hero-cta, .btn-primary, .btn-secondary, .form-submit').forEach(btn => {
+                let raf = null;
+                btn.addEventListener('pointermove', (e) => {
+                    if (raf) return;
+                    raf = requestAnimationFrame(() => {
+                        const rect = btn.getBoundingClientRect();
+                        const dx = (e.clientX - rect.left - rect.width / 2) * 0.22;
+                        const dy = (e.clientY - rect.top - rect.height / 2) * 0.28;
+                        btn.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
+                        raf = null;
+                    });
+                });
+                btn.addEventListener('pointerleave', () => {
+                    if (raf) { cancelAnimationFrame(raf); raf = null; }
+                    btn.style.transform = '';
+                });
+            });
+        })();
 
         // ============================================
         // INTERACTIVE TILT CARDS + CURSOR LIGHTING (Reborn)
@@ -4434,46 +4731,41 @@
         })();
 
         // ============================================
-        // HERO PARALLAX (Reborn)
+        // HERO TYPOGRAPHY REACTIVITY (Reborn)
+        // One deliberate, restrained effect: the DUNEWORKS mark's letter-
+        // spacing subtly tightens toward the cursor's horizontal position.
+        // Nothing else in the hero moves on pointer input.
         // ============================================
         (function () {
             const finePointer = window.matchMedia('(pointer: fine)').matches;
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (!finePointer || reduceMotion) return;
             const hero = document.querySelector('.hero');
-            const heroContent = document.querySelector('.hero-content');
-            const heroLogo = document.querySelector('.hero-logo');
-            if (!hero || !heroContent) return;
+            const heroMark = document.querySelector('.hero-mark');
+            if (!hero || !heroMark) return;
             const isOG = () => document.documentElement.getAttribute('data-palette') === 'og';
-            let targetX = 0, targetY = 0, curX = 0, curY = 0, heroRaf = null;
+            let target = 0.01, current = 0.01, raf = null;
 
             const render = () => {
-                curX += (targetX - curX) * 0.08;
-                curY += (targetY - curY) * 0.08;
-                if (Math.abs(targetX - curX) < 0.05 && Math.abs(targetY - curY) < 0.05) {
-                    heroContent.style.transform = '';
-                    if (heroLogo) heroLogo.style.translate = '';
-                    heroRaf = null;
-                    return;
+                current += (target - current) * 0.06;
+                heroMark.style.letterSpacing = current.toFixed(4) + 'em';
+                if (Math.abs(target - current) > 0.0005) {
+                    raf = requestAnimationFrame(render);
+                } else {
+                    raf = null;
                 }
-                heroContent.style.transform = `translate3d(${(curX * 8).toFixed(2)}px, ${(curY * 6).toFixed(2)}px, 0)`;
-                if (heroLogo && !isOG()) {
-                    heroLogo.style.translate = `${(curX * -14).toFixed(2)}px ${(curY * -10).toFixed(2)}px`;
-                }
-                heroRaf = requestAnimationFrame(render);
             };
 
             hero.addEventListener('pointermove', (e) => {
                 if (isOG()) return;
                 const rect = hero.getBoundingClientRect();
-                targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-                targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-                if (!heroRaf) heroRaf = requestAnimationFrame(render);
+                const nx = (e.clientX - rect.left) / rect.width;
+                target = 0.01 + (0.5 - nx) * 0.04;
+                if (!raf) raf = requestAnimationFrame(render);
             });
             hero.addEventListener('pointerleave', () => {
-                targetX = 0;
-                targetY = 0;
-                if (!heroRaf) heroRaf = requestAnimationFrame(render);
+                target = 0.01;
+                if (!raf) raf = requestAnimationFrame(render);
             });
         })();
         
@@ -4491,7 +4783,55 @@
                 nav.classList.remove('visible');
             }
         }, { passive: true });
-        
+
+        // ============================================
+        // HERO RECEDE ON SCROLL (Reborn) — one controlled transition:
+        // the hero composition eases back and softens as the next
+        // section rises to meet it. transform/opacity only.
+        // ============================================
+        (function () {
+            const heroSection = document.getElementById('home');
+            const heroContent = document.querySelector('.hero-content');
+            if (!heroSection || !heroContent) return;
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) return;
+            let ticking = false;
+            const update = () => {
+                const vh = window.innerHeight;
+                const ratio = Math.min(1, Math.max(0, window.scrollY / vh));
+                heroContent.style.transform = `scale(${(1 - ratio * 0.06).toFixed(3)})`;
+                heroContent.style.opacity = String((1 - ratio * 0.7).toFixed(3));
+                ticking = false;
+            };
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(update);
+                }
+            }, { passive: true });
+        })();
+
+        // ============================================
+        // ACTIVE NAV LINK HIGHLIGHTING
+        // ============================================
+        (function () {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+            if (!sections.length || !navLinks.length) return;
+            const linkFor = (id) => document.querySelector(`.nav-link[href="#${id}"]`);
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const link = linkFor(entry.target.id);
+                    if (!link) return;
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        link.classList.add('active');
+                    }
+                });
+            }, { rootMargin: '-45% 0px -45% 0px' });
+            sections.forEach(s => sectionObserver.observe(s));
+        })();
+
         mobileToggle.addEventListener('click', () => {
             mobileToggle.classList.toggle('active');
             mobileNav.classList.toggle('active');
@@ -5363,18 +5703,25 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                     await new Promise(resolve => setTimeout(resolve, DUNA_CONFIG.typingSpeed));
                 }
                 
-                // Add navigation button if applicable
+                finalizeAIMessage(placeholder.id, currentContent);
+
+                // Append a navigation button as trusted markup *after* finalizing
+                // the markdown-escaped text, so it renders as a real button
+                // instead of being escaped into visible HTML source.
                 if (navMatch) {
                     const [_, navInfo] = navMatch;
                     const btnId = generateId();
-                    currentContent += `<br><br><button class="duna-nav-btn" id="${btnId}" data-section="${navInfo.section}">
-                        Go to ${navInfo.section.charAt(0).toUpperCase() + navInfo.section.slice(1)}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                        </svg>
-                    </button>`;
-                    updateAIMessage(placeholder.id, currentContent);
-                    
+                    const sectionLabel = navInfo.section.charAt(0).toUpperCase() + navInfo.section.slice(1);
+                    const contentEl = document.getElementById(`${placeholder.id}_content`);
+                    if (contentEl) {
+                        contentEl.insertAdjacentHTML('beforeend', `<button class="duna-nav-btn" id="${btnId}" data-section="${navInfo.section}">
+                            Go to ${sectionLabel}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                            </svg>
+                        </button>`);
+                    }
+
                     // Add click handler for navigation button
                     setTimeout(() => {
                         const btn = document.getElementById(btnId);
@@ -5386,8 +5733,6 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                         }
                     }, 100);
                 }
-                
-                finalizeAIMessage(placeholder.id, currentContent);
             };
             
             // Add error message
@@ -5746,12 +6091,8 @@ What would you like to know more about? Or feel free to ask me about our upcomin
         <div class="duna-chat-messages" id="dunaChatMessages">
             <!-- Sneak Peek Announcement -->
             <div class="duna-sneak-peek" id="dunaSneakPeek">
-                <div class="duna-sneak-peek-header">
-                    <div class="duna-sneak-peek-dot"></div>
-                    <h4>Sneak Peek of Duna AI</h4>
-                </div>
-                <div class="duna-sneak-peek-subtitle">Early Demo Experience</div>
-                <p>Duna AI is currently in development. This preview showcases some future capabilities of the platform.</p>
+                <div class="duna-sneak-peek-dot"></div>
+                <h4>Early preview — Duna AI is still in development</h4>
             </div>
 
             <!-- Welcome Screen -->
