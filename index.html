@@ -103,6 +103,198 @@
             --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             --transition-dramatic: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
+        :root[data-theme="light"] {
+            --bg-primary: #f4f1ea;
+            --bg-secondary: #ece7dd;
+            --bg-tertiary: #e3ddd2;
+            --bg-elevated: rgba(255, 255, 255, 0.78);
+            --bg-light: #f8f5ef;
+            --text-primary: #191612;
+            --text-secondary: #5c564b;
+            --text-tertiary: #7c7364;
+            --text-muted: #9a907f;
+            --text-dark: #17140f;
+            --accent-primary: #8d7138;
+            --accent-secondary: #b1914b;
+            --accent-glow: rgba(141, 113, 56, 0.16);
+            --accent-subtle: rgba(141, 113, 56, 0.1);
+            --gradient-hero: linear-gradient(180deg, rgba(244,241,234,0.02) 0%, rgba(244,241,234,0.24) 55%, rgba(244,241,234,0.92) 100%);
+            --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.74) 0%, rgba(236,231,221,0.92) 100%);
+            --shadow-sm: 0 1px 2px rgba(90, 76, 46, 0.08);
+            --shadow-md: 0 10px 32px rgba(90, 76, 46, 0.12);
+            --shadow-lg: 0 18px 60px rgba(90, 76, 46, 0.14);
+            --shadow-glow: 0 0 60px rgba(141, 113, 56, 0.18);
+            color-scheme: light;
+        }
+
+        :root[data-theme="dark"] { color-scheme: dark; }
+
+        .site-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 10001;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at 50% 45%, rgba(201,169,98,0.12), transparent 28%),
+                linear-gradient(180deg, rgba(7,7,8,1), rgba(7,7,8,0.98));
+            transition: opacity 420ms ease, visibility 420ms ease;
+        }
+        .site-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-inner { text-align: center; display: grid; gap: 1rem; justify-items: center; }
+        .loader-logo {
+            width: min(220px, 54vw);
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.32));
+            animation: loaderMark 1.4s var(--transition-dramatic) both;
+        }
+        .loader-line {
+            width: 140px;
+            height: 1px;
+            background: rgba(255,255,255,0.14);
+            overflow: hidden;
+            position: relative;
+        }
+        .loader-line::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            animation: loaderSweep 1.2s ease-in-out infinite;
+        }
+        .loader-copy {
+            font-size: 0.72rem;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: rgba(250,250,250,0.72);
+        }
+
+        .space-layer {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .space-layer::before,
+        .space-layer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+        }
+        .space-layer::before {
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 70% 30%, rgba(255,255,255,0.16) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 40% 80%, rgba(255,255,255,0.12) 0 1px, transparent 1.5px);
+            background-size: 320px 320px, 420px 420px, 520px 520px;
+            opacity: 0.22;
+            animation: starDrift 28s linear infinite;
+        }
+        .space-layer::after {
+            background:
+                radial-gradient(circle at 18% 18%, rgba(201,169,98,0.12), transparent 28%),
+                radial-gradient(circle at 82% 28%, rgba(90,120,170,0.12), transparent 30%),
+                radial-gradient(circle at 50% 85%, rgba(201,169,98,0.06), transparent 24%);
+            filter: blur(20px);
+            animation: nebulaDrift 22s ease-in-out infinite alternate;
+        }
+        :root[data-theme="light"] .space-layer::before {
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(65,55,36,0.12) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 70% 30%, rgba(65,55,36,0.1) 0 1px, transparent 1.5px),
+                radial-gradient(circle at 40% 80%, rgba(65,55,36,0.08) 0 1px, transparent 1.5px);
+            opacity: 0.18;
+        }
+        :root[data-theme="light"] .space-layer::after {
+            background:
+                radial-gradient(circle at 18% 18%, rgba(141,113,56,0.14), transparent 28%),
+                radial-gradient(circle at 82% 28%, rgba(140,156,188,0.14), transparent 30%),
+                radial-gradient(circle at 50% 85%, rgba(141,113,56,0.08), transparent 24%);
+        }
+        @keyframes loaderMark {
+            from { opacity: 0; transform: scale(0.985) translateY(4px); filter: blur(8px); }
+            to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
+        @keyframes loaderSweep { to { transform: translateX(100%); } }
+        @keyframes starDrift { from { transform: translate3d(0,0,0); } to { transform: translate3d(-4%,3%,0); } }
+        @keyframes nebulaDrift { from { transform: translate3d(-1%, -1%, 0) scale(1); } to { transform: translate3d(1%, 1%, 0) scale(1.04); } }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: var(--space-xs) var(--space-sm);
+            border: 1px solid var(--text-muted);
+            border-radius: 999px;
+            color: var(--text-secondary);
+            background: transparent;
+            transition: all var(--transition-base);
+        }
+        .theme-toggle:hover { color: var(--text-primary); border-color: var(--accent-primary); }
+        .theme-toggle i { font-size: 0.85rem; }
+
+        .duna-chat-btn[data-action="fullscreen"] { position: relative; }
+        .duna-chat-container.fullscreen {
+            background:
+                radial-gradient(circle at 18% 20%, rgba(201,169,98,0.08), transparent 28%),
+                radial-gradient(circle at 84% 12%, rgba(120,140,190,0.08), transparent 30%),
+                var(--bg-primary);
+        }
+        :root[data-theme="light"] .duna-chat-container {
+            background: rgba(255,255,255,0.84);
+            border-color: rgba(141,113,56,0.18);
+            box-shadow: 0 24px 80px rgba(90,76,46,0.16);
+        }
+        :root[data-theme="light"] .duna-chat-overlay { background: rgba(244,241,234,0.52); backdrop-filter: blur(8px); }
+        :root[data-theme="light"] .nav.visible { background: rgba(244,241,234,0.82); }
+        :root[data-theme="light"] .hero { color: var(--text-primary); }
+        :root[data-theme="light"] .hero-main-title,
+        :root[data-theme="light"] .section-title,
+        :root[data-theme="light"] .manifesto-text h2,
+        :root[data-theme="light"] .contact-title,
+        :root[data-theme="light"] .duna-chat-title h3,
+        :root[data-theme="light"] .duna-welcome h2,
+        :root[data-theme="light"] .duna-message-content,
+        :root[data-theme="light"] .duna-chat-input { color: var(--text-primary); }
+        :root[data-theme="light"] .hero-description,
+        :root[data-theme="light"] .section-description,
+        :root[data-theme="light"] .exec-bio,
+        :root[data-theme="light"] .team-role,
+        :root[data-theme="light"] .duna-chat-status,
+        :root[data-theme="light"] .duna-chat-hint { color: var(--text-secondary); }
+        :root[data-theme="light"] .exec-card,
+        :root[data-theme="light"] .team-card,
+        :root[data-theme="light"] .contact-form,
+        :root[data-theme="light"] .featured-card,
+        :root[data-theme="light"] .social-card,
+        :root[data-theme="light"] .duna-message,
+        :root[data-theme="light"] .duna-chat-header,
+        :root[data-theme="light"] .duna-chat-input-area {
+            background: rgba(255,255,255,0.62);
+            border-color: rgba(141,113,56,0.14);
+        }
+        :root[data-theme="light"] .duna-message.user { background: rgba(141,113,56,0.12); }
+        :root[data-theme="light"] .duna-chat-container.fullscreen .duna-chat-messages { max-width: 920px; }
+        .duna-chat-container.fullscreen { box-shadow: none; }
+        .duna-chat-container.fullscreen .duna-chat-header,
+        .duna-chat-container.fullscreen .duna-chat-input-area {
+            max-width: 920px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .duna-chat-container.fullscreen .duna-chat-header { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .duna-chat-container.fullscreen .duna-chat-input-area { padding-bottom: 1.5rem; }
+
+        @media (max-width: 768px) {
+            .theme-toggle span { display: none; }
+            .loader-copy { font-size: 0.66rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .site-loader, .loader-logo, .loader-line::after, .space-layer::before, .space-layer::after { animation: none !important; transition: none !important; }
+        }
         
         /* Reset & Base */
         *, *::before, *::after {
@@ -3218,8 +3410,16 @@
 </head>
 <body>
     <!-- Cinematic Overlays -->
+    <div class="space-layer" aria-hidden="true"></div>
     <div class="grain-overlay"></div>
     <div class="vignette"></div>
+    <div class="site-loader" id="siteLoader" role="status" aria-label="Loading Duneworks Productions">
+        <div class="loader-inner">
+            <img class="loader-logo" src="https://i.postimg.cc/jR3Nszp0/Gemini-Generated-Image-5vnzno5vnzno5vnz-Photoroom.png" alt="Duneworks Productions logo">
+            <div class="loader-line" aria-hidden="true"></div>
+            <div class="loader-copy">Duneworks Productions</div>
+        </div>
+    </div>
     
     <!-- Custom Camera Cursor -->
     <div class="cursor"></div>
@@ -3256,6 +3456,10 @@
                     </button>
                 </div>
                 
+                <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme">
+                    <i class="fas fa-moon" id="themeIcon" aria-hidden="true"></i>
+                    <span id="themeLabel">Dark</span>
+                </button>
                 <div class="nav-language">
                     <button class="lang-toggle" id="langToggle">
                         <span class="fi fi-gb"></span>
@@ -3819,6 +4023,40 @@
     <!-- JavaScript -->
     <script>
         // ============================================
+        // THEME + LOADER
+        // ============================================
+        (function () {
+            const root = document.documentElement;
+            const loader = document.getElementById('siteLoader');
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const themeLabel = document.getElementById('themeLabel');
+            let savedTheme = null;
+            try { savedTheme = localStorage.getItem('dw-theme'); } catch (error) {}
+            const applyTheme = (theme) => {
+                const nextTheme = theme === 'light' ? 'light' : 'dark';
+                root.setAttribute('data-theme', nextTheme);
+                try { localStorage.setItem('dw-theme', nextTheme); } catch (error) {}
+                if (themeIcon) themeIcon.className = nextTheme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+                if (themeLabel) themeLabel.textContent = nextTheme === 'light' ? 'Light' : 'Dark';
+                if (themeToggle) themeToggle.setAttribute('aria-label', nextTheme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+            };
+            applyTheme(savedTheme || 'dark');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+                    applyTheme(current === 'light' ? 'dark' : 'light');
+                });
+            }
+            const hideLoader = () => {
+                if (!loader) return;
+                loader.classList.add('hidden');
+            };
+            window.setTimeout(hideLoader, 1200);
+            window.setTimeout(hideLoader, 2600);
+        })();
+
+        // ============================================
         // CUSTOM CAMERA CURSOR (RESTORED)
         // ============================================
         const cursor = document.querySelector('.cursor');
@@ -4209,18 +4447,11 @@
             
             // Duna AI Configuration
             const DUNA_CONFIG = {
-                // SECURITY WARNING: This API key is visible in client-side code.
-                // For production, use a secure backend proxy to protect your key.
-                // See: docs/SECURITY.md for setup instructions.
-                apiEndpoint: 'https://api.deepseek.com/v1/chat/completions',
-                apiKey: 'sk-56252bb00f6649c8a570b70a35e907b9', // DeepSeek API Key
-                model: 'deepseek-chat',
-                maxTokens: 2000,
-                temperature: 0.7,
+                apiEndpoint: '/api/chat',
                 storageKey: 'duna_chat_history',
                 maxMessages: 50,
-                typingSpeed: 15, // ms per character for streaming effect
-                useRealAPI: true, // Set to true to use DeepSeek API, false for demo mode
+                typingSpeed: 15,
+                useRealAPI: false,
             };
             
             // Duna AI System Prompt
@@ -4532,7 +4763,7 @@ IMPORTANT: Keep responses focused on Duneworks-related topics. If asked about un
             };
             
             // ============================================
-            // AI API INTEGRATION (DeepSeek)
+            // AI RESPONSE FLOW
             // ============================================
             
             // Send message to AI
@@ -4548,14 +4779,8 @@ IMPORTANT: Keep responses focused on Duneworks-related topics. If asked about un
                         { role: 'user', content: userMessage }
                     ];
                     
-                    // Check if we should use real API or demo mode
-                    if (DUNA_CONFIG.useRealAPI && DUNA_CONFIG.apiKey) {
-                        // Real API call to DeepSeek
-                        await callDeepSeekAPI(messages);
-                    } else {
-                        // Simulated AI response for demo
-                        await simulateAIResponse(userMessage);
-                    }
+                    // Simulated AI response for demo until a secure backend is connected
+                    await simulateAIResponse(userMessage);
                     
                 } catch (error) {
                     console.error('Duna AI Error:', error);
@@ -4567,76 +4792,7 @@ IMPORTANT: Keep responses focused on Duneworks-related topics. If asked about un
                 }
             };
             
-            // Call DeepSeek API
-            const callDeepSeekAPI = async (messages) => {
-                const placeholder = addAIMessagePlaceholder();
-                let fullContent = '';
-                
-                try {
-                    const response = await fetch(DUNA_CONFIG.apiEndpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${DUNA_CONFIG.apiKey}`
-                        },
-                        body: JSON.stringify({
-                            model: DUNA_CONFIG.model,
-                            messages: messages,
-                            max_tokens: DUNA_CONFIG.maxTokens,
-                            temperature: DUNA_CONFIG.temperature,
-                            stream: true
-                        })
-                    });
-                    
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(errorData.error?.message || `API Error: ${response.status}`);
-                    }
-                    
-                    // Handle streaming response
-                    const reader = response.body.getReader();
-                    const decoder = new TextDecoder();
-                    
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-                        
-                        const chunk = decoder.decode(value);
-                        const lines = chunk.split('\n');
-                        
-                        for (const line of lines) {
-                            if (line.startsWith('data: ')) {
-                                const data = line.slice(6);
-                                if (data === '[DONE]') continue;
-                                
-                                try {
-                                    const parsed = JSON.parse(data);
-                                    const content = parsed.choices?.[0]?.delta?.content || '';
-                                    if (content) {
-                                        fullContent += content;
-                                        updateAIMessage(placeholder.id, fullContent);
-                                    }
-                                } catch (e) {
-                                    // Ignore parsing errors for malformed chunks
-                                }
-                            }
-                        }
-                    }
-                    
-                    finalizeAIMessage(placeholder.id, fullContent);
-                    
-                } catch (error) {
-                    // Remove placeholder and show error
-                    const placeholderEl = document.getElementById(placeholder.id);
-                    if (placeholderEl) placeholderEl.remove();
-                    
-                    // Fallback to simulated response if API fails
-                    console.warn('DeepSeek API error, falling back to demo mode:', error);
-                    await simulateAIResponse(messages[messages.length - 1].content);
-                }
-            };
-            
-            // Simulated AI Response (for demo without API key)
+            // Simulated AI Response (demo mode until a secure backend is connected)
             const simulateAIResponse = async (userMessage) => {
                 const lowerMsg = userMessage.toLowerCase();
                 let response = '';
@@ -5095,23 +5251,10 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                 // FINAL SETUP
                 // ============================================
                 
-                console.log('🌟 Duna AI initialized - Your creative production assistant');
-                console.log(`🔌 Mode: ${DUNA_CONFIG.useRealAPI ? 'DeepSeek API (LIVE)' : 'Demo/Simulated'}`);
-                
-                // Update status indicator based on mode
                 const statusEl = document.getElementById('dunaChatStatus');
                 if (statusEl) {
-                    statusEl.textContent = DUNA_CONFIG.useRealAPI ? 'AI Powered' : 'Demo Mode';
-                    if (!DUNA_CONFIG.useRealAPI) {
-                        statusEl.style.color = 'var(--duna-text-tertiary)';
-                    }
-                }
-                
-                // SECURITY NOTICE
-                if (DUNA_CONFIG.useRealAPI) {
-                    console.warn('⚠️  SECURITY: API key is exposed in client-side code.');
-                    console.warn('   For production, implement a secure backend proxy.');
-                    console.warn('   See: https://platform.deepseek.com/docs for best practices.');
+                    statusEl.textContent = 'Demo Mode';
+                    statusEl.style.color = 'var(--duna-text-tertiary)';
                 }
                 
                 // Pulse animation on floating button after 5 seconds
@@ -5184,19 +5327,19 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                 </div>
             </div>
             <div class="duna-chat-actions">
-                <button class="duna-chat-btn" id="dunaClearBtn" aria-label="Clear conversation" title="Clear conversation">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 6h18"/>
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                    </svg>
-                </button>
-                <button class="duna-chat-btn" id="dunaFullscreenBtn" aria-label="Toggle fullscreen" title="Toggle fullscreen">
+                <button class="duna-chat-btn" id="dunaFullscreenBtn" data-action="fullscreen" aria-label="Expand chat to fullscreen" title="Expand chat to fullscreen">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="dunaFullscreenIcon">
                         <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
                         <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
                         <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
                         <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+                    </svg>
+                </button>
+                <button class="duna-chat-btn" id="dunaClearBtn" aria-label="Clear conversation" title="Clear conversation">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18"/>
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
                     </svg>
                 </button>
                 <button class="duna-chat-btn" id="dunaCloseBtn" aria-label="Close chat" title="Close chat">
