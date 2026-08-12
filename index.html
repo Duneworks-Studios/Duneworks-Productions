@@ -680,7 +680,8 @@
             left: 0;
             top: 0;
             pointer-events: none;
-            z-index: 10000;
+            /* Above Duna chat (10001) and theme wipe (10002) so it never vanishes over UI chrome */
+            z-index: 10050;
             --cx: 0px;
             --cy: 0px;
             --cs: 1;
