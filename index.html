@@ -471,12 +471,14 @@
             z-index: -1;
             pointer-events: none;
             overflow: hidden;
+            contain: strict;
         }
         .space-layer::before,
         .space-layer::after {
             content: '';
             position: absolute;
             inset: 0;
+            will-change: auto;
         }
         .space-layer::before {
             background-image:
@@ -485,15 +487,16 @@
                 radial-gradient(circle at 40% 80%, rgba(255,255,255,0.12) 0 1px, transparent 1.5px);
             background-size: 320px 320px, 420px 420px, 520px 520px;
             opacity: 0.22;
-            animation: starDrift 28s linear infinite;
+            animation: starDrift 40s linear infinite;
         }
         .space-layer::after {
             background:
                 radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12), transparent 28%),
                 radial-gradient(circle at 82% 28%, rgba(90,120,170,0.12), transparent 30%),
                 radial-gradient(circle at 50% 85%, rgba(255,255,255,0.06), transparent 24%);
-            filter: blur(20px);
-            animation: nebulaDrift 22s ease-in-out infinite alternate;
+            /* Soft nebula without expensive live blur filter */
+            opacity: 0.75;
+            animation: nebulaDrift 36s ease-in-out infinite alternate;
         }
         :root[data-theme="light"] .space-layer::before {
             background-image:
@@ -509,8 +512,8 @@
                 radial-gradient(circle at 50% 85%, rgba(23,23,26,0.08), transparent 24%);
         }
         @keyframes loaderMark {
-            from { opacity: 0; transform: scale(0.985) translateY(4px); filter: blur(8px); }
-            to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @keyframes starDrift { from { transform: translate3d(0,0,0); } to { transform: translate3d(-4%,3%,0); } }
         @keyframes nebulaDrift { from { transform: translate3d(-1%, -1%, 0) scale(1); } to { transform: translate3d(1%, 1%, 0) scale(1.04); } }
@@ -634,31 +637,20 @@
            CINEMATIC EFFECTS & OVERLAYS
            ============================================ */
         
-        /* Film Grain Overlay */
+        /* Film Grain Overlay — static by default (animated grain is expensive) */
         .grain-overlay {
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.025;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            animation: grain 8s steps(10) infinite;
-        }
-        
-        @keyframes grain {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-5%, -10%); }
-            20% { transform: translate(-15%, 5%); }
-            30% { transform: translate(7%, -25%); }
-            40% { transform: translate(-5%, 25%); }
-            50% { transform: translate(-15%, 10%); }
-            60% { transform: translate(15%, 0%); }
-            70% { transform: translate(0%, 15%); }
-            80% { transform: translate(3%, 35%); }
-            90% { transform: translate(-10%, 10%); }
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-size: 180px 180px;
+            mix-blend-mode: overlay;
+            contain: strict;
         }
         
         /* Vignette */
@@ -674,30 +666,73 @@
            CUSTOM CAMERA CURSOR (ORIGINAL RESTORED)
            ============================================ */
         
+        /* Hide native cursor when the custom cursor is active (desktop only) */
+        @media (pointer: fine) {
+            html, body, a, button, input, textarea, select, label, [role="button"] {
+                cursor: none !important;
+            }
+        }
+
         .cursor {
             width: 40px;
             height: 40px;
             position: fixed;
+            left: 0;
+            top: 0;
             pointer-events: none;
             z-index: 10000;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease, opacity 0.3s ease;
+            --cx: 0px;
+            --cy: 0px;
+            --cs: 1;
+            transform: translate3d(var(--cx), var(--cy), 0) translate(-50%, -50%) scale(var(--cs));
+            transition: opacity 0.25s ease, --cs 0.12s ease;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23ffffff' stroke-width='3'%3E%3Crect x='10' y='25' width='80' height='50' rx='10' /%3E%3Ccircle cx='50' cy='50' r='15' /%3E%3Crect x='60' y='30' width='15' height='10' rx='2' fill='%23ffffff' stroke='none'/%3E%3C/svg%3E");
             background-size: contain;
             background-repeat: no-repeat;
             display: block;
+            will-change: transform;
+            contain: layout style;
+        }
+
+        /* OG: never show any text label above/near the camera cursor */
+        :root[data-palette="og"] .cursor-label,
+        :root[data-palette="og"] .cursor.cursor-text .cursor-label {
+            display: none !important;
+            opacity: 0 !important;
+            content: none !important;
+            font-size: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            visibility: hidden !important;
+        }
+
+        :root[data-palette="og"] .cursor.cursor-text {
+            width: 40px;
+            height: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23ffffff' stroke-width='3'%3E%3Crect x='10' y='25' width='80' height='50' rx='10' /%3E%3Ccircle cx='50' cy='50' r='15' /%3E%3Crect x='60' y='30' width='15' height='10' rx='2' fill='%23ffffff' stroke='none'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-color: transparent;
+            border: none;
+            mix-blend-mode: normal;
         }
         
         .cursor.hover-active {
-            transform: translate(-50%, -50%) scale(1.5);
-            opacity: 0.8;
+            --cs: 1.35;
+            opacity: 0.85;
         }
 
         @media (pointer: coarse) {
-            .cursor { display: none; }
+            .cursor { display: none !important; }
+            html, body, a, button, input, textarea, select, label, [role="button"] {
+                cursor: auto !important;
+            }
         }
 
-        /* Reborn: minimal dot/ring cursor with contextual text label */
+        /* Reborn: minimal dot/ring cursor with contextual text label.
+           Position must NEVER be transitioned — only size/color morph on hover.
+           Transitioning `transform` made the whole cursor trail behind the mouse. */
         :root:not([data-palette="og"]) .cursor {
             width: 8px;
             height: 8px;
@@ -705,8 +740,11 @@
             background: var(--text-primary);
             border-radius: 50%;
             border: none;
-            transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                        background 0.28s ease, opacity 0.3s ease, transform 0.12s ease;
+            transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                        height 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                        background 0.22s ease,
+                        opacity 0.22s ease,
+                        border-color 0.22s ease;
             mix-blend-mode: difference;
         }
 
@@ -715,11 +753,13 @@
             height: 34px;
             background: transparent;
             border: 1px solid var(--text-primary);
-            transform: translate(-50%, -50%);
+            --cs: 1;
         }
 
-        :root:not([data-palette="og"]) .cursor-label {
+        .cursor-label {
+            display: none;
             opacity: 0;
+            pointer-events: none;
             font-size: 0.5625rem;
             font-weight: 600;
             letter-spacing: 0.14em;
@@ -741,6 +781,7 @@
         }
 
         :root:not([data-palette="og"]) .cursor.cursor-text .cursor-label {
+            display: block;
             opacity: 1;
         }
         
@@ -1481,6 +1522,8 @@
         .section {
             position: relative;
             padding: var(--section-padding) var(--container-padding);
+            content-visibility: auto;
+            contain-intrinsic-size: 1px 720px;
         }
         
         .section-header {
@@ -2083,6 +2126,12 @@
             display: flex;
             width: max-content;
             animation: marquee 40s linear infinite;
+            will-change: transform;
+            contain: layout paint;
+        }
+
+        .marquee-container.is-paused {
+            animation-play-state: paused;
         }
 
         @keyframes marquee {
@@ -2099,7 +2148,6 @@
             margin: 0 var(--space-xl);
             opacity: 0.9;
             transition: transform var(--transition-base), filter var(--transition-base), opacity var(--transition-base);
-            will-change: transform;
         }
 
         .partner-logo:hover {
@@ -2327,17 +2375,14 @@
         
         .reveal {
             opacity: 0;
-            transform: translateY(30px) scale(0.98);
-            filter: blur(6px);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(24px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.visible {
             opacity: 1;
-            transform: translateY(0) scale(1);
-            filter: blur(0);
+            transform: translateY(0);
         }
         
         .reveal-delay-1 { transition-delay: 0.1s; }
@@ -2779,6 +2824,10 @@
             .cursor {
                 display: none !important;
             }
+
+            html, body, a, button, input, textarea, select, label, [role="button"] {
+                cursor: auto !important;
+            }
             
             .social-card:hover,
             .exec-card:hover,
@@ -2791,6 +2840,54 @@
                 transform: none;
                 filter: none;
             }
+
+            .tilt-card::after {
+                display: none !important;
+            }
+        }
+
+        /* Mobile / narrow screens — cut expensive continuous effects */
+        @media (max-width: 768px) {
+            .grain-overlay {
+                display: none;
+            }
+
+            .space-layer::before,
+            .space-layer::after,
+            .hero-orbit,
+            .hero-light-sweep {
+                animation: none !important;
+            }
+
+            .space-layer::after {
+                opacity: 0.45;
+            }
+
+            .nav.visible,
+            :root:not([data-palette="og"]) .exec-card,
+            :root:not([data-palette="og"]) .team-card {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+
+            .marquee-container {
+                animation-duration: 55s;
+            }
+
+            .reveal {
+                transform: translateY(16px);
+                transition-duration: 0.45s;
+            }
+        }
+
+        /* Pause decorative motion while the tab is hidden */
+        .perf-paused .space-layer::before,
+        .perf-paused .space-layer::after,
+        .perf-paused .hero-orbit,
+        .perf-paused .hero-light-sweep,
+        .perf-paused .marquee-container,
+        .perf-paused .duna-particle {
+            animation-play-state: paused !important;
         }
         
         /* Reduced Motion */
@@ -2801,14 +2898,35 @@
                 transition-duration: 0.01ms !important;
             }
             
-            .grain-overlay {
-                animation: none;
+            .grain-overlay,
+            .space-layer::before,
+            .space-layer::after,
+            .hero-orbit,
+            .hero-light-sweep {
+                animation: none !important;
             }
             
             .marquee-container {
                 animation: none;
             }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
         }
+
+        /* Respect battery / data-saver when available via JS class */
+        html.lite-mode .grain-overlay,
+        html.lite-mode .space-layer::before,
+        html.lite-mode .space-layer::after,
+        html.lite-mode .hero-orbit,
+        html.lite-mode .hero-light-sweep {
+            animation: none !important;
+        }
+        html.lite-mode .grain-overlay { opacity: 0.015; }
+        html.lite-mode .space-layer::after { opacity: 0.35; }
+        html.lite-mode .tilt-card::after { display: none !important; }
         
         /* ============================================
            DUNA AI - FUTURISTIC AI ASSISTANT SYSTEM
@@ -3917,7 +4035,7 @@
     </div>
     
     <!-- Custom Cursor: camera icon (OG) / minimal dot-ring with label (Reborn) -->
-    <div class="cursor"><span class="cursor-label"></span></div>
+    <div class="cursor" aria-hidden="true"><span class="cursor-label" aria-hidden="true"></span></div>
     
     <!-- Navigation -->
     <nav class="nav" id="nav">
@@ -4005,17 +4123,17 @@
                 <img class="hero-logo" src="./assets/duneworks-logo.png" alt="Duneworks Productions">
                 <span class="hero-brand">Duneworks Production</span>
                 <div class="hero-mark" aria-hidden="true">DUNEWORKS</div>
-                <h1 class="hero-main-title">Visions Crafted.<br><em>Global Reach.</em></h1>
-                <p class="hero-subtitle">Premium Media Service<br>Commercial Film Production</p>
+                <h1 class="hero-main-title" data-i18n="hero-title">Visions Crafted.<br><em>Global Reach.</em></h1>
+                <p class="hero-subtitle" data-i18n="hero-subtitle">Premium Media Service<br>Commercial Film Production</p>
             </div>
             
             <!-- OG-only: dense original layout (description, stats, series) -->
             <div class="hero-og-detail">
                 <div class="hero-middle">
-                    <p class="hero-description">
+                    <p class="hero-description" data-i18n="hero-description">
                         We are <strong>Duneworks Productions</strong> — a global creative agency specializing in premium motorsport media and commercial film production. From the paddocks of Formula 1 to the deserts of cross-continental rallies, we capture the essence of motorsport with cinematic precision. Our work spans across FIA-sanctioned series, Formula 3, Asian Le Mans, and beyond.
                     </p>
-                    <p class="hero-description-secondary">
+                    <p class="hero-description-secondary" data-i18n="hero-description-secondary">
                         With teams across 9 countries and partnerships with world-leading brands, we deliver content that resonates with audiences worldwide. Every frame tells a story. Every project is a masterpiece.
                     </p>
                 </div>
@@ -4023,15 +4141,15 @@
                 <div class="hero-stats-row">
                     <div class="hero-stat-item">
                         <div class="hero-stat-number">9+</div>
-                        <div class="hero-stat-label">Countries</div>
+                        <div class="hero-stat-label" data-i18n="stat-countries">Countries</div>
                     </div>
                     <div class="hero-stat-item">
                         <div class="hero-stat-number">14+</div>
-                        <div class="hero-stat-label">Partners</div>
+                        <div class="hero-stat-label" data-i18n="stat-partners">Partners</div>
                     </div>
                     <div class="hero-stat-item">
                         <div class="hero-stat-number">F1</div>
-                        <div class="hero-stat-label">Formula 1</div>
+                        <div class="hero-stat-label" data-i18n="stat-f1">Formula 1</div>
                     </div>
                 </div>
 
@@ -4039,48 +4157,48 @@
                     <div class="hero-series-item">
                         <i class="fas fa-flag-checkered"></i>
                         <div>
-                            <strong>Formula 1</strong>
-                            <span>Premier motorsport content creation</span>
+                            <strong data-i18n="series-f1-title">Formula 1</strong>
+                            <span data-i18n="series-f1">Premier motorsport content creation</span>
                         </div>
                     </div>
                     <div class="hero-series-item">
                         <i class="fas fa-shield-alt"></i>
                         <div>
-                            <strong>FIA Championships</strong>
-                            <span>FIA-sanctioned racing series coverage</span>
+                            <strong data-i18n="series-fia-title">FIA Championships</strong>
+                            <span data-i18n="series-fia">FIA-sanctioned racing series coverage</span>
                         </div>
                     </div>
                     <div class="hero-series-item">
                         <i class="fas fa-tachometer-alt"></i>
                         <div>
-                            <strong>Formula 3</strong>
-                            <span>Rising talent and developmental series</span>
+                            <strong data-i18n="series-f3-title">Formula 3</strong>
+                            <span data-i18n="series-f3">Rising talent and developmental series</span>
                         </div>
                     </div>
                     <div class="hero-series-item">
                         <i class="fas fa-clock"></i>
                         <div>
-                            <strong>Asian Le Mans</strong>
-                            <span>Endurance racing across Asia-Pacific</span>
+                            <strong data-i18n="series-lemans-title">Asian Le Mans</strong>
+                            <span data-i18n="series-lemans">Endurance racing across Asia-Pacific</span>
                         </div>
                     </div>
                     <div class="hero-series-item">
                         <i class="fas fa-calendar-star"></i>
                         <div>
-                            <strong>Premium Media Service</strong>
-                            <span>For Events</span>
+                            <strong data-i18n="series-media-title">Premium Media Service</strong>
+                            <span data-i18n="series-media">For Events</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Reborn-only: lean typographic statement -->
-            <p class="hero-reborn-statement">Creative Technology<span aria-hidden="true">—</span>Media / Development / Production</p>
+            <p class="hero-reborn-statement" data-i18n="hero-reborn-statement">Creative Technology<span aria-hidden="true">—</span>Media / Development / Production</p>
 
             <!-- CTA -->
             <div class="hero-bottom">
-                <a href="#contact" class="hero-cta hero-cta-primary">Start Your Project</a>
-                <a href="#contact" class="hero-cta hero-cta-secondary">View Our Work</a>
+                <a href="#contact" class="hero-cta hero-cta-primary" data-i18n="hero-cta-primary">Start Your Project</a>
+                <a href="#contact" class="hero-cta hero-cta-secondary" data-i18n="hero-cta-secondary">View Our Work</a>
             </div>
         </div>
 
@@ -4092,7 +4210,7 @@
         </div>
 
         <div class="hero-scroll">
-            <span>Scroll</span>
+            <span data-i18n="scroll">Scroll</span>
             <div class="hero-scroll-line"></div>
         </div>
     </section>
@@ -4140,7 +4258,7 @@
                         <i class="fas fa-flag-checkered"></i>
                     </div>
                     <div class="series-content">
-                        <h4>Formula 1</h4>
+                        <h4 data-i18n="series-f1-title">Formula 1</h4>
                         <p data-i18n="series-f1">Premier motorsport content creation</p>
                     </div>
                 </div>
@@ -4149,7 +4267,7 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <div class="series-content">
-                        <h4>FIA Championships</h4>
+                        <h4 data-i18n="series-fia-title">FIA Championships</h4>
                         <p data-i18n="series-fia">FIA-sanctioned racing series coverage</p>
                     </div>
                 </div>
@@ -4158,7 +4276,7 @@
                         <i class="fas fa-tachometer-alt"></i>
                     </div>
                     <div class="series-content">
-                        <h4>Formula 3</h4>
+                        <h4 data-i18n="series-f3-title">Formula 3</h4>
                         <p data-i18n="series-f3">Rising talent and developmental series</p>
                     </div>
                 </div>
@@ -4167,7 +4285,7 @@
                         <i class="fas fa-clock"></i>
                     </div>
                     <div class="series-content">
-                        <h4>Asian Le Mans</h4>
+                        <h4 data-i18n="series-lemans-title">Asian Le Mans</h4>
                         <p data-i18n="series-lemans">Endurance racing across Asia-Pacific</p>
                     </div>
                 </div>
@@ -4176,8 +4294,8 @@
                         <i class="fas fa-camera"></i>
                     </div>
                     <div class="series-content">
-                        <h4>Premium Media Service</h4>
-                        <p data-i18n="series-ferrari">For all events</p>
+                        <h4 data-i18n="series-media-title">Premium Media Service</h4>
+                        <p data-i18n="series-media">For all events</p>
                     </div>
                 </div>
             </div>
@@ -4288,38 +4406,38 @@
 
     <div class="leadership-grid">
         <div class="exec-card reveal">
-            <div class="exec-role">Founder & Chief Executive Officer</div>
+            <div class="exec-role" data-i18n="exec-daniel-role">Founder & Chief Executive Officer</div>
             <h3 class="exec-name">Daniel Lee Buckley</h3>
-            <p class="exec-bio">
+            <p class="exec-bio" data-i18n="exec-daniel-bio">
                 Founder of Duneworks Productions. Photographer, cinematographer, and creative director leading the vision and growth of the company.
             </p>
         </div>
 
         <div class="exec-card reveal reveal-delay-2">
-            <div class="exec-role">Operations Manager</div>
+            <div class="exec-role" data-i18n="exec-sarvar-role">Operations Manager</div>
             <h3 class="exec-name">Sarvar Tursunov</h3>
-            <p class="exec-bio">
+            <p class="exec-bio" data-i18n="exec-sarvar-bio">
                 Manages the team and works to keep operations stable and efficient.
             </p>
         </div>
         <div class="exec-card reveal reveal-delay-3">
-            <div class="exec-role">Producer</div>
+            <div class="exec-role" data-i18n="exec-abubakir-role">Producer</div>
             <h3 class="exec-name">Abubakir Abduqayumov</h3>
-            <p class="exec-bio">
+            <p class="exec-bio" data-i18n="exec-abubakir-bio">
                 Producer supporting Duneworks Productions across project planning and delivery.
             </p>
         </div>
         <div class="exec-card reveal reveal-delay-3">
-            <div class="exec-role">Brand Face</div>
+            <div class="exec-role" data-i18n="exec-amirsaid-role">Brand Face</div>
             <h3 class="exec-name">Amirsaid Samigjanov</h3>
-            <p class="exec-bio">
+            <p class="exec-bio" data-i18n="exec-amirsaid-bio">
                 Represents Duneworks Productions as a public-facing brand presence.
             </p>
         </div>
         <div class="exec-card reveal reveal-delay-3">
-    <div class="exec-role">Social Media Manager</div>
+    <div class="exec-role" data-i18n="exec-kamron-role">Social Media Manager</div>
     <h3 class="exec-name">Xayrullayev Kamronbek</h3>
-    <p class="exec-bio">
+    <p class="exec-bio" data-i18n="exec-kamron-bio">
         Manages Duneworks Productions social media presence, content planning, and community engagement across platforms.
     </p>
 </div>
@@ -4494,19 +4612,19 @@
             <form class="contact-form reveal reveal-delay-1" id="bookingForm" action="https://formsubmit.co/Duneworksstudios@gmail.com" method="POST">
                 <div class="form-row">
                     <label class="form-label" data-i18n="form-name">Full Name</label>
-                    <input type="text" name="name" class="form-input" placeholder="Your name" required>
+                    <input type="text" name="name" class="form-input" placeholder="Your name" data-i18n-placeholder="ph-name" required>
                 </div>
                 <div class="form-row">
                     <label class="form-label" data-i18n="form-email">Email Address</label>
-                    <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
+                    <input type="email" name="email" class="form-input" placeholder="your@email.com" data-i18n-placeholder="ph-email" required>
                 </div>
                 <div class="form-row">
                     <label class="form-label" data-i18n="form-company">Project Type</label>
-                    <input type="text" name="service" class="form-input" placeholder="Project type">
+                    <input type="text" name="service" class="form-input" placeholder="Project type" data-i18n-placeholder="ph-project">
                 </div>
                 <div class="form-row">
                     <label class="form-label" data-i18n="form-message">Your Vision</label>
-                    <textarea name="message" class="form-input" placeholder="Tell us about your project..." required></textarea>
+                    <textarea name="message" class="form-input" placeholder="Tell us about your project..." data-i18n-placeholder="ph-message" required></textarea>
                 </div>
                 <input type="hidden" name="_subject" value="New Luxury Inquiry">
                 <input type="hidden" name="_captcha" value="false">
@@ -4537,6 +4655,30 @@
     <!-- JavaScript -->
     <script>
         // ============================================
+        // PERFORMANCE BOOTSTRAP
+        // Detect constrained devices early and pause
+        // decorative work when the tab is hidden.
+        // ============================================
+        (function () {
+            const root = document.documentElement;
+            const coarse = window.matchMedia('(pointer: coarse)').matches;
+            const narrow = window.matchMedia('(max-width: 768px)').matches;
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let saveData = false;
+            let lowCores = false;
+            try { saveData = !!(navigator.connection && navigator.connection.saveData); } catch (e) {}
+            try { lowCores = typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4; } catch (e) {}
+            if (coarse || narrow || reduceMotion || saveData || lowCores) {
+                root.classList.add('lite-mode');
+            }
+            const syncPause = () => {
+                root.classList.toggle('perf-paused', document.hidden);
+            };
+            document.addEventListener('visibilitychange', syncPause);
+            syncPause();
+        })();
+
+        // ============================================
         // THEME + LOADER
         // ============================================
         (function () {
@@ -4554,6 +4696,15 @@
                 if (themeToggle) {
                     themeToggle.setAttribute('data-state', nextPalette);
                     themeToggle.setAttribute('aria-label', nextPalette === 'reborn' ? 'Switch to OG theme' : 'Switch to Reborn theme');
+                }
+                // Never leave Reborn cursor labels visible after switching to OG
+                if (nextPalette === 'og') {
+                    const cursor = document.querySelector('.cursor');
+                    if (cursor) {
+                        cursor.classList.remove('cursor-text');
+                        const label = cursor.querySelector('.cursor-label');
+                        if (label) label.textContent = '';
+                    }
                 }
             };
             applyPalette(savedPalette || 'reborn');
@@ -4624,26 +4775,62 @@
         })();
 
         // ============================================
-        // CUSTOM CAMERA CURSOR (RESTORED)
+        // CUSTOM CAMERA CURSOR
         // ============================================
         const cursor = document.querySelector('.cursor');
         let mouseX = 0, mouseY = 0;
         let cursorX = 0, cursorY = 0;
+        let cursorRaf = null;
+        let cursorNeedsFrame = false;
         
-        if (window.matchMedia('(pointer: fine)').matches) {
+        if (cursor && window.matchMedia('(pointer: fine)').matches) {
+            const cursorLabel = cursor.querySelector('.cursor-label');
+            const isOG = () => document.documentElement.getAttribute('data-palette') === 'og';
+
+            const clearCursorLabel = () => {
+                cursor.classList.remove('cursor-text');
+                if (cursorLabel) cursorLabel.textContent = '';
+            };
+
+            function animateCursor() {
+                // Reborn is a tiny dot — stick tightly to the pointer.
+                // OG camera cursor can keep a light cinematic trail.
+                const ease = isOG() ? 0.22 : 0.55;
+                cursorX += (mouseX - cursorX) * ease;
+                cursorY += (mouseY - cursorY) * ease;
+                cursor.style.setProperty('--cx', cursorX.toFixed(1) + 'px');
+                cursor.style.setProperty('--cy', cursorY.toFixed(1) + 'px');
+                const stillMoving = Math.abs(mouseX - cursorX) > 0.15 || Math.abs(mouseY - cursorY) > 0.15;
+                if (stillMoving || cursorNeedsFrame) {
+                    cursorNeedsFrame = false;
+                    cursorRaf = requestAnimationFrame(animateCursor);
+                } else {
+                    // Snap residual error so it never feels stuck one pixel behind
+                    cursorX = mouseX;
+                    cursorY = mouseY;
+                    cursor.style.setProperty('--cx', cursorX.toFixed(1) + 'px');
+                    cursor.style.setProperty('--cy', cursorY.toFixed(1) + 'px');
+                    cursorRaf = null;
+                }
+            }
+
+            const kickCursor = () => {
+                cursorNeedsFrame = true;
+                if (!cursorRaf) cursorRaf = requestAnimationFrame(animateCursor);
+            };
+
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
+                kickCursor();
             }, { passive: true });
-            
-            function animateCursor() {
-                cursorX += (mouseX - cursorX) * 0.15;
-                cursorY += (mouseY - cursorY) * 0.15;
-                cursor.style.left = cursorX + 'px';
-                cursor.style.top = cursorY + 'px';
-                requestAnimationFrame(animateCursor);
-            }
-            animateCursor();
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && cursorRaf) {
+                    cancelAnimationFrame(cursorRaf);
+                    cursorRaf = null;
+                }
+            });
             
             // Hover effects - using original class name
             const hoverElements = document.querySelectorAll('a, button, .social-card, .exec-card, .team-card, .featured-card, .series-item');
@@ -4653,18 +4840,25 @@
             });
 
             // Reborn-only contextual cursor label ("VIEW" on social/work links)
-            const cursorLabel = cursor.querySelector('.cursor-label');
-            const isOG = () => document.documentElement.getAttribute('data-palette') === 'og';
             document.querySelectorAll('[data-cursor-label]').forEach(el => {
                 el.addEventListener('mouseenter', () => {
-                    if (isOG() || !cursorLabel) return;
-                    cursorLabel.textContent = el.getAttribute('data-cursor-label');
+                    if (isOG() || !cursorLabel) {
+                        clearCursorLabel();
+                        return;
+                    }
+                    cursorLabel.textContent = el.getAttribute('data-cursor-label') || '';
                     cursor.classList.add('cursor-text');
                 });
-                el.addEventListener('mouseleave', () => {
-                    cursor.classList.remove('cursor-text');
-                });
+                el.addEventListener('mouseleave', clearCursorLabel);
             });
+
+            // Theme switch can leave a stale Reborn label — wipe it for OG
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    setTimeout(() => { if (isOG()) clearCursorLabel(); }, 0);
+                });
+            }
         }
 
         // ============================================
@@ -4858,48 +5052,61 @@
             en: {
                 'nav-home': 'Home',
                 'nav-leadership': 'Leadership',
-                'nav-team': 'Team',
+                'nav-team': 'Global Team',
                 'nav-partners': 'Partners',
                 'nav-contact': 'Contact',
-                'hero-label': 'Visual Storytelling',
-                'hero-tagline': 'Crafting cinematic narratives for Formula 1, motorsport legends, and visionary brands worldwide.',
-                'hero-location': 'Based in Uzbekistan & UAE · Working Worldwide',
-                'hero-cta-primary': 'Start Project',
-                'hero-cta-secondary': 'View Work',
+                'hero-title': 'Visions Crafted.<br><em>Global Reach.</em>',
+                'hero-subtitle': 'Premium Media Service<br>Commercial Film Production',
+                'hero-description': 'We are <strong>Duneworks Productions</strong> — a global creative agency specializing in premium motorsport media and commercial film production. From the paddocks of Formula 1 to the deserts of cross-continental rallies, we capture the essence of motorsport with cinematic precision. Our work spans across FIA-sanctioned series, Formula 3, Asian Le Mans, and beyond.',
+                'hero-description-secondary': 'With teams across 9 countries and partnerships with world-leading brands, we deliver content that resonates with audiences worldwide. Every frame tells a story. Every project is a masterpiece.',
+                'hero-cta-primary': 'Start Your Project',
+                'hero-cta-secondary': 'View Our Work',
+                'hero-reborn-statement': 'Creative Technology<span aria-hidden="true">—</span>Media / Development / Production',
                 'scroll': 'Scroll',
                 'intro-label': 'The Agency',
                 'intro-title': 'Visions Crafted.<br>Global Reach.',
                 'intro-heading': 'We are <em>Duneworks Productions</em> — a global creative agency specializing in premium motorsport media and commercial film production.',
-                'intro-p1': 'From the paddocks of Formula 1 to the deserts of cross-continental rallies, we capture the essence of motorsport with cinematic precision.',
-                'intro-p2': 'With teams across 9 countries and partnerships with world-leading brands, we deliver content that resonates with audiences worldwide.',
+                'intro-p1': 'From the paddocks of Formula 1 to the deserts of cross-continental rallies, we capture the essence of motorsport with cinematic precision. Our work spans across FIA-sanctioned series, Formula 3, Asian Le Mans, and beyond.',
+                'intro-p2': 'With teams across 9 countries and partnerships with world-leading brands, we deliver content that resonates with audiences worldwide. Every frame tells a story. Every project is a masterpiece.',
                 'stat-countries': 'Countries',
                 'stat-partners': 'Partners',
                 'stat-f1': 'Formula 1',
+                'series-f1-title': 'Formula 1',
                 'series-f1': 'Premier motorsport content creation',
+                'series-fia-title': 'FIA Championships',
                 'series-fia': 'FIA-sanctioned racing series coverage',
+                'series-f3-title': 'Formula 3',
                 'series-f3': 'Rising talent and developmental series',
+                'series-lemans-title': 'Asian Le Mans',
                 'series-lemans': 'Endurance racing across Asia-Pacific',
-                'series-ferrari': 'Iconic supercar racing series content',
+                'series-media-title': 'Premium Media Service',
+                'series-media': 'For all events',
                 'social-label': 'Connect',
                 'social-title': 'Follow Our Journey',
                 'social-youtube-desc': 'YouTube Channel',
-                'social-youtube-text': 'Exclusive behind-the-scenes content, race highlights, and cinematic motorsport documentaries.',
+                'social-youtube-text': 'Exclusive behind-the-scenes content, race highlights, and cinematic motorsport documentaries from the world\'s greatest racing series.',
                 'social-insta1-desc': 'Photography',
-                'social-insta1-text': 'Stunning motorsport photography capturing the beauty, speed, and emotion of racing.',
+                'social-insta1-text': 'Stunning motorsport photography capturing the beauty, speed, and emotion of racing. Every shot tells a story from the world\'s most iconic circuits.',
                 'social-insta2-desc': 'Official Account',
-                'social-insta2-text': 'Official Duneworks Productions account showcasing our latest projects and exclusive content.',
+                'social-insta2-text': 'Official Duneworks Productions account showcasing our latest projects, team updates, and exclusive content from the world of motorsport media.',
                 'social-visit': 'Visit Channel',
                 'social-follow': 'Follow',
                 'social-contact-title': 'Work With Us',
-                'social-contact-text': 'Ready to elevate your brand with premium motorsport content?',
+                'social-contact-text': 'Ready to elevate your brand with premium motorsport content? Let\'s create something extraordinary together.',
                 'social-getintouch': 'Get in Touch',
                 'leadership-label': 'Leadership',
                 'leadership-title': 'The Visionaries',
-                'leadership-desc': 'Our executive team brings together decades of experience in motorsport media and creative production.',
-                'exec1-role': 'Casting Director',
-                'exec1-bio': 'Expert in talent acquisition and casting for motorsport productions, commercials, and brand campaigns.',
-                'exec2-role': 'Operations Manager',
-                'exec2-bio': 'Operations Manager ensuring seamless production logistics across global racing events and commercial shoots.',
+                'leadership-desc': 'Our executive team brings together decades of experience in motorsport media, creative production, and global brand strategy.',
+                'exec-daniel-role': 'Founder & Chief Executive Officer',
+                'exec-daniel-bio': 'Founder of Duneworks Productions. Photographer, cinematographer, and creative director leading the vision and growth of the company.',
+                'exec-sarvar-role': 'Operations Manager',
+                'exec-sarvar-bio': 'Manages the team and works to keep operations stable and efficient.',
+                'exec-abubakir-role': 'Producer',
+                'exec-abubakir-bio': 'Producer supporting Duneworks Productions across project planning and delivery.',
+                'exec-amirsaid-role': 'Brand Face',
+                'exec-amirsaid-bio': 'Represents Duneworks Productions as a public-facing brand presence.',
+                'exec-kamron-role': 'Social Media Manager',
+                'exec-kamron-bio': 'Manages Duneworks Productions social media presence, content planning, and community engagement across platforms.',
                 'global-label': 'Global Reach',
                 'global-title': 'Our Locations and People',
                 'global-desc': 'A diverse team of specialists bringing perspective from the world\'s most creative hubs.',
@@ -4924,133 +5131,217 @@
                 'featured-label': 'Trusted Collaborators',
                 'featured-title': 'Strategic Partners',
                 'partner-ngk-desc': 'Official Partner for Motorsport Media',
-                'partner-studio-desc': 'Studio, Logistics & Development Partner. Part of the Dune Network with Duneworks Productions',
+                'partner-studio-desc': 'Studio, Logistics & Development Partner<br>Part of the Dune Network with Duneworks Productions',
                 'partners-title': 'Partners & Companies We Have Worked For',
                 'contact-label': 'Contact',
                 'contact-title': "Let's Create Together",
-                'contact-desc': 'Ready to bring your vision to life? We\'re here to make it extraordinary.',
+                'contact-desc': 'Ready to bring your vision to life? Whether it\'s a Formula 1 paddock documentary, a commercial production, or brand content — we\'re here to make it extraordinary.',
                 'contact-booking': 'Booking Inquiries',
                 'contact-media': 'Media & Press',
                 'contact-email': 'Email',
-                'form-name': 'Name',
-                'form-email': 'Email',
-                'form-company': 'Company / Project',
-                'form-message': 'Message',
+                'form-name': 'Full Name',
+                'form-email': 'Email Address',
+                'form-company': 'Project Type',
+                'form-message': 'Your Vision',
                 'form-submit': 'Send Inquiry',
+                'ph-name': 'Your name',
+                'ph-email': 'your@email.com',
+                'ph-project': 'Project type',
+                'ph-message': 'Tell us about your project...',
                 'footer-tagline': 'Premium motorsport media and creative production for the world\'s leading brands.',
-                'footer-rights': 'All rights reserved.'
+                'footer-rights': 'All rights reserved.',
+                'chat-preview': 'Preview',
+                'chat-status': 'Demo Mode',
+                'chat-sneak': 'Early preview — Duna AI is still in development',
+                'chat-welcome-title': "Hello, I'm <span>Duna AI</span>",
+                'chat-welcome-text': 'Your creative production assistant. Ask me about booking sessions, our services, or navigating the site.',
+                'chat-s1': 'How do I book a session?',
+                'chat-s2': 'Who is Daniel Lee Buckley?',
+                'chat-s3': 'Tell me about Duneworks',
+                'chat-s4': 'What is Duna AI?',
+                'chat-s5': 'Where can I contact you?',
+                'chat-placeholder': 'Ask Duna AI anything...',
+                'chat-hint': 'Press Enter to send · Shift+Enter for new line'
             },
             ru: {
                 'nav-home': 'Главная',
                 'nav-leadership': 'Руководство',
-                'nav-team': 'Команда',
-                'nav-partners': 'Партнеры',
+                'nav-team': 'Глобальная команда',
+                'nav-partners': 'Партнёры',
                 'nav-contact': 'Контакты',
-                'hero-label': 'Визуальное Повествование',
-                'hero-tagline': 'Создание кинематографических историй для Формулы 1, легенд автоспорта и visionary brands по всему миру.',
-                'hero-location': 'Штаб-квартиры в Узбекистане и ОАЭ · Работаем по всему миру',
+                'hero-title': 'Воплощённые видения.<br><em>Глобальный охват.</em>',
+                'hero-subtitle': 'Премиальные медиа-услуги<br>Коммерческое кинопроизводство',
+                'hero-description': 'Мы — <strong>Duneworks Productions</strong>, глобальное креативное агентство, специализирующееся на премиальном автоспортивном медиа и коммерческом кинопроизводстве. От паддоков Формулы 1 до пустынь межконтинентальных ралли мы передаём дух автоспорта с кинематографической точностью. Наша работа охватывает серии FIA, Формулу 3, Asian Le Mans и многое другое.',
+                'hero-description-secondary': 'С командами в 9 странах и партнёрствами с ведущими мировыми брендами мы создаём контент, который находит отклик у аудитории по всему миру. Каждый кадр рассказывает историю. Каждый проект — шедевр.',
                 'hero-cta-primary': 'Начать проект',
                 'hero-cta-secondary': 'Наши работы',
-                'cta-primary': 'Начать Проект',
-                'cta-secondary': 'Наши Работы',
+                'hero-reborn-statement': 'Креативные технологии<span aria-hidden="true">—</span>Медиа / Разработка / Продакшн',
                 'scroll': 'Листать',
                 'intro-label': 'Агентство',
-                'intro-title': 'Воплощенные Видения.<br>Глобальный Охват.',
-                'intro-heading': 'Мы <em>Duneworks Productions</em> — глобальное креативное агентство, специализирующееся на премиальном автоспортивном контенте.',
+                'intro-title': 'Воплощённые видения.<br>Глобальный охват.',
+                'intro-heading': 'Мы — <em>Duneworks Productions</em>, глобальное креативное агентство, специализирующееся на премиальном автоспортивном медиа и коммерческом кинопроизводстве.',
+                'intro-p1': 'От паддоков Формулы 1 до пустынь межконтинентальных ралли мы передаём дух автоспорта с кинематографической точностью. Наша работа охватывает серии FIA, Формулу 3, Asian Le Mans и многое другое.',
+                'intro-p2': 'С командами в 9 странах и партнёрствами с ведущими мировыми брендами мы создаём контент, который находит отклик у аудитории по всему миру. Каждый кадр рассказывает историю. Каждый проект — шедевр.',
                 'stat-countries': 'Стран',
-                'stat-partners': 'Партнеров',
+                'stat-partners': 'Партнёров',
                 'stat-f1': 'Формула 1',
-                'series-f1': 'Создание премиального контента',
-                'series-fia': 'Освещение серий FIA',
-                'series-f3': 'Восходящие таланты',
-                'series-lemans': 'Гонки на выносливость',
-                'series-ferrari': 'Эксклюзивный контент',
-                'social-label': 'Контакты',
-                'social-title': 'Следите за Нами',
+                'series-f1-title': 'Формула 1',
+                'series-f1': 'Премиальное создание автоспортивного контента',
+                'series-fia-title': 'Чемпионаты FIA',
+                'series-fia': 'Освещение гоночных серий под санкцией FIA',
+                'series-f3-title': 'Формула 3',
+                'series-f3': 'Восходящие таланты и юниорские серии',
+                'series-lemans-title': 'Asian Le Mans',
+                'series-lemans': 'Гонки на выносливость в Азиатско-Тихоокеанском регионе',
+                'series-media-title': 'Премиальные медиа-услуги',
+                'series-media': 'Для всех событий',
+                'social-label': 'Связь',
+                'social-title': 'Следите за нашим путём',
+                'social-youtube-desc': 'YouTube-канал',
+                'social-youtube-text': 'Эксклюзивные закулисья, гоночные хайлайты и кинематографические автоспортивные документальные фильмы о величайших гоночных сериях мира.',
+                'social-insta1-desc': 'Фотография',
+                'social-insta1-text': 'Потрясающая автоспортивная фотография, передающая красоту, скорость и эмоции гонок. Каждый кадр — история с самых знаковых трасс мира.',
+                'social-insta2-desc': 'Официальный аккаунт',
+                'social-insta2-text': 'Официальный аккаунт Duneworks Productions с нашими последними проектами, новостями команды и эксклюзивным контентом из мира автоспортивных медиа.',
+                'social-visit': 'Перейти на канал',
+                'social-follow': 'Подписаться',
+                'social-contact-title': 'Работайте с нами',
+                'social-contact-text': 'Готовы поднять свой бренд с помощью премиального автоспортивного контента? Давайте создадим что-то выдающееся вместе.',
+                'social-getintouch': 'Связаться',
                 'leadership-label': 'Руководство',
-                'leadership-title': 'Видение Будущего',
-                'leadership-desc': 'Наша команда руководителей объединяет десятилетия опыта в автоспортивных медиа.',
-                'exec1-role': 'Кастинг-директор',
-                'exec1-bio': 'Эксперт в области подбора талантов и кастинга для автоспортивных продакшнов, рекламы и брендовых кампаний.',
-                'exec2-role': 'Операционный менеджер',
-                'exec2-bio': 'Операционный менеджер, обеспечивающий бесперебойную логистику производства на глобальных гоночных мероприятиях и коммерческих съемках.',
-                'global-label': 'Глобальное Присутствие',
-                'global-title': 'Наши Локации и Люди',
-                'global-desc': 'Разнообразная команда специалистов, приносящая перспективу из самых креативных центров мира.',
+                'leadership-title': 'Визионеры',
+                'leadership-desc': 'Наша команда руководителей объединяет десятилетия опыта в автоспортивных медиа, креативном продакшне и глобальной бренд-стратегии.',
+                'exec-daniel-role': 'Основатель и генеральный директор',
+                'exec-daniel-bio': 'Основатель Duneworks Productions. Фотограф, кинематографист и креативный директор, ведущий видение и рост компании.',
+                'exec-sarvar-role': 'Операционный менеджер',
+                'exec-sarvar-bio': 'Управляет командой и обеспечивает стабильную и эффективную работу.',
+                'exec-abubakir-role': 'Продюсер',
+                'exec-abubakir-bio': 'Продюсер, поддерживающий Duneworks Productions в планировании и реализации проектов.',
+                'exec-amirsaid-role': 'Лицо бренда',
+                'exec-amirsaid-bio': 'Представляет Duneworks Productions как публичное лицо бренда.',
+                'exec-kamron-role': 'Менеджер по соцсетям',
+                'exec-kamron-bio': 'Управляет присутствием Duneworks Productions в социальных сетях, планированием контента и взаимодействием с аудиторией.',
+                'global-label': 'Глобальный охват',
+                'global-title': 'Наши локации и люди',
+                'global-desc': 'Разнообразная команда специалистов, приносящая взгляд из самых креативных центров мира.',
                 'country-uz': 'Узбекистан',
-                'role-uz': 'Штаб-квартира и все производство',
-                'country-ae': 'ОАЭ',
-                'role-ae': 'Вторая штаб-квартира и главная для автоспорта',
+                'role-uz': 'Штаб-квартира и всё производство',
+                'country-ae': 'Объединённые Арабские Эмираты',
+                'role-ae': 'Вторая штаб-квартира и главная для автоспортивного продакшна',
                 'country-au': 'Австралия',
                 'role-au': 'Продакшн и кинематография',
                 'country-gb': 'Великобритания',
                 'role-gb': 'Менеджмент',
-                'country-za': 'ЮАР',
+                'country-za': 'Южная Африка',
                 'role-za': 'Менеджмент',
                 'country-pk': 'Пакистан',
-                'role-pk': 'Монтаж и пост-продакшн',
+                'role-pk': 'Монтаж и постпродакшн',
                 'country-ca': 'Канада',
                 'role-ca': 'Продакшн и фотография',
                 'country-in': 'Индия',
                 'role-in': 'Продакшн',
                 'country-kw': 'Кувейт',
                 'role-kw': 'Операции на Ближнем Востоке',
-                'team-secondary': 'Второй Офис',
-                'featured-label': 'Надежные Партнеры',
-                'featured-title': 'Стратегические Партнеры',
-                'partners-title': 'Партнеры и Компании',
+                'featured-label': 'Надёжные партнёры',
+                'featured-title': 'Стратегические партнёры',
+                'partner-ngk-desc': 'Официальный партнёр по автоспортивным медиа',
+                'partner-studio-desc': 'Студия, логистика и партнёр по разработке<br>Часть сети Dune Network вместе с Duneworks Productions',
+                'partners-title': 'Партнёры и компании, с которыми мы работали',
                 'contact-label': 'Контакты',
-                'contact-title': 'Создадим Вместе',
-                'contact-desc': 'Готовы воплотить ваше видение в жизнь? Мы здесь, чтобы сделать это экстраординарным.',
-                'form-name': 'Имя',
-                'form-email': 'Email',
-                'form-company': 'Компания',
-                'form-message': 'Сообщение',
-                'form-submit': 'Отправить',
-                'footer-tagline': 'Премиальные медиа и креативное производство для ведущих мировых брендов.',
-                'footer-rights': 'Все права защищены.'
+                'contact-title': 'Создадим вместе',
+                'contact-desc': 'Готовы воплотить ваше видение в жизнь? Документальный фильм с паддока Формулы 1, коммерческий продакшн или брендовый контент — мы здесь, чтобы сделать это выдающимся.',
+                'contact-booking': 'Заявки на бронирование',
+                'contact-media': 'Медиа и пресса',
+                'contact-email': 'Email',
+                'form-name': 'Полное имя',
+                'form-email': 'Адрес email',
+                'form-company': 'Тип проекта',
+                'form-message': 'Ваше видение',
+                'form-submit': 'Отправить заявку',
+                'ph-name': 'Ваше имя',
+                'ph-email': 'your@email.com',
+                'ph-project': 'Тип проекта',
+                'ph-message': 'Расскажите нам о вашем проекте...',
+                'footer-tagline': 'Премиальные автоспортивные медиа и креативное производство для ведущих мировых брендов.',
+                'footer-rights': 'Все права защищены.',
+                'chat-preview': 'Превью',
+                'chat-status': 'Демо-режим',
+                'chat-sneak': 'Ранний превью — Duna AI ещё в разработке',
+                'chat-welcome-title': 'Привет, я <span>Duna AI</span>',
+                'chat-welcome-text': 'Ваш ассистент по креативному продакшну. Спросите о бронировании, услугах или навигации по сайту.',
+                'chat-s1': 'Как забронировать сессию?',
+                'chat-s2': 'Кто такой Daniel Lee Buckley?',
+                'chat-s3': 'Расскажи о Duneworks',
+                'chat-s4': 'Что такое Duna AI?',
+                'chat-s5': 'Как с вами связаться?',
+                'chat-placeholder': 'Спросите Duna AI о чём угодно...',
+                'chat-hint': 'Enter — отправить · Shift+Enter — новая строка'
             },
             uz: {
-                'nav-home': 'Bosh Sahifa',
+                'nav-home': 'Bosh sahifa',
                 'nav-leadership': 'Rahbariyat',
-                'nav-team': 'Jamoa',
+                'nav-team': 'Global jamoa',
                 'nav-partners': 'Hamkorlar',
                 'nav-contact': 'Aloqa',
-                'hero-label': 'Vizual Hikoya',
-                'hero-tagline': 'Formula 1, avtosport afsonalari va dunyo bo\'ylab vizioner brendlar uchun kinematografik hikoyalar yaratish.',
-                'hero-location': 'O\'zbekiston va BAA da joylashgan · Butun dunyo bo\'ylab ishlaymiz',
-                'hero-cta-primary': 'Loyiha boshlash',
-                'hero-cta-secondary': 'Ishlarni ko\'rish',
-                'cta-primary': 'Loyiha Boshlash',
-                'cta-secondary': 'Ishlarimiz',
-                'scroll': 'Aylantiring',
+                'hero-title': 'Yaratilgan vizyonlar.<br><em>Global qamrov.</em>',
+                'hero-subtitle': 'Premium media xizmati<br>Tijorat kino ishlab chiqarish',
+                'hero-description': 'Biz — <strong>Duneworks Productions</strong>, premium avtosport media va tijorat kino ishlab chiqarishga ixtisoslashgan global ijodiy agentlik. Formula 1 paddoklaridan tortib qit\'alararo ralli cho\'llarigacha, avtosport mohiyatini kinematografik aniqlik bilan aks ettiramiz. Ishimiz FIA seriyalari, Formula 3, Asian Le Mans va undan tashqarini qamrab oladi.',
+                'hero-description-secondary': '9 mamlakatdagi jamoalar va dunyoning yetakchi brendlari bilan hamkorlik orqali biz butun dunyo auditoriyasiga ta\'sir qiladigan kontent yetkazamiz. Har bir kadr hikoya aytadi. Har bir loyiha — asar.',
+                'hero-cta-primary': 'Loyihani boshlash',
+                'hero-cta-secondary': 'Ishlarimizni ko\'rish',
+                'hero-reborn-statement': 'Ijodiy texnologiya<span aria-hidden="true">—</span>Media / Rivojlantirish / Ishlab chiqarish',
+                'scroll': 'Pastga',
                 'intro-label': 'Agentlik',
-                'intro-title': 'Yaratilgan Ko\'rishlar.<br>Global Qamrov.',
-                'intro-heading': 'Biz <em>Duneworks Productions</em> — premium avtosport kontenti va tijorat kinosi uchun global ijodiy agentlik.',
+                'intro-title': 'Yaratilgan vizyonlar.<br>Global qamrov.',
+                'intro-heading': 'Biz — <em>Duneworks Productions</em>, premium avtosport media va tijorat kino ishlab chiqarishga ixtisoslashgan global ijodiy agentlik.',
+                'intro-p1': 'Formula 1 paddoklaridan tortib qit\'alararo ralli cho\'llarigacha, avtosport mohiyatini kinematografik aniqlik bilan aks ettiramiz. Ishimiz FIA seriyalari, Formula 3, Asian Le Mans va undan tashqarini qamrab oladi.',
+                'intro-p2': '9 mamlakatdagi jamoalar va dunyoning yetakchi brendlari bilan hamkorlik orqali biz butun dunyo auditoriyasiga ta\'sir qiladigan kontent yetkazamiz. Har bir kadr hikoya aytadi. Har bir loyiha — asar.',
                 'stat-countries': 'Davlatlar',
                 'stat-partners': 'Hamkorlar',
                 'stat-f1': 'Formula 1',
-                'series-f1': 'Premium kontent yaratish',
-                'series-fia': 'FIA litsenziyali seriyalar',
-                'series-f3': 'Yosh iste\'dodlar',
-                'series-lemans': 'Chidamlilik poyalari',
-                'series-ferrari': 'Eksklyuziv kontent',
-                'social-label': 'Aloqa',
-                'social-title': 'Bizni Kuzating',
+                'series-f1-title': 'Formula 1',
+                'series-f1': 'Premium avtosport kontent yaratish',
+                'series-fia-title': 'FIA chempionatlari',
+                'series-fia': 'FIA litsenziyali poyga seriyalarini yoritish',
+                'series-f3-title': 'Formula 3',
+                'series-f3': 'Yosh iste\'dodlar va rivojlanish seriyalari',
+                'series-lemans-title': 'Asian Le Mans',
+                'series-lemans': 'Osiyo-Tinch okeani bo\'ylab chidamlilik poyalari',
+                'series-media-title': 'Premium media xizmati',
+                'series-media': 'Barcha tadbirlar uchun',
+                'social-label': 'Bog\'lanish',
+                'social-title': 'Safarimizni kuzating',
+                'social-youtube-desc': 'YouTube kanali',
+                'social-youtube-text': 'Dunyoning eng buyuk poyga seriyalaridan eksklyuziv sahna orti kontenti, poyga highlightlari va kinematografik avtosport hujjatli filmlari.',
+                'social-insta1-desc': 'Fotografiya',
+                'social-insta1-text': 'Poyganing go\'zalligi, tezligi va hissiyotini aks ettiruvchi ajoyib avtosport fotografiyasi. Har bir surat — dunyoning eng mashhur trassalaridan hikoya.',
+                'social-insta2-desc': 'Rasmiy akkaunt',
+                'social-insta2-text': 'Duneworks Productions rasmiy akkaunti — so\'nggi loyihalar, jamoa yangiliklari va avtosport media olamidan eksklyuziv kontent.',
+                'social-visit': 'Kanalga o\'tish',
+                'social-follow': 'Kuzatish',
+                'social-contact-title': 'Biz bilan ishlang',
+                'social-contact-text': 'Brendingizni premium avtosport kontenti bilan yuksaltirishga tayyormisiz? Keling, birgalikda ajoyib narsa yarataylik.',
+                'social-getintouch': 'Bog\'lanish',
                 'leadership-label': 'Rahbariyat',
-                'leadership-title': 'Kelajak Vizionerlari',
-                'leadership-desc': 'Bizning boshqaruv jamoamiz avtosport media sohasida o\'n yillik tajribani birlashtiradi.',
-                'exec1-role': 'Kasting Direktori',
-                'exec1-bio': 'Avtosport loyihalari, reklama va brend kampaniyalari uchun kasting va iste\'dodlarni jalb qilish bo\'yicha mutaxassis.',
-                'exec2-role': 'Operatsion Menejer',
-                'exec2-bio': 'Global poyga tadbirlari va tijorat suratga olish ishlarida ishlab chiqarish logistikasini uzluksiz ta\'minlaydigan operatsion menejer.',
-                'global-label': 'Global Mavjudlik',
-                'global-title': 'Bizning Lokatsiyalar va Odamlar',
-                'global-desc': 'Dunyoning eng ijodiy markazlaridan kelgan turli xil mutaxassislar jamoasi.',
+                'leadership-title': 'Vizyonerlar',
+                'leadership-desc': 'Boshqaruv jamoamiz avtosport media, ijodiy ishlab chiqarish va global brend strategiyasida o\'n yillik tajribani birlashtiradi.',
+                'exec-daniel-role': 'Asoschi va bosh ijrochi direktor',
+                'exec-daniel-bio': 'Duneworks Productions asoschisi. Fotograf, kinematograf va kompaniya vizyoni hamda o\'sishini boshqaruvchi ijodiy direktor.',
+                'exec-sarvar-role': 'Operatsion menejer',
+                'exec-sarvar-bio': 'Jamoani boshqaradi va ishlarning barqaror hamda samarali kechishini ta\'minlaydi.',
+                'exec-abubakir-role': 'Prodyuser',
+                'exec-abubakir-bio': 'Loyihalarni rejalashtirish va yetkazib berishda Duneworks Productionsni qo\'llab-quvvatlovchi prodyuser.',
+                'exec-amirsaid-role': 'Brend yuzi',
+                'exec-amirsaid-bio': 'Duneworks Productionsni jamoatchilik oldida brend yuzi sifatida ifodalaydi.',
+                'exec-kamron-role': 'Ijtimoiy tarmoqlar menejeri',
+                'exec-kamron-bio': 'Duneworks Productionsning ijtimoiy tarmoqlardagi ishtiroki, kontent rejalashtirish va auditoriya bilan aloqani boshqaradi.',
+                'global-label': 'Global qamrov',
+                'global-title': 'Lokatsiyalarimiz va odamlarimiz',
+                'global-desc': 'Dunyoning eng ijodiy markazlaridan kelgan turli mutaxassislar jamoasi.',
                 'country-uz': 'O\'zbekiston',
                 'role-uz': 'Bosh ofis va barcha ishlab chiqarish',
-                'country-ae': 'BAA',
-                'role-ae': 'Ikkinchi bosh ofis va avtosport uchun bosh ofis',
+                'country-ae': 'Birlashgan Arab Amirliklari',
+                'role-ae': 'Ikkinchi bosh ofis va avtosport ishlab chiqarish uchun asosiy ofis',
                 'country-au': 'Avstraliya',
                 'role-au': 'Ishlab chiqarish va kinematografiya',
                 'country-gb': 'Buyuk Britaniya',
@@ -5065,45 +5356,87 @@
                 'role-in': 'Ishlab chiqarish',
                 'country-kw': 'Quvayt',
                 'role-kw': 'Yaqin Sharq operatsiyalari',
-                'team-secondary': 'Ikkinchi Shtab',
-                'featured-label': 'Ishonchli Hamkorlar',
-                'featured-title': 'Strategik Hamkorlar',
-                'partners-title': 'Hamkorlar va Kompaniyalar',
+                'featured-label': 'Ishonchli hamkorlar',
+                'featured-title': 'Strategik hamkorlar',
+                'partner-ngk-desc': 'Avtosport media bo\'yicha rasmiy hamkor',
+                'partner-studio-desc': 'Studiya, logistika va rivojlantirish hamkori<br>Duneworks Productions bilan Dune Networkning bir qismi',
+                'partners-title': 'Hamkorlar va ishlagan kompaniyalarimiz',
                 'contact-label': 'Aloqa',
-                'contact-title': 'Birga Yarataylik',
-                'contact-desc': 'Tasavvuringizni hayotga keltirishga tayyormisiz? Biz uni ajoyib qilish uchun shu yerdamiz.',
-                'form-name': 'Ism',
-                'form-email': 'Email',
-                'form-company': 'Kompaniya',
-                'form-message': 'Xabar',
-                'form-submit': 'Yuborish',
-                'footer-tagline': 'Yetakchi jahon brendlari uchun premium avtosport media va ijodiy ishlab chiqarish.',
-                'footer-rights': 'Barcha huquqlar himoyalangan.'
+                'contact-title': 'Birga yarataylik',
+                'contact-desc': 'Vizyoningizni hayotga keltirishga tayyormisiz? Formula 1 paddok hujjatli filmi, tijorat ishlab chiqarish yoki brend kontenti — biz uni ajoyib qilish uchun shu yerdamiz.',
+                'contact-booking': 'Bron so\'rovlari',
+                'contact-media': 'Media va matbuot',
+                'contact-email': 'Email',
+                'form-name': 'To\'liq ism',
+                'form-email': 'Email manzil',
+                'form-company': 'Loyiha turi',
+                'form-message': 'Sizning vizyoningiz',
+                'form-submit': 'So\'rov yuborish',
+                'ph-name': 'Ismingiz',
+                'ph-email': 'your@email.com',
+                'ph-project': 'Loyiha turi',
+                'ph-message': 'Loyihangiz haqida gapirib bering...',
+                'footer-tagline': 'Dunyoning yetakchi brendlari uchun premium avtosport media va ijodiy ishlab chiqarish.',
+                'footer-rights': 'Barcha huquqlar himoyalangan.',
+                'chat-preview': 'Preview',
+                'chat-status': 'Demo rejim',
+                'chat-sneak': 'Erta preview — Duna AI hali ishlab chiqilmoqda',
+                'chat-welcome-title': 'Salom, men <span>Duna AI</span>',
+                'chat-welcome-text': 'Sizning ijodiy ishlab chiqarish yordamchingiz. Bron, xizmatlar yoki sayt navigatsiyasi haqida so\'rang.',
+                'chat-s1': 'Qanday qilib sessiya bron qilaman?',
+                'chat-s2': 'Daniel Lee Buckley kim?',
+                'chat-s3': 'Duneworks haqida aytib bering',
+                'chat-s4': 'Duna AI nima?',
+                'chat-s5': 'Qayerdan bog\'lanish mumkin?',
+                'chat-placeholder': 'Duna AI dan so\'rang...',
+                'chat-hint': 'Enter — yuborish · Shift+Enter — yangi qator'
             }
         };
         
+        let activeLang = 'en';
         function setLanguage(lang) {
             const t = translations[lang];
             if (!t) return;
+            activeLang = lang;
+            document.documentElement.setAttribute('lang', lang === 'uz' ? 'uz' : lang);
             
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (t[key]) {
-                    if (el.innerHTML !== t[key]) {
-                        el.innerHTML = t[key];
-                    }
+                if (t[key] != null) {
+                    el.innerHTML = t[key];
                 }
             });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key] != null) el.setAttribute('placeholder', t[key]);
+            });
+
+            document.querySelectorAll('[data-i18n-prompt]').forEach(el => {
+                const key = el.getAttribute('data-i18n-prompt');
+                if (t[key] != null) el.setAttribute('data-prompt', t[key]);
+            });
+
+            // Keep chat demo status in sync if JS previously overwrote it
+            const statusEl = document.getElementById('dunaChatStatus');
+            if (statusEl && t['chat-status']) statusEl.textContent = t['chat-status'];
             
             // Update flag and label
             const flagMap = { en: 'gb', ru: 'ru', uz: 'uz' };
             currentLang.textContent = lang.toUpperCase();
             langToggle.querySelector('.fi').className = `fi fi-${flagMap[lang]}`;
+            try { localStorage.setItem('dw-lang', lang); } catch (e) {}
             
             // Close dropdown
             langDropdown.classList.remove('active');
         }
         
+        // Restore saved language
+        try {
+            const savedLang = localStorage.getItem('dw-lang');
+            if (savedLang && translations[savedLang]) setLanguage(savedLang);
+        } catch (e) {}
+
         // Language toggle
         langToggle.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -5140,6 +5473,20 @@
         });
         
         revealElements.forEach(el => revealObserver.observe(el));
+
+        // Pause partner marquee while off-screen (saves continuous compositor work)
+        (function () {
+            const marquee = document.querySelector('.marquee-container');
+            if (!marquee || !('IntersectionObserver' in window)) return;
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    marquee.classList.toggle('is-paused', !entry.isIntersecting);
+                });
+            }, { rootMargin: '80px 0px' });
+            io.observe(marquee);
+            // Start paused until first intersection callback
+            marquee.classList.add('is-paused');
+        })();
         
         // ============================================
         // FORM HANDLING - FormSubmit.co Integration
@@ -5322,8 +5669,13 @@ IMPORTANT: Keep responses focused on Duneworks-related topics. If asked about un
             const createParticles = () => {
                 if (!elements.particles) return;
                 elements.particles.innerHTML = '';
-                
-                for (let i = 0; i < 15; i++) {
+
+                const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+                if (reduceMotion || isMobile || document.documentElement.classList.contains('lite-mode')) return;
+
+                const count = 6;
+                for (let i = 0; i < count; i++) {
                     const particle = document.createElement('div');
                     particle.className = 'duna-particle';
                     particle.style.left = Math.random() * 100 + '%';
@@ -5989,7 +6341,8 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                 
                 const statusEl = document.getElementById('dunaChatStatus');
                 if (statusEl) {
-                    statusEl.textContent = 'Demo Mode';
+                    const langPack = (typeof translations !== 'undefined' && translations[typeof activeLang !== 'undefined' ? activeLang : 'en']) || null;
+                    statusEl.textContent = (langPack && langPack['chat-status']) || 'Demo Mode';
                     statusEl.style.color = 'var(--duna-text-tertiary)';
                 }
                 
@@ -6057,9 +6410,9 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                 <div class="duna-chat-title">
                     <h3>
                         Duna AI
-                        <span class="duna-preview-badge">Preview</span>
+                        <span class="duna-preview-badge" data-i18n="chat-preview">Preview</span>
                     </h3>
-                    <span class="duna-chat-status" id="dunaChatStatus">Online</span>
+                    <span class="duna-chat-status" id="dunaChatStatus" data-i18n="chat-status">Demo Mode</span>
                 </div>
             </div>
             <div class="duna-chat-actions">
@@ -6092,7 +6445,7 @@ What would you like to know more about? Or feel free to ask me about our upcomin
             <!-- Sneak Peek Announcement -->
             <div class="duna-sneak-peek" id="dunaSneakPeek">
                 <div class="duna-sneak-peek-dot"></div>
-                <h4>Early preview — Duna AI is still in development</h4>
+                <h4 data-i18n="chat-sneak">Early preview — Duna AI is still in development</h4>
             </div>
 
             <!-- Welcome Screen -->
@@ -6105,14 +6458,14 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                         <path d="M16 10h.01"/>
                     </svg>
                 </div>
-                <h2>Hello, I'm <span>Duna AI</span></h2>
-                <p>Your creative production assistant. Ask me about booking sessions, our services, or navigating the site.</p>
+                <h2 data-i18n="chat-welcome-title">Hello, I'm <span>Duna AI</span></h2>
+                <p data-i18n="chat-welcome-text">Your creative production assistant. Ask me about booking sessions, our services, or navigating the site.</p>
                 <div class="duna-suggestions">
-                    <button class="duna-suggestion-chip" data-prompt="How do I book a session?">How do I book a session?</button>
-                    <button class="duna-suggestion-chip" data-prompt="Who is Daniel Lee Buckley?">Who is Daniel Lee Buckley?</button>
-                    <button class="duna-suggestion-chip" data-prompt="Tell me about Duneworks">Tell me about Duneworks</button>
-                    <button class="duna-suggestion-chip" data-prompt="What is Duna AI?">What is Duna AI?</button>
-                    <button class="duna-suggestion-chip" data-prompt="Where can I contact you?">Where can I contact you?</button>
+                    <button class="duna-suggestion-chip" data-prompt="How do I book a session?" data-i18n="chat-s1" data-i18n-prompt="chat-s1">How do I book a session?</button>
+                    <button class="duna-suggestion-chip" data-prompt="Who is Daniel Lee Buckley?" data-i18n="chat-s2" data-i18n-prompt="chat-s2">Who is Daniel Lee Buckley?</button>
+                    <button class="duna-suggestion-chip" data-prompt="Tell me about Duneworks" data-i18n="chat-s3" data-i18n-prompt="chat-s3">Tell me about Duneworks</button>
+                    <button class="duna-suggestion-chip" data-prompt="What is Duna AI?" data-i18n="chat-s4" data-i18n-prompt="chat-s4">What is Duna AI?</button>
+                    <button class="duna-suggestion-chip" data-prompt="Where can I contact you?" data-i18n="chat-s5" data-i18n-prompt="chat-s5">Where can I contact you?</button>
                 </div>
             </div>
             
@@ -6148,7 +6501,7 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                 <textarea 
                     class="duna-chat-input" 
                     id="dunaChatInput" 
-                    placeholder="Ask Duna AI anything..." 
+                    placeholder="Ask Duna AI anything..." data-i18n-placeholder="chat-placeholder" 
                     rows="1"
                     aria-label="Message input"
                 ></textarea>
@@ -6159,7 +6512,7 @@ What would you like to know more about? Or feel free to ask me about our upcomin
                     </svg>
                 </button>
             </div>
-            <p class="duna-chat-hint">Press Enter to send · Shift+Enter for new line</p>
+            <p class="duna-chat-hint" data-i18n="chat-hint">Press Enter to send · Shift+Enter for new line</p>
         </div>
     </div>
 </body>
