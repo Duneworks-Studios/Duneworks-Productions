@@ -680,8 +680,8 @@
             left: 0;
             top: 0;
             pointer-events: none;
-            /* Above Duna chat (10001) and theme wipe (10002) so it never vanishes over UI chrome */
-            z-index: 10050;
+            /* Above lightbox (15000) and its close button (16000) */
+            z-index: 16001;
             --cx: 0px;
             --cy: 0px;
             --cs: 1;
@@ -1826,6 +1826,733 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ============================================
+           SELECTED FILMS — CINEMA REEL GALLERY
+           ============================================ */
+
+        .showreel {
+            background: #070708;
+            position: relative;
+        }
+
+        /* Subtle ambient glow */
+        .showreel-ambient {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .showreel-ambient::before {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 500px;
+            left: 50%;
+            top: -100px;
+            transform: translateX(-50%);
+            background: radial-gradient(ellipse, rgba(201,169,98,0.07) 0%, transparent 65%);
+            filter: blur(40px);
+        }
+
+        .showreel-header {
+            max-width: var(--max-width);
+            margin: 0 auto var(--space-2xl);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: var(--space-xl);
+        }
+
+        .showreel-header .section-header {
+            margin: 0;
+            text-align: left;
+        }
+
+        .showreel-header .section-label { color: rgba(201,169,98,0.9); }
+        :root[data-palette="reborn"] .showreel-header .section-label { color: rgba(255,255,255,0.5); }
+
+        .showreel-header .section-title { color: #fafafa; }
+        .showreel-header .section-description { color: rgba(255,255,255,0.38); margin-top: var(--space-md); }
+
+        .showreel-controls {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            padding-bottom: 4px;
+        }
+
+        .showreel-control {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+        .showreel-control:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.28);
+        }
+
+        /* Scroll track */
+        .showreel-track {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: clamp(200px, 20vw, 268px);
+            gap: 16px;
+            overflow-x: auto;
+            overscroll-behavior-inline: contain;
+            scroll-snap-type: inline mandatory;
+            padding: 4px 4px 28px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.14) transparent;
+        }
+        .showreel-track::-webkit-scrollbar { height: 3px; }
+        .showreel-track::-webkit-scrollbar-track { background: transparent; }
+        .showreel-track::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.14);
+            border-radius: 999px;
+        }
+
+        /* Portrait cinema card */
+        .reel-card {
+            position: relative;
+            aspect-ratio: 9 / 16;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            scroll-snap-align: start;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            background: #0a0a0a;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.2s ease;
+        }
+
+        /* Cinematic vignette overlay — semi-transparent so thumbnails show through */
+        .reel-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.18) 0%,
+                rgba(0,0,0,0.08) 30%,
+                rgba(0,0,0,0.22) 60%,
+                rgba(0,0,0,0.82) 100%
+            );
+            transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+            z-index: 0;
+        }
+        .reel-card:hover::before { transform: scale(1.05); }
+
+        /* Film grain texture */
+        .reel-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+            background-size: 160px 160px;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Hover border glow layer */
+        .reel-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid rgba(255,255,255,0.07);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .reel-card:hover .reel-glow {
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 50px rgba(255,255,255,0.03);
+        }
+
+        /* Large faded watermark number */
+        .reel-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(80px, 14vw, 130px);
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            color: rgba(255,255,255,0.028);
+            user-select: none;
+            pointer-events: none;
+            z-index: 2;
+            line-height: 1;
+        }
+
+        /* Circular play button */
+        .reel-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 3;
+            width: 64px;
+            height: 64px;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,0.08);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 50%;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                        background 0.25s ease,
+                        box-shadow 0.25s ease;
+        }
+        .reel-play svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+            margin-left: 3px;
+            filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+        }
+        .reel-card:hover .reel-play {
+            transform: translate(-50%, -50%) scale(1.14);
+            background: rgba(255,255,255,0.16);
+            box-shadow: 0 0 0 14px rgba(255,255,255,0.055), 0 8px 36px rgba(0,0,0,0.5);
+        }
+
+        /* Top badge */
+        .reel-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: rgba(5,5,6,0.65);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 999px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .reel-badge i { font-size: 0.62rem; color: rgba(255,255,255,0.45); }
+        .reel-badge span {
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+        }
+
+        /* Bottom gradient meta */
+        .reel-meta {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 3;
+            padding: 60px 18px 20px;
+            background: linear-gradient(to top, rgba(4,4,5,0.95) 0%, transparent 100%);
+        }
+        .reel-index {
+            display: block;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .reel-client {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.88);
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 3px;
+        }
+        .reel-category {
+            display: block;
+            font-size: 0.64rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.32);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* ---- Reel Lightbox ---- */
+        .reel-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 15000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.94);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.28s ease, visibility 0.28s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .reel-lightbox.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ── Lightbox shell — dimensions set by JS per video aspect ratio ── */
+        .reel-lightbox-inner {
+            position: relative;
+            /* JS sets width + height dynamically; these are safety guards */
+            max-width: calc(100vw - 20px);
+            max-height: calc(100svh - 20px);
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 40px 120px rgba(0,0,0,0.97);
+            transform: scale(0.94);
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .reel-lightbox.open .reel-lightbox-inner { transform: scale(1); }
+
+        /* ── Native video element ─────────────────────────────── */
+        .reel-lightbox-inner video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: #000;
+        }
+
+        /* ── Custom controls overlay ──────────────────────────── */
+        .reel-player-ui {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border-radius: 20px;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+        .reel-player-ui.hidden { opacity: 0; }
+
+        /* gradient bar at bottom */
+        .reel-player-bar {
+            padding: 12px 16px 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+            pointer-events: all;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* scrub — native range input, fully styled */
+        .reel-scrub {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(to right, #fff var(--pct,0%), rgba(255,255,255,0.25) var(--pct,0%));
+            cursor: pointer;
+            outline: none;
+            border: none;
+            transition: height 0.15s ease;
+            display: block;
+        }
+        .reel-scrub:hover { height: 5px; }
+        .reel-scrub::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 13px; height: 13px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 4px rgba(0,0,0,0.4);
+        }
+        .reel-scrub::-moz-range-thumb {
+            width: 13px; height: 13px;
+            background: #fff;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* icon row */
+        .reel-ctrl-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .reel-ctrl-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px;
+            display: grid;
+            place-items: center;
+            opacity: 0.85;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            pointer-events: all;
+        }
+        .reel-ctrl-btn:hover { opacity: 1; transform: scale(1.12); }
+        .reel-ctrl-time {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.65);
+            letter-spacing: 0.04em;
+            font-feature-settings: "tnum";
+            margin-left: auto;
+        }
+
+        /* big center play indicator (flashes on tap) */
+        .reel-center-play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .reel-center-icon {
+            width: 68px; height: 68px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0.7);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .reel-center-icon.flash {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* close button */
+        .reel-lightbox-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 16000;
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 50%;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            transition: background 0.2s ease, transform 0.25s ease;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .reel-lightbox-close:hover {
+            background: rgba(255,255,255,0.15);
+            transform: rotate(90deg) scale(1.05);
+        }
+
+        /* missing-file fallback */
+        .reel-video-missing {
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: rgba(255,255,255,0.35);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 20px;
+        }
+        .reel-video-missing i { font-size: 2rem; margin-bottom: 6px; }
+
+        @keyframes reelSpin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .showreel-header { flex-wrap: wrap; gap: var(--space-md); }
+            .showreel-controls { display: none; }
+            .showreel-track {
+                grid-auto-columns: clamp(150px, 40vw, 220px);
+                gap: 12px;
+                padding-bottom: 20px;
+            }
+            .reel-lightbox-inner {
+                max-width: calc(100vw - 10px);
+                max-height: calc(100svh - 10px);
+            }
+            .reel-play { width: 54px; height: 54px; }
+            .reel-play svg { width: 17px; height: 17px; }
+        }
+
+        /* ============================================
+           PHOTOGRAPHY SECTION
+           ============================================ */
+
+        .photos {
+            background: #070708;
+            position: relative;
+            overflow: hidden;
+            contain-intrinsic-size: 1px 980px;
+        }
+
+        .photos-ambient {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .photos-ambient::before {
+            content: '';
+            position: absolute;
+            width: 720px;
+            height: 420px;
+            left: 50%;
+            top: -80px;
+            transform: translateX(-50%);
+            background: radial-gradient(ellipse, rgba(201,169,98,0.06) 0%, transparent 65%);
+            filter: blur(40px);
+        }
+        :root[data-palette="reborn"] .photos-ambient::before {
+            background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 65%);
+        }
+
+        .photos-header {
+            max-width: var(--max-width);
+            margin: 0 auto var(--space-2xl);
+        }
+        .photos-header .section-header { margin: 0; text-align: left; }
+        .photos-header .section-label { color: rgba(201,169,98,0.9); }
+        :root[data-palette="reborn"] .photos-header .section-label { color: rgba(255,255,255,0.5); }
+        .photos-header .section-title { color: #fafafa; }
+        .photos-header .section-description {
+            color: rgba(255,255,255,0.38);
+            margin-top: var(--space-md);
+        }
+
+        .photos-stage {
+            margin-left: calc(-1 * var(--container-padding));
+            margin-right: calc(-1 * var(--container-padding));
+            width: calc(100% + 2 * var(--container-padding));
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            mask-image: linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+        }
+
+        .photos-row {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .photos-strip {
+            display: flex;
+            width: max-content;
+            will-change: transform;
+            contain: layout paint;
+            animation: marquee 55s linear infinite;
+        }
+        .photos-row:nth-child(2) .photos-strip {
+            animation-duration: 72s;
+            animation-direction: reverse;
+        }
+        .photos-row:nth-child(3) .photos-strip { animation-duration: 48s; }
+        .photos-strip.is-paused { animation-play-state: paused; }
+
+        .photos-set {
+            display: flex;
+            gap: 14px;
+            padding-right: 14px;
+            flex-shrink: 0;
+        }
+
+        .photos-tile {
+            flex-shrink: 0;
+            height: 240px;
+            padding: 0;
+            margin: 0;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 2px;
+            background: #0c0c0e;
+            overflow: hidden;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease, filter 0.45s ease;
+        }
+        .photos-tile img {
+            display: block;
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+            pointer-events: none;
+            transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), filter 0.45s ease;
+        }
+        .photos-tile:hover {
+            border-color: rgba(255,255,255,0.22);
+            transform: translateY(-4px);
+            z-index: 2;
+        }
+        .photos-tile:hover img {
+            transform: scale(1.06);
+            filter: brightness(1.08);
+        }
+
+        /* Photo lightbox */
+        .photo-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 15000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.94);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.28s ease, visibility 0.28s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .photo-lightbox.open { opacity: 1; visibility: visible; }
+
+        .photo-lightbox-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 16000;
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1rem;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .photo-lightbox-close:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.35);
+        }
+
+        .photo-lightbox-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 16000;
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .photo-lightbox-nav:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.32);
+        }
+        .photo-lightbox-prev { left: 20px; }
+        .photo-lightbox-next { right: 20px; }
+
+        .photo-lightbox-inner {
+            max-width: min(96vw, 1400px);
+            max-height: calc(100svh - 80px);
+            transform: scale(0.94);
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.22s ease;
+            opacity: 1;
+        }
+        .photo-lightbox.open .photo-lightbox-inner { transform: scale(1); }
+        .photo-lightbox-inner.is-switching { opacity: 0.35; }
+
+        .photo-lightbox-inner img {
+            display: block;
+            max-width: 100%;
+            max-height: calc(100svh - 80px);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 2px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+        }
+
+        .photo-lightbox-counter {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 16000;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            font-feature-settings: "tnum";
+        }
+
+        @media (max-width: 900px) {
+            .photos-tile { height: 180px; }
+            .photos-stage { gap: 12px; }
+            .photos-set { gap: 12px; padding-right: 12px; }
+        }
+        @media (max-width: 640px) {
+            .photos-tile { height: 140px; }
+            .photos-stage { gap: 10px; }
+            .photos-set { gap: 10px; padding-right: 10px; }
+            .photo-lightbox-nav { width: 40px; height: 40px; }
+            .photo-lightbox-prev { left: 10px; }
+            .photo-lightbox-next { right: 10px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .photos-strip { animation: none !important; }
+            .photos-set[data-clone="true"] { display: none !important; }
+            .photos-stage {
+                mask-image: none;
+                -webkit-mask-image: none;
+            }
+            .photos-row { overflow: visible; }
+            .photos-strip {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .photos-set {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding-right: 0;
+                width: 100%;
+            }
+        }
         
         /* ============================================
            LEADERSHIP SECTION
@@ -2887,6 +3614,7 @@
         .perf-paused .hero-orbit,
         .perf-paused .hero-light-sweep,
         .perf-paused .marquee-container,
+        .perf-paused .photos-strip,
         .perf-paused .duna-particle {
             animation-play-state: paused !important;
         }
@@ -4199,7 +4927,7 @@
             <!-- CTA -->
             <div class="hero-bottom">
                 <a href="#contact" class="hero-cta hero-cta-primary" data-i18n="hero-cta-primary">Start Your Project</a>
-                <a href="#contact" class="hero-cta hero-cta-secondary" data-i18n="hero-cta-secondary">View Our Work</a>
+                <a href="#showreel" class="hero-cta hero-cta-secondary" data-i18n="hero-cta-secondary">View Our Work</a>
             </div>
         </div>
 
@@ -4393,6 +5121,137 @@
             </div>
         </div>
     </section>
+
+    <!-- Selected Films -->
+    <section class="section showreel" id="showreel">
+        <div class="showreel-ambient" aria-hidden="true"></div>
+
+        <div class="showreel-header reveal">
+            <div class="section-header">
+                <div class="section-label" data-i18n="showreel-label">Selected Work</div>
+                <h2 class="section-title" data-i18n="showreel-title">Films in Motion</h2>
+                <p class="section-description" data-i18n="showreel-desc">This is some of our work.</p>
+            </div>
+            <div class="showreel-controls">
+                <button class="showreel-control" type="button" data-reel-direction="-1" data-i18n-aria="showreel-prev" aria-label="Previous videos">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                </button>
+                <button class="showreel-control" type="button" data-reel-direction="1" data-i18n-aria="showreel-next" aria-label="Next videos">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="showreel-track reveal reveal-delay-1" data-i18n-aria="showreel-gallery" aria-label="Video gallery">
+
+            <article class="reel-card" data-reel-video="assets/videos/reel-01.mp4" tabindex="0" role="button" aria-label="Play: Sippy.uz — Commercial Film">
+                <div class="reel-watermark" aria-hidden="true">01</div>
+                <div class="reel-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="reel-glow" aria-hidden="true"></div>
+                <div class="reel-meta">
+                    <span class="reel-index">01 / 06</span>
+                    <span class="reel-client">Sippy.uz</span>
+                    <span class="reel-category">Commercial Film</span>
+                </div>
+            </article>
+
+            <article class="reel-card" data-reel-video="assets/videos/reel-02.mp4" tabindex="0" role="button" aria-label="Play: Asian Le Mans Series — Motorsport">
+                <div class="reel-watermark" aria-hidden="true">02</div>
+                <div class="reel-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="reel-glow" aria-hidden="true"></div>
+                <div class="reel-meta">
+                    <span class="reel-index">02 / 06</span>
+                    <span class="reel-client">Asian Le Mans Series</span>
+                    <span class="reel-category">Motorsport</span>
+                </div>
+            </article>
+
+            <article class="reel-card" data-reel-video="assets/videos/reel-03.mp4" tabindex="0" role="button" aria-label="Play: Dubai Autodrome — Motorsport">
+                <div class="reel-watermark" aria-hidden="true">03</div>
+                <div class="reel-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="reel-glow" aria-hidden="true"></div>
+                <div class="reel-meta">
+                    <span class="reel-index">03 / 06</span>
+                    <span class="reel-client">Dubai Autodrome</span>
+                    <span class="reel-category">Motorsport</span>
+                </div>
+            </article>
+
+            <article class="reel-card" data-reel-video="assets/videos/reel-04.mp4" tabindex="0" role="button" aria-label="Play: Asian Le Mans Series — Highlights">
+                <div class="reel-watermark" aria-hidden="true">04</div>
+                <div class="reel-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="reel-glow" aria-hidden="true"></div>
+                <div class="reel-meta">
+                    <span class="reel-index">04 / 06</span>
+                    <span class="reel-client">Asian Le Mans Series</span>
+                    <span class="reel-category">Highlights</span>
+                </div>
+            </article>
+
+            <article class="reel-card" data-reel-video="assets/videos/reel-05.mp4" tabindex="0" role="button" aria-label="Play: Amirsaid Samigjanov — Cinematic">
+                <div class="reel-watermark" aria-hidden="true">05</div>
+                <div class="reel-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="reel-glow" aria-hidden="true"></div>
+                <div class="reel-meta">
+                    <span class="reel-index">05 / 06</span>
+                    <span class="reel-client">Amirsaid Samigjanov</span>
+                    <span class="reel-category">Cinematic</span>
+                </div>
+            </article>
+
+            <article class="reel-card" data-reel-video="assets/videos/reel-06.mp4" tabindex="0" role="button" aria-label="Play: Ferrari 488 Spider — Automotive">
+                <div class="reel-watermark" aria-hidden="true">06</div>
+                <div class="reel-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="reel-glow" aria-hidden="true"></div>
+                <div class="reel-meta">
+                    <span class="reel-index">06 / 06</span>
+                    <span class="reel-client">Ferrari 488 Spider</span>
+                    <span class="reel-category">Automotive</span>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- Reel Lightbox — native HTML5 video player -->
+    <div class="reel-lightbox" id="reelLightbox" role="dialog" aria-modal="true" aria-label="Video player">
+        <button class="reel-lightbox-close" id="reelLightboxClose" aria-label="Close video">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="reel-lightbox-inner" id="reelLightboxInner"></div>
+    </div>
+
+    <!-- Photography -->
+    <section class="section photos" id="photos">
+        <div class="photos-ambient" aria-hidden="true"></div>
+
+        <div class="photos-header reveal">
+            <div class="section-header">
+                <div class="section-label" data-i18n="photos-label">Stills</div>
+                <h2 class="section-title" data-i18n="photos-title">Photography</h2>
+                <p class="section-description" data-i18n="photos-desc">This is some of our photos.</p>
+            </div>
+        </div>
+
+        <div class="photos-stage reveal reveal-delay-1" id="photosStage" data-i18n-aria="photos-gallery" aria-label="Photo gallery"></div>
+    </section>
+
+    <!-- Photo Lightbox -->
+    <div class="photo-lightbox" id="photoLightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+        <button class="photo-lightbox-close" id="photoLightboxClose" type="button" aria-label="Close photo">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="photo-lightbox-nav photo-lightbox-prev" id="photoLightboxPrev" type="button" aria-label="Previous photo">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="photo-lightbox-nav photo-lightbox-next" id="photoLightboxNext" type="button" aria-label="Next photo">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="photo-lightbox-inner" id="photoLightboxInner">
+            <img id="photoLightboxImg" src="" alt="">
+        </div>
+        <div class="photo-lightbox-counter" id="photoLightboxCounter" aria-live="polite"></div>
+    </div>
 
     <!-- Executive Team -->
     <section class="section leadership" id="leadership">
@@ -5095,6 +5954,17 @@
                 'social-contact-title': 'Work With Us',
                 'social-contact-text': 'Ready to elevate your brand with premium motorsport content? Let\'s create something extraordinary together.',
                 'social-getintouch': 'Get in Touch',
+                'showreel-label': 'Selected Work',
+                'showreel-title': 'Films in Motion',
+                'showreel-desc': 'This is some of our work.',
+                'showreel-open': 'Watch on Instagram',
+                'showreel-prev': 'Previous videos',
+                'showreel-next': 'Next videos',
+                'showreel-gallery': 'Instagram video gallery',
+                'photos-label': 'Stills',
+                'photos-title': 'Photography',
+                'photos-desc': 'This is some of our photos.',
+                'photos-gallery': 'Photo gallery',
                 'leadership-label': 'Leadership',
                 'leadership-title': 'The Visionaries',
                 'leadership-desc': 'Our executive team brings together decades of experience in motorsport media, creative production, and global brand strategy.',
@@ -5209,6 +6079,17 @@
                 'social-contact-title': 'Работайте с нами',
                 'social-contact-text': 'Готовы поднять свой бренд с помощью премиального автоспортивного контента? Давайте создадим что-то выдающееся вместе.',
                 'social-getintouch': 'Связаться',
+                'showreel-label': 'Избранные работы',
+                'showreel-title': 'Фильмы в движении',
+                'showreel-desc': 'Это часть наших работ.',
+                'showreel-open': 'Смотреть в Instagram',
+                'showreel-prev': 'Предыдущие видео',
+                'showreel-next': 'Следующие видео',
+                'showreel-gallery': 'Галерея видео из Instagram',
+                'photos-label': 'Кадры',
+                'photos-title': 'Фотография',
+                'photos-desc': 'Это часть наших фотографий.',
+                'photos-gallery': 'Фотогалерея',
                 'leadership-label': 'Руководство',
                 'leadership-title': 'Визионеры',
                 'leadership-desc': 'Наша команда руководителей объединяет десятилетия опыта в автоспортивных медиа, креативном продакшне и глобальной бренд-стратегии.',
@@ -5323,6 +6204,17 @@
                 'social-contact-title': 'Biz bilan ishlang',
                 'social-contact-text': 'Brendingizni premium avtosport kontenti bilan yuksaltirishga tayyormisiz? Keling, birgalikda ajoyib narsa yarataylik.',
                 'social-getintouch': 'Bog\'lanish',
+                'showreel-label': 'Tanlangan ishlar',
+                'showreel-title': 'Harakatdagi filmlar',
+                'showreel-desc': 'Bu bizning ba\'zi ishlarimiz.',
+                'showreel-open': 'Instagramda tomosha qilish',
+                'showreel-prev': 'Oldingi videolar',
+                'showreel-next': 'Keyingi videolar',
+                'showreel-gallery': 'Instagram video galereyasi',
+                'photos-label': 'Kadrlar',
+                'photos-title': 'Fotografiya',
+                'photos-desc': 'Bu — bizning ba’zi fotosuratlarimiz.',
+                'photos-gallery': 'Fotosuratlar galereyasi',
                 'leadership-label': 'Rahbariyat',
                 'leadership-title': 'Vizyonerlar',
                 'leadership-desc': 'Boshqaruv jamoamiz avtosport media, ijodiy ishlab chiqarish va global brend strategiyasida o\'n yillik tajribani birlashtiradi.',
@@ -5418,6 +6310,11 @@
                 if (t[key] != null) el.setAttribute('data-prompt', t[key]);
             });
 
+            document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+                const key = el.getAttribute('data-i18n-aria');
+                if (t[key] != null) el.setAttribute('aria-label', t[key]);
+            });
+
             // Keep chat demo status in sync if JS previously overwrote it
             const statusEl = document.getElementById('dunaChatStatus');
             if (statusEl && t['chat-status']) statusEl.textContent = t['chat-status'];
@@ -5474,6 +6371,398 @@
         });
         
         revealElements.forEach(el => revealObserver.observe(el));
+
+        // ============================================
+        // SHOWREEL GALLERY + NATIVE VIDEO PLAYER
+        // ============================================
+        (function () {
+            var section     = document.getElementById('showreel');
+            var track       = section && section.querySelector('.showreel-track');
+            var lightbox    = document.getElementById('reelLightbox');
+            var lightboxInner = document.getElementById('reelLightboxInner');
+            var lightboxClose = document.getElementById('reelLightboxClose');
+            if (!section || !track || !lightbox) return;
+
+            // ── Arrow navigation ─────────────────────────────────
+            section.querySelectorAll('[data-reel-direction]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var dir  = Number(btn.dataset.reelDirection) || 1;
+                    var card = track.querySelector('.reel-card');
+                    var gap  = parseFloat(getComputedStyle(track).columnGap) || 0;
+                    track.scrollBy({ left: dir * ((card ? card.getBoundingClientRect().width : 240) + gap), behavior: 'smooth' });
+                });
+            });
+
+            // ── Custom video player helpers ───────────────────────
+            var hideTimer;
+            function formatTime(s) {
+                var m = Math.floor(s / 60);
+                var sec = Math.floor(s % 60);
+                return m + ':' + (sec < 10 ? '0' : '') + sec;
+            }
+
+            function flashCenter(ui, icon) {
+                var el = ui.querySelector('.reel-center-icon');
+                if (!el) return;
+                el.className = 'reel-center-icon';
+                el.innerHTML = '<i class="fas fa-' + icon + '"></i>';
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        el.classList.add('flash');
+                        clearTimeout(el._ft);
+                        el._ft = setTimeout(function () { el.classList.remove('flash'); }, 600);
+                    });
+                });
+            }
+
+            // Derive poster URL from video path: reel-01.mp4 → reel-01-poster.jpg
+            function posterUrl(src) {
+                return src.replace(/\.mp4$/i, '-poster.jpg');
+            }
+
+
+            // Set card background thumbnails on load
+            track.querySelectorAll('.reel-card').forEach(function (card) {
+                var vsrc = card.dataset.reelVideo;
+                if (!vsrc) return;
+                var img = new Image();
+                img.onload = function () {
+                    card.style.backgroundImage = 'url(' + posterUrl(vsrc) + ')';
+                    card.style.backgroundSize = 'cover';
+                    card.style.backgroundPosition = 'center';
+                };
+                img.src = posterUrl(vsrc);
+            });
+
+            function buildPlayer(src, label) {
+                var wrap = document.createElement('div');
+                wrap.style.cssText = 'position:relative;width:100%;height:100%;';
+
+                var vid = document.createElement('video');
+                vid.src = src;
+                vid.poster = posterUrl(src);
+                vid.playsInline = true;
+                vid.loop = true;
+                vid.preload = 'metadata';
+                vid.setAttribute('aria-label', label || 'Video');
+                wrap.appendChild(vid);
+
+                // UI overlay
+                var ui = document.createElement('div');
+                ui.className = 'reel-player-ui';
+                ui.innerHTML =
+                    '<div class="reel-center-play"><div class="reel-center-icon"></div></div>' +
+                    '<div class="reel-player-bar">' +
+                        '<input type="range" class="reel-scrub" min="0" max="1000" step="1" value="0" aria-label="Seek">' +
+                        '<div class="reel-ctrl-row">' +
+                            '<button class="reel-ctrl-btn" data-reel-ctrl="play" aria-label="Play/Pause"><i class="fas fa-pause"></i></button>' +
+                            '<button class="reel-ctrl-btn" data-reel-ctrl="mute" aria-label="Mute/Unmute"><i class="fas fa-volume-up"></i></button>' +
+                            '<span class="reel-ctrl-time">0:00 / 0:00</span>' +
+                            '<button class="reel-ctrl-btn" data-reel-ctrl="fs" aria-label="Fullscreen"><i class="fas fa-expand"></i></button>' +
+                        '</div>' +
+                    '</div>';
+                wrap.appendChild(ui);
+
+                var scrub   = ui.querySelector('.reel-scrub');
+                var timeLbl = ui.querySelector('.reel-ctrl-time');
+                var playBtn = ui.querySelector('[data-reel-ctrl="play"]');
+                var muteBtn = ui.querySelector('[data-reel-ctrl="mute"]');
+                var fsBtn   = ui.querySelector('[data-reel-ctrl="fs"]');
+
+                function syncScrub() {
+                    if (!vid.duration) return;
+                    var pct = vid.currentTime / vid.duration;
+                    scrub.value = Math.round(pct * 1000);
+                    scrub.style.setProperty('--pct', (pct * 100).toFixed(2) + '%');
+                    timeLbl.textContent = formatTime(vid.currentTime) + ' / ' + formatTime(vid.duration);
+                }
+                function syncPlay() {
+                    playBtn.querySelector('i').className = vid.paused ? 'fas fa-play' : 'fas fa-pause';
+                }
+                function syncMute() {
+                    muteBtn.querySelector('i').className = vid.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+                }
+
+                function showUI() {
+                    ui.classList.remove('hidden');
+                    clearTimeout(hideTimer);
+                    if (!vid.paused) {
+                        hideTimer = setTimeout(function () { ui.classList.add('hidden'); }, 3000);
+                    }
+                }
+
+                // playback events
+                vid.addEventListener('timeupdate', syncScrub);
+                vid.addEventListener('play',  function () { syncPlay(); showUI(); });
+                vid.addEventListener('pause', function () { syncPlay(); showUI(); });
+                vid.addEventListener('volumechange', syncMute);
+                vid.addEventListener('loadedmetadata', syncScrub);
+
+                // video click = toggle play + flash
+                vid.addEventListener('click', function () {
+                    if (vid.paused) { vid.play(); flashCenter(ui, 'play'); }
+                    else           { vid.pause(); flashCenter(ui, 'pause'); }
+                    showUI();
+                });
+
+                // move anywhere on overlay = show controls
+                wrap.addEventListener('mousemove', showUI);
+                wrap.addEventListener('touchstart', showUI, { passive: true });
+
+                // scrub — native range input handles all drag/touch automatically
+                scrub.addEventListener('input', function () {
+                    if (vid.duration) {
+                        vid.currentTime = (scrub.value / 1000) * vid.duration;
+                        scrub.style.setProperty('--pct', ((scrub.value / 1000) * 100).toFixed(2) + '%');
+                    }
+                    showUI();
+                });
+                scrub.addEventListener('mousedown', function (e) { e.stopPropagation(); showUI(); });
+                scrub.addEventListener('touchstart', function (e) { e.stopPropagation(); showUI(); }, { passive: true });
+
+                // controls
+                playBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (vid.paused) vid.play(); else vid.pause();
+                    showUI();
+                });
+                muteBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    vid.muted = !vid.muted;
+                    showUI();
+                });
+                fsBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var el = lightboxInner;
+                    if (!document.fullscreenElement) {
+                        (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+                    } else {
+                        (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document);
+                    }
+                    showUI();
+                });
+
+                // error fallback
+                vid.addEventListener('error', function () {
+                    wrap.innerHTML =
+                        '<div class="reel-video-missing">' +
+                        '<i class="fas fa-video-slash"></i>' +
+                        '<span>Video file not found.<br>Drop <code>' + src + '</code> into the project.</span>' +
+                        '</div>';
+                });
+
+                return { wrap: wrap, vid: vid };
+            }
+
+            // ── Resize lightbox to match video's natural aspect ratio ──
+            function sizeToVideo(vid) {
+                var vw = vid.videoWidth, vh = vid.videoHeight;
+                if (!vw || !vh) return;
+                var pad = 20;
+                var maxW = window.innerWidth  - pad;
+                var maxH = window.innerHeight - pad;
+                var aspect = vw / vh;
+                var h = Math.min(maxH, maxW / aspect);
+                var w = h * aspect;
+                // Clamp once more
+                if (w > maxW) { w = maxW; h = w / aspect; }
+                lightboxInner.style.width  = Math.round(w) + 'px';
+                lightboxInner.style.height = Math.round(h) + 'px';
+                // Flatter radius for wide video, rounder for portrait
+                lightboxInner.style.borderRadius = aspect >= 1 ? '10px' : '16px';
+            }
+
+            // ── Open / close lightbox ─────────────────────────────
+            var currentVid = null;
+
+            function openLightbox(src, label) {
+                // Start with a sensible default size before metadata loads
+                lightboxInner.style.width  = '360px';
+                lightboxInner.style.height = '640px';
+                lightboxInner.style.borderRadius = '16px';
+                lightboxInner.innerHTML = '';
+
+                var player = buildPlayer(src, label);
+                currentVid = player.vid;
+
+                // Resize as soon as we know the real dimensions
+                player.vid.addEventListener('loadedmetadata', function () {
+                    sizeToVideo(player.vid);
+                });
+
+                lightboxInner.appendChild(player.wrap);
+                lightbox.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                lightboxClose.focus();
+                player.vid.play().catch(function () {});
+            }
+
+            function closeLightbox() {
+                if (currentVid) { currentVid.pause(); currentVid = null; }
+                lightbox.classList.remove('open');
+                document.body.style.overflow = '';
+                clearTimeout(hideTimer);
+                setTimeout(function () {
+                    lightboxInner.innerHTML = '';
+                    lightboxInner.style.width = '';
+                    lightboxInner.style.height = '';
+                }, 300);
+            }
+
+            // ── Card click / keyboard ─────────────────────────────
+            track.querySelectorAll('.reel-card').forEach(function (card) {
+                var open = function () {
+                    if (card.dataset.reelVideo) openLightbox(card.dataset.reelVideo, card.getAttribute('aria-label'));
+                };
+                card.addEventListener('click', open);
+                card.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+                });
+            });
+
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+            });
+        })();
+
+        // Photography marquee + lightbox
+        (function () {
+            var stage = document.getElementById('photosStage');
+            var lightbox = document.getElementById('photoLightbox');
+            var lightboxInner = document.getElementById('photoLightboxInner');
+            var lightboxImg = document.getElementById('photoLightboxImg');
+            var lightboxClose = document.getElementById('photoLightboxClose');
+            var lightboxPrev = document.getElementById('photoLightboxPrev');
+            var lightboxNext = document.getElementById('photoLightboxNext');
+            var lightboxCounter = document.getElementById('photoLightboxCounter');
+            var cursor = document.querySelector('.cursor');
+            if (!stage || !lightbox || !lightboxImg) return;
+
+            var TOTAL = 105;
+            var photos = [];
+            for (var i = 1; i <= TOTAL; i++) {
+                var n = String(i).padStart(3, '0');
+                photos.push('assets/photos/photo-' + n + '.jpg');
+            }
+
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var rows = [[], [], []];
+            photos.forEach(function (src, idx) { rows[idx % 3].push(src); });
+
+            var flatOrder = [];
+            rows.forEach(function (row) { row.forEach(function (src) { flatOrder.push(src); }); });
+            var currentIndex = 0;
+
+            function bindCursorHover(el) {
+                if (!cursor) return;
+                el.addEventListener('mouseenter', function () { cursor.classList.add('hover-active'); });
+                el.addEventListener('mouseleave', function () { cursor.classList.remove('hover-active'); });
+            }
+
+            function makeTile(src, eager) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'photos-tile';
+                btn.setAttribute('aria-label', 'View photo');
+                var img = document.createElement('img');
+                img.src = src;
+                img.alt = '';
+                img.decoding = 'async';
+                img.loading = eager ? 'eager' : 'lazy';
+                btn.appendChild(img);
+                btn.addEventListener('click', function () {
+                    openLightbox(flatOrder.indexOf(src));
+                });
+                bindCursorHover(btn);
+                return btn;
+            }
+
+            function buildSet(sources, clone, eagerCount) {
+                var set = document.createElement('div');
+                set.className = 'photos-set';
+                if (clone) set.setAttribute('data-clone', 'true');
+                set.setAttribute('aria-hidden', clone ? 'true' : 'false');
+                sources.forEach(function (src, i) {
+                    set.appendChild(makeTile(src, !clone && i < eagerCount));
+                });
+                return set;
+            }
+
+            rows.forEach(function (sources, rowIndex) {
+                var row = document.createElement('div');
+                row.className = 'photos-row';
+                var strip = document.createElement('div');
+                strip.className = 'photos-strip';
+                strip.appendChild(buildSet(sources, false, rowIndex === 0 ? 4 : 2));
+                if (!reduceMotion) {
+                    strip.appendChild(buildSet(sources, true, 0));
+                }
+                row.appendChild(strip);
+                stage.appendChild(row);
+            });
+
+            function updateLightbox() {
+                var src = flatOrder[currentIndex];
+                lightboxInner.classList.add('is-switching');
+                window.setTimeout(function () {
+                    lightboxImg.src = src;
+                    lightboxImg.alt = 'Photo ' + (currentIndex + 1);
+                    lightboxCounter.textContent = String(currentIndex + 1).padStart(2, '0') + ' / ' + String(flatOrder.length).padStart(2, '0');
+                    lightboxInner.classList.remove('is-switching');
+                }, 90);
+            }
+
+            function openLightbox(index) {
+                if (index < 0) return;
+                currentIndex = index;
+                lightboxImg.src = flatOrder[currentIndex];
+                lightboxImg.alt = 'Photo ' + (currentIndex + 1);
+                lightboxCounter.textContent = String(currentIndex + 1).padStart(2, '0') + ' / ' + String(flatOrder.length).padStart(2, '0');
+                lightbox.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeLightbox() {
+                lightbox.classList.remove('open');
+                document.body.style.overflow = '';
+                window.setTimeout(function () {
+                    if (!lightbox.classList.contains('open')) lightboxImg.removeAttribute('src');
+                }, 280);
+            }
+
+            function step(delta) {
+                currentIndex = (currentIndex + delta + flatOrder.length) % flatOrder.length;
+                updateLightbox();
+            }
+
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightboxPrev.addEventListener('click', function () { step(-1); });
+            lightboxNext.addEventListener('click', function () { step(1); });
+            lightbox.addEventListener('click', function (e) {
+                if (e.target === lightbox) closeLightbox();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (!lightbox.classList.contains('open')) return;
+                if (e.key === 'Escape') closeLightbox();
+                else if (e.key === 'ArrowLeft') step(-1);
+                else if (e.key === 'ArrowRight') step(1);
+            });
+
+            if (!reduceMotion && 'IntersectionObserver' in window) {
+                var strips = stage.querySelectorAll('.photos-strip');
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        entry.target.classList.toggle('is-paused', !entry.isIntersecting);
+                    });
+                }, { rootMargin: '100px 0px' });
+                strips.forEach(function (strip) {
+                    strip.classList.add('is-paused');
+                    io.observe(strip);
+                });
+            }
+        })();
 
         // Pause partner marquee while off-screen (saves continuous compositor work)
         (function () {

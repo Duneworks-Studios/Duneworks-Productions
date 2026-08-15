@@ -15,7 +15,7 @@
 
 ## Learned Workspace Facts
 
-- Static single-page marketing site for Duneworks Productions (cinematography / motorsport media agency); the entire app is one `index.html` (~5,400 lines of inline HTML/CSS/JS) with no framework, no build system, and no package manifest.
+- Static single-page marketing site for Duneworks Productions (cinematography / motorsport media agency); the entire app is one `index.html` (~6,400+ lines of inline HTML/CSS/JS) with no framework, no build system, and no package manifest.
 - Git remote is `https://github.com/Duneworks-Studios/Duneworks-Productions.git`, branch `main`.
 - Local preview is served with a static file server at `http://localhost:5500`.
 - Site features include trilingual i18n (EN/RU/UZ via `data-i18n` attributes), an OG/Reborn theme toggle, an intro loading screen, a custom camera cursor, a partner logo marquee, a "Duna AI" chat widget backed by the DeepSeek API, and a contact form posting to formsubmit.co.
@@ -23,3 +23,7 @@
 - Booking / contact number used on the site is `+998 33 006 7 006`.
 - Team roster includes Abubakir Abduqayumov (Producer), Amirsaid Samigjanov (Brand Face), and Kmaron (Social Media Manager); Muhammad was removed from the team section.
 - Keep secrets out of client-side code and chat: a DeepSeek API key was previously exposed in `index.html` and a GitHub token was once pasted in chat; treat any exposed credential as compromised and never commit one.
+- Site includes a "Films in Motion" video showcase section with 7 self-hosted MP4 reels; video assets live in `assets/videos/` following the naming convention `reel-NN.mp4` / `reel-NN-poster.jpg`; poster thumbnails are generated with ffmpeg (available in the environment).
+- User explicitly rejected Instagram embed approaches (both blockquote embeds and `/embed/` iframes) — always use self-hosted MP4 with a custom HTML5 player for video content.
+- Custom cursor z-index must stay above all overlays; currently set to 16001; the video lightbox uses z-index 15000 (overlay) and 16000 (close button) — adjust cursor z-index upward whenever new high-z-index layers are added.
+- When moving files from Windows Downloads via PowerShell, use `-LiteralPath` to handle special characters (`…`, `#`, `@`, etc.) in filenames.
