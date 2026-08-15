@@ -6667,8 +6667,10 @@
             if (!stage || !lightbox || !lightboxImg) return;
 
             var TOTAL = 105;
+            var skip = { 84: true };
             var photos = [];
             for (var i = 1; i <= TOTAL; i++) {
+                if (skip[i]) continue;
                 var n = String(i).padStart(3, '0');
                 photos.push('assets/photos/photo-' + n + '.jpg');
             }
